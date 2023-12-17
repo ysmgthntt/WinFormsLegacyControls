@@ -546,7 +546,7 @@ namespace System.Windows.Forms
                 text = Text;
             }
 
-            Graphics g = parent.CreateGraphicsInternal();
+            Graphics g = parent.CreateGraphics/*Internal*/();
             Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
             if (icon != null)
             {

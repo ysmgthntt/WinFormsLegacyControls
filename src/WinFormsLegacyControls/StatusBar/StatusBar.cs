@@ -24,9 +24,12 @@ namespace System.Windows.Forms
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent(nameof(PanelClick)),
     DefaultProperty(nameof(Text)),
+    /* TODO: Designer
     Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign),
+    */
     ]
     public class StatusBar : Control
+        , IHandle
     {
         private int sizeGripWidth = 0;
         private const int SIMPLE_INDEX = 0xFF;
@@ -1069,7 +1072,7 @@ namespace System.Windows.Forms
             // allow resizing, when it would resize the form.
             if (x > bounds.X + bounds.Width - SizeGripWidth)
             {
-                Control parent = ParentInternal;
+                Control parent = Parent/*Internal*/;
                 if (parent != null && parent is Form)
                 {
                     FormBorderStyle bs = ((Form)parent).FormBorderStyle;
