@@ -1153,7 +1153,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                m.Result = (IntPtr)NativeMethods.HTCLIENT;
+                //m.Result = (IntPtr)NativeMethods.HTCLIENT;
+                m.Result = (nint)PInvoke.HTCLIENT;
             }
         }
 
@@ -1714,7 +1715,8 @@ namespace System.Windows.Forms
                         //ClassName = WindowClasses.TOOLTIPS_CLASS
                         ClassName = PInvoke.TOOLTIPS_CLASS
                     };
-                    cp.Style |= NativeMethods.TTS_ALWAYSTIP;
+                    //cp.Style |= NativeMethods.TTS_ALWAYSTIP;
+                    cp.Style |= (int)PInvoke.TTS_ALWAYSTIP;
                     cp.ExStyle = 0;
                     cp.Caption = null;
                     return cp;
