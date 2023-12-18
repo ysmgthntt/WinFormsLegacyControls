@@ -12,7 +12,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
-using static Interop.ComCtl32;
+//using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -202,17 +202,21 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = WindowClasses.WC_STATUSBAR;
+                //cp.ClassName = WindowClasses.WC_STATUSBAR;
+                cp.ClassName = PInvoke.STATUSCLASSNAME;
 
                 if (sizeGrip)
                 {
-                    cp.Style |= (int)SBARS.SIZEGRIP;
+                    //cp.Style |= (int)SBARS.SIZEGRIP;
+                    cp.Style |= (int)PInvoke.SBARS_SIZEGRIP;
                 }
                 else
                 {
-                    cp.Style &= ~(int)SBARS.SIZEGRIP;
+                    //cp.Style &= ~(int)SBARS.SIZEGRIP;
+                    cp.Style &= ~(int)PInvoke.SBARS_SIZEGRIP;
                 }
-                cp.Style |= (int)(CCS.NOPARENTALIGN | CCS.NORESIZE);
+                //cp.Style |= (int)(CCS.NOPARENTALIGN | CCS.NORESIZE);
+                cp.Style |= (int)(PInvoke.CCS_NOPARENTALIGN | PInvoke.CCS_NORESIZE);
 
                 return cp;
             }
@@ -414,7 +418,8 @@ namespace System.Windows.Forms
                     layoutDirty = true;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)SB.SIMPLE, PARAM.FromBool(!showPanels), IntPtr.Zero);
+                        //User32.SendMessageW(this, (User32.WM)SB.SIMPLE, PARAM.FromBool(!showPanels), IntPtr.Zero);
+                        PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SIMPLE, (WPARAM)(BOOL)(!showPanels));
 
                         if (showPanels)
                         {
@@ -562,8 +567,12 @@ namespace System.Windows.Forms
                 {
                     offsets[0] -= SizeGripWidth;
                 }
+                /*
                 User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)1, ref offsets[0]);
                 User32.SendMessageW(this, (User32.WM)SB.SETICON, IntPtr.Zero, IntPtr.Zero);
+                */
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETPARTS, 1, ref offsets[0]);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETICON, 0, 0);
 
                 return;
             }
@@ -580,7 +589,8 @@ namespace System.Windows.Forms
 
             fixed (int* pOffsets = offsets2)
             {
-                User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)length, (IntPtr)pOffsets);
+                //User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)length, (IntPtr)pOffsets);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETPARTS, (WPARAM)length, (LPARAM)pOffsets);
             }
 
             // Tooltip setup...
@@ -597,19 +607,30 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
+                //IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
+                using ThemingScope scope = new(Application.UseVisualStyles);
 
                 try
                 {
+                    /*
                     var icc = new INITCOMMONCONTROLSEX
                     {
                         dwICC = ICC.BAR_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
+                    */
+                    unsafe
+                    {
+                        PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
+                        {
+                            dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                            dwICC = INITCOMMONCONTROLSEX_ICC.ICC_BAR_CLASSES
+                        });
+                    }
                 }
                 finally
                 {
-                    ThemingScope.Deactivate(userCookie);
+                    //ThemingScope.Deactivate(userCookie);
                 }
             }
 
@@ -666,7 +687,8 @@ namespace System.Windows.Forms
 
             if (!showPanels)
             {
-                User32.SendMessageW(this, (User32.WM)SB.SIMPLE, (IntPtr)1, IntPtr.Zero);
+                //User32.SendMessageW(this, (User32.WM)SB.SIMPLE, (IntPtr)1, IntPtr.Zero);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SIMPLE, (WPARAM)1);
                 SetSimpleText(simpleText);
             }
             else
@@ -733,7 +755,8 @@ namespace System.Windows.Forms
 
             if (length == 0)
             {
-                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, string.Empty);
+                //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, string.Empty);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETTEXT, (WPARAM)0, string.Empty);
             }
 
             int i;
@@ -751,7 +774,8 @@ namespace System.Windows.Forms
             }
             for (; i < old; i++)
             {
-                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, null);
+                //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, null);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETTEXT, 0, 0);
             }
         }
 
@@ -808,13 +832,16 @@ namespace System.Windows.Forms
         {
             if (!showPanels && IsHandleCreated)
             {
-                int wparam = SIMPLE_INDEX + (int)SBT.NOBORDERS;
+                //int wparam = SIMPLE_INDEX + (int)SBT.NOBORDERS;
+                int wparam = SIMPLE_INDEX + (int)PInvoke.SBT_NOBORDERS;
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    wparam |= (int)SBT.RTLREADING;
+                    //wparam |= (int)SBT.RTLREADING;
+                    wparam |= (int)PInvoke.SBT_RTLREADING;
                 }
 
-                User32.SendMessageW(this, (User32.WM)SB.SETTEXT, (IntPtr)wparam, simpleText);
+                //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, (IntPtr)wparam, simpleText);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETTEXT, (WPARAM)wparam, simpleText);
             }
         }
 
@@ -991,7 +1018,8 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDrawItem(ref Message m)
         {
-            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            //User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
 
             int length = panels.Count;
             if (dis->itemID < 0 || dis->itemID >= length)
@@ -1005,7 +1033,8 @@ namespace System.Windows.Forms
             OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
-        private unsafe void WmNotifyNMClick(User32.NMHDR* note)
+        //private unsafe void WmNotifyNMClick(User32.NMHDR* note)
+        private unsafe void WmNotifyNMClick(NMHDR* note)
         {
             if (!showPanels)
             {
@@ -1030,21 +1059,26 @@ namespace System.Windows.Forms
             {
                 MouseButtons button = MouseButtons.Left;
                 int clicks = 0;
-                switch ((NM)note->code)
+                //switch ((NM)note->code)
+                switch (note->code)
                 {
-                    case NM.CLICK:
+                    //case NM.CLICK:
+                    case PInvoke.NM_CLICK:
                         button = MouseButtons.Left;
                         clicks = 1;
                         break;
-                    case NM.RCLICK:
+                    //case NM.RCLICK:
+                    case PInvoke.NM_RCLICK:
                         button = MouseButtons.Right;
                         clicks = 1;
                         break;
-                    case NM.DBLCLK:
+                    //case NM.DBLCLK:
+                    case PInvoke.NM_DBLCLK:
                         button = MouseButtons.Left;
                         clicks = 2;
                         break;
-                    case NM.RDBLCLK:
+                    //case NM.RDBLCLK:
+                    case PInvoke.NM_RDBLCLK:
                         button = MouseButtons.Right;
                         clicks = 2;
                         break;
@@ -1140,13 +1174,21 @@ namespace System.Windows.Forms
                     break;
                 case User32.WM.NOTIFY:
                 case User32.WM.NOTIFY | User32.WM.REFLECT:
-                    User32.NMHDR* note = (User32.NMHDR*)m.LParam;
-                    switch ((NM)note->code)
+                    //User32.NMHDR* note = (User32.NMHDR*)m.LParam;
+                    NMHDR* note = (NMHDR*)m.LParam;
+                    //switch ((NM)note->code)
+                    switch (note->code)
                     {
+                        /*
                         case NM.CLICK:
                         case NM.RCLICK:
                         case NM.DBLCLK:
                         case NM.RDBLCLK:
+                        */
+                        case PInvoke.NM_CLICK:
+                        case PInvoke.NM_RCLICK:
+                        case PInvoke.NM_DBLCLK:
+                        case PInvoke.NM_RDBLCLK:
                             WmNotifyNMClick(note);
                             break;
                         default:
@@ -1650,16 +1692,27 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    /*
                     var icc = new INITCOMMONCONTROLSEX
                     {
                         dwICC = ICC.TAB_CLASSES
                     };
                     InitCommonControlsEx(ref icc);
+                    */
+                    unsafe
+                    {
+                        PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
+                        {
+                            dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                            dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
+                        });
+                    }
 
                     var cp = new CreateParams
                     {
                         Parent = IntPtr.Zero,
-                        ClassName = WindowClasses.TOOLTIPS_CLASS
+                        //ClassName = WindowClasses.TOOLTIPS_CLASS
+                        ClassName = PInvoke.TOOLTIPS_CLASS
                     };
                     cp.Style |= NativeMethods.TTS_ALWAYSTIP;
                     cp.ExStyle = 0;
@@ -1770,7 +1823,8 @@ namespace System.Windows.Forms
                     StatusBar p = (StatusBar)parent;
 
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
+                    //if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)PInvoke.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1782,7 +1836,8 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
-                    info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
+                    //info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
+                    info.SendMessage(this, (User32.WM)PInvoke.TTM_DELTOOLW);
                 }
             }
 
@@ -1791,7 +1846,8 @@ namespace System.Windows.Forms
                 if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
-                    info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
+                    //info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
+                    info.SendMessage(this, (User32.WM)PInvoke.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1806,13 +1862,21 @@ namespace System.Windows.Forms
                 }
 
                 window.CreateHandle(CreateParams);
+                /*
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOPMOST,
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
+                */
+                PInvoke.SetWindowPos(
+                    this,
+                    HWND.HWND_TOPMOST,
+                    0, 0, 0, 0,
+                    SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                //User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                PInvoke.SendMessage(this, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
@@ -1861,13 +1925,15 @@ namespace System.Windows.Forms
             private ToolInfoWrapper<Control> GetTOOLINFO(Tool tool)
             {
                 ToolInfoWrapper<Control> ti = GetMinTOOLINFO(tool);
-                ti.Info.uFlags |= TTF.TRANSPARENT | TTF.SUBCLASS;
+                //ti.Info.uFlags |= TTF.TRANSPARENT | TTF.SUBCLASS;
+                ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS;
 
                 // RightToLeft reading order
                 Control richParent = parent;
                 if (richParent != null && richParent.RightToLeft == RightToLeft.Yes)
                 {
-                    ti.Info.uFlags |= TTF.RTLREADING;
+                    //ti.Info.uFlags |= TTF.RTLREADING;
+                    ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                 }
 
                 ti.Text = tool.text;

@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
-using static Interop.ComCtl32;
+//using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -126,7 +126,8 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken)]
-        [DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        //[DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))]
         public StatusBarPanelBorderStyle BorderStyle
         {
@@ -190,7 +191,8 @@ namespace System.Windows.Forms
                 if (Created)
                 {
                     IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
-                    User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), handle);
+                    //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), handle);
+                    PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
                 }
                 UpdateSize();
                 if (Created)
@@ -575,7 +577,8 @@ namespace System.Windows.Forms
             if (Created)
             {
                 string sendText;
-                SBT border = 0;
+                //SBT border = 0;
+                uint border = 0;
 
                 string text = this.text ?? string.Empty;
 
@@ -610,12 +613,14 @@ namespace System.Windows.Forms
                 switch (borderStyle)
                 {
                     case StatusBarPanelBorderStyle.None:
-                        border |= SBT.NOBORDERS;
+                        //border |= SBT.NOBORDERS;
+                        border |= PInvoke.SBT_NOBORDERS;
                         break;
                     case StatusBarPanelBorderStyle.Sunken:
                         break;
                     case StatusBarPanelBorderStyle.Raised:
-                        border |= SBT.POPOUT;
+                        //border |= SBT.POPOUT;
+                        border |= PInvoke.SBT_POPOUT;
                         break;
                 }
                 switch (style)
@@ -623,17 +628,20 @@ namespace System.Windows.Forms
                     case StatusBarPanelStyle.Text:
                         break;
                     case StatusBarPanelStyle.OwnerDraw:
-                        border |= SBT.OWNERDRAW;
+                        //border |= SBT.OWNERDRAW;
+                        border |= PInvoke.SBT_OWNERDRAW;
                         break;
                 }
 
                 int wparam = GetIndex() | (int)border;
                 if (parent.RightToLeft == RightToLeft.Yes)
                 {
-                    wparam |= (int)SBT.RTLREADING;
+                    //wparam |= (int)SBT.RTLREADING;
+                    wparam |= (int)PInvoke.SBT_RTLREADING;
                 }
 
-                int result = (int)User32.SendMessageW(parent, (User32.WM)SB.SETTEXT, (IntPtr)wparam, sendText);
+                //int result = (int)User32.SendMessageW(parent, (User32.WM)SB.SETTEXT, (IntPtr)wparam, sendText);
+                int result = (int)PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETTEXT, (WPARAM)wparam, sendText);
 
                 if (result == 0)
                 {
@@ -642,17 +650,20 @@ namespace System.Windows.Forms
 
                 if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {
-                    User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
+                    //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
+                    PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETICON, (WPARAM)GetIndex(), icon.Handle);
                 }
                 else
                 {
-                    User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
+                    //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
+                    PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETICON, (WPARAM)GetIndex(), 0);
                 }
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
-                    result = (int)User32.SendMessageW(parent, (User32.WM)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
+                    //result = (int)User32.SendMessageW(parent, (User32.WM)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
+                    result = (int)PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
 
                     if (result != 0)
                     {
