@@ -17,7 +17,9 @@ namespace System.Windows.Forms
     ///  Represents a Windows toolbar button.
     /// </summary>
     [
+    /* TODO: Designer
     Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign),
+    */
     DefaultProperty(nameof(Text)),
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -52,11 +54,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal ToolBar parent;
 
+#if false// TODO: Menu
         /// <summary>
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
         internal Menu dropDownMenu = null;
+#endif
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
@@ -72,7 +76,7 @@ namespace System.Windows.Forms
 
         // We need a special way to defer to the ToolBar's image
         // list for indexing purposes.
-        internal class ToolBarButtonImageIndexer : ImageList.Indexer
+        internal class ToolBarButtonImageIndexer : /*ImageList.Indexer*/ImageListIndexer
         {
             private readonly ToolBarButton owner;
 
@@ -108,6 +112,7 @@ namespace System.Windows.Forms
             }
         }
 
+#if false // TODO: Menu
         /// <summary>
         ///
         ///  Indicates the menu to be displayed in
@@ -136,6 +141,7 @@ namespace System.Windows.Forms
                 dropDownMenu = value;
             }
         }
+#endif
 
         /// <summary>
         ///  Indicates whether the button is enabled or not.
@@ -161,8 +167,11 @@ namespace System.Windows.Forms
 
                     if (parent != null && parent.IsHandleCreated)
                     {
+                        /*
                         parent.SendMessage(NativeMethods.TB_ENABLEBUTTON, FindButtonIndex(),
                             enabled ? 1 : 0);
+                        */
+                        PInvoke.SendMessage(parent, PInvoke.TB_ENABLEBUTTON, (WPARAM)FindButtonIndex(), enabled ? 1 : 0);
                     }
                 }
             }
@@ -174,7 +183,9 @@ namespace System.Windows.Forms
         /// </summary>
         [
         TypeConverter(typeof(ImageIndexConverter)),
+        /* TODO: Desinger
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        */
         DefaultValue(-1),
         RefreshProperties(RefreshProperties.Repaint),
         Localizable(true),
@@ -207,7 +218,9 @@ namespace System.Windows.Forms
         /// </summary>
         [
         TypeConverter(typeof(ImageKeyConverter)),
+        /* TODO: Desinger
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        */
         DefaultValue(""),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
@@ -291,7 +304,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if ((int)parent.SendMessage(NativeMethods.TB_ISBUTTONINDETERMINATE, FindButtonIndex(), 0) != 0)
+                    //if ((int)parent.SendMessage(NativeMethods.TB_ISBUTTONINDETERMINATE, FindButtonIndex(), 0) != 0)
+                    if (PInvoke.SendMessage(parent, PInvoke.TB_ISBUTTONINDETERMINATE, (WPARAM)FindButtonIndex()) != 0)
                     {
                         partialPush = true;
                     }
@@ -354,7 +368,8 @@ namespace System.Windows.Forms
                 if (parent != null)
                 {
                     RECT rc = new RECT();
-                    UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.TB_GETRECT, FindButtonIndex(), ref rc);
+                    //UnsafeNativeMethods.SendMessage(new HandleRef(parent, parent.Handle), NativeMethods.TB_GETRECT, FindButtonIndex(), ref rc);
+                    PInvoke.SendMessage(parent, PInvoke.TB_GETRECT, (WPARAM)FindButtonIndex(), ref rc);
                     return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
                 }
                 return Rectangle.Empty;
@@ -513,7 +528,7 @@ namespace System.Windows.Forms
 
                     // COMPAT: this will force handle creation.
                     // we could use the measurement graphics, but it looks like this has been like this since Everett.
-                    using (Graphics g = parent.CreateGraphicsInternal())
+                    using (Graphics g = parent.CreateGraphics/*Internal*/())
                     {
 
                         Size buttonSize = parent.buttonSize;
@@ -610,13 +625,25 @@ namespace System.Windows.Forms
             // Assume that this button is the same width as the parent's ButtonSize's Width
             int buttonWidth = Parent.ButtonSize.Width;
 
+            /*
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO
             {
                 cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
                 dwMask = NativeMethods.TBIF_SIZE
             };
+            */
+            TBBUTTONINFOW button;
+            unsafe
+            {
+                button = new TBBUTTONINFOW
+                {
+                    cbSize = (uint)sizeof(TBBUTTONINFOW),
+                    dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE
+                };
+            }
 
-            int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
+            //int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
+            int buttonID = (int)PInvoke.SendMessage(Parent, PInvoke.TB_GETBUTTONINFO, (WPARAM)commandId, ref button);
             if (buttonID != -1)
             {
                 buttonWidth = button.cx;
@@ -627,7 +654,8 @@ namespace System.Windows.Forms
 
         private bool GetPushedState()
         {
-            if ((int)parent.SendMessage(NativeMethods.TB_ISBUTTONCHECKED, FindButtonIndex(), 0) != 0)
+            //if ((int)parent.SendMessage(NativeMethods.TB_ISBUTTONCHECKED, FindButtonIndex(), 0) != 0)
+            if (PInvoke.SendMessage(parent, PInvoke.TB_ISBUTTONCHECKED, (WPARAM)FindButtonIndex()) != 0)
             {
                 pushed = true;
             }
@@ -654,22 +682,26 @@ namespace System.Windows.Forms
             };
             if (enabled)
             {
-                button.fsState |= NativeMethods.TBSTATE_ENABLED;
+                //button.fsState |= NativeMethods.TBSTATE_ENABLED;
+                button.fsState |= (byte)PInvoke.TBSTATE_ENABLED;
             }
 
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
             {
-                button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+                //button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+                button.fsState |= (byte)PInvoke.TBSTATE_INDETERMINATE;
             }
 
             if (pushed)
             {
-                button.fsState |= NativeMethods.TBSTATE_CHECKED;
+                //button.fsState |= NativeMethods.TBSTATE_CHECKED;
+                button.fsState |= (byte)PInvoke.TBSTATE_CHECKED;
             }
 
             if (!visible)
             {
-                button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+                //button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+                button.fsState |= (byte)PInvoke.TBSTATE_HIDDEN;
             }
 
             // set the button style
@@ -677,16 +709,20 @@ namespace System.Windows.Forms
             switch (style)
             {
                 case ToolBarButtonStyle.PushButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_BUTTON;
+                    //button.fsStyle = NativeMethods.TBSTYLE_BUTTON;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_BUTTON;
                     break;
                 case ToolBarButtonStyle.ToggleButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_CHECK;
+                    //button.fsStyle = NativeMethods.TBSTYLE_CHECK;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_CHECK;
                     break;
                 case ToolBarButtonStyle.Separator:
-                    button.fsStyle = NativeMethods.TBSTYLE_SEP;
+                    //button.fsStyle = NativeMethods.TBSTYLE_SEP;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_SEP;
                     break;
                 case ToolBarButtonStyle.DropDownButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_DROPDOWN;
+                    //button.fsStyle = NativeMethods.TBSTYLE_DROPDOWN;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_DROPDOWN;
                     break;
 
             }
@@ -702,21 +738,35 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a TBBUTTONINFO object that represents this ToolBarButton.
         /// </summary>
-        internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId)
+        //internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId)
+        internal TBBUTTONINFOW GetTBBUTTONINFO(bool updateText, int newCommandId)
         {
+            /*
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO
             {
                 cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
                 dwMask = NativeMethods.TBIF_IMAGE
                             | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE
             };
+            */
+            TBBUTTONINFOW button;
+            unsafe
+            {
+                button = new TBBUTTONINFOW
+                {
+                    cbSize = (uint)sizeof(TBBUTTONINFOW),
+                    dwMask = TBBUTTONINFOW_MASK.TBIF_IMAGE
+                           | TBBUTTONINFOW_MASK.TBIF_STATE | TBBUTTONINFOW_MASK.TBIF_STYLE
+                };
+            }
 
             // Older platforms interpret null strings as empty, which forces the button to
             // leave space for text.
             // The only workaround is to avoid having comctl update the text.
             if (updateText)
             {
-                button.dwMask |= NativeMethods.TBIF_TEXT;
+                //button.dwMask |= NativeMethods.TBIF_TEXT;
+                button.dwMask |= TBBUTTONINFOW_MASK.TBIF_TEXT;
             }
 
             button.iImage = ImageIndexer.ActualIndex;
@@ -725,7 +775,8 @@ namespace System.Windows.Forms
             {
                 commandId = newCommandId;
                 button.idCommand = newCommandId;
-                button.dwMask |= NativeMethods.TBIF_COMMAND;
+                //button.dwMask |= NativeMethods.TBIF_COMMAND;
+                button.dwMask |= TBBUTTONINFOW_MASK.TBIF_COMMAND;
             }
 
             // set up the state of the button
@@ -733,22 +784,26 @@ namespace System.Windows.Forms
             button.fsState = 0;
             if (enabled)
             {
-                button.fsState |= NativeMethods.TBSTATE_ENABLED;
+                //button.fsState |= NativeMethods.TBSTATE_ENABLED;
+                button.fsState |= (byte)PInvoke.TBSTATE_ENABLED;
             }
 
             if (partialPush && style == ToolBarButtonStyle.ToggleButton)
             {
-                button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+                //button.fsState |= NativeMethods.TBSTATE_INDETERMINATE;
+                button.fsState |= (byte)PInvoke.TBSTATE_INDETERMINATE;
             }
 
             if (pushed)
             {
-                button.fsState |= NativeMethods.TBSTATE_CHECKED;
+                //button.fsState |= NativeMethods.TBSTATE_CHECKED;
+                button.fsState |= (byte)PInvoke.TBSTATE_CHECKED;
             }
 
             if (!visible)
             {
-                button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+                //button.fsState |= NativeMethods.TBSTATE_HIDDEN;
+                button.fsState |= (byte)PInvoke.TBSTATE_HIDDEN;
             }
 
             // set the button style
@@ -756,16 +811,20 @@ namespace System.Windows.Forms
             switch (style)
             {
                 case ToolBarButtonStyle.PushButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_BUTTON;
+                    //button.fsStyle = NativeMethods.TBSTYLE_BUTTON;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_BUTTON;
                     break;
                 case ToolBarButtonStyle.ToggleButton:
-                    button.fsStyle = NativeMethods.TBSTYLE_CHECK;
+                    //button.fsStyle = NativeMethods.TBSTYLE_CHECK;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_CHECK;
                     break;
                 case ToolBarButtonStyle.Separator:
-                    button.fsStyle = NativeMethods.TBSTYLE_SEP;
+                    //button.fsStyle = NativeMethods.TBSTYLE_SEP;
+                    button.fsStyle = (byte)PInvoke.TBSTYLE_SEP;
                     break;
             }
 
+            /*
             if (text == null)
             {
                 button.pszText = Marshal.StringToHGlobalAuto("\0\0");
@@ -776,8 +835,25 @@ namespace System.Windows.Forms
                 PrefixAmpersands(ref textValue);
                 button.pszText = Marshal.StringToHGlobalAuto(textValue);
             }
+            */
 
             return button;
+        }
+
+        //
+        internal unsafe void SetButtonInfo(bool updateText, int index)
+        {
+            TBBUTTONINFOW tbbi = GetTBBUTTONINFO(updateText, index);
+            string textValue = text;
+            if (textValue is null)
+                textValue = "\0\0";
+            else
+                PrefixAmpersands(ref textValue);
+            fixed (char* pszText = textValue)
+            {
+                tbbi.pszText = pszText;
+                PInvoke.SendMessage(parent, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, ref tbbi);
+            }
         }
 
         private void PrefixAmpersands(ref string value)

@@ -18,10 +18,13 @@ namespace System.Windows.Forms
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent(nameof(ButtonClick)),
+    /* TODO: Designer
     Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign),
+    */
     DefaultProperty(nameof(Buttons))
     ]
-    public class ToolBar : Control
+    public partial class ToolBar : Control
+        , IHandle
     {
         private readonly ToolBarButtonCollection buttonsCollection;
 
@@ -273,7 +276,8 @@ namespace System.Windows.Forms
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(BorderStyle.None),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
+        //DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
+        DispId(PInvoke.DISPID_BORDERSTYLE),
         SRDescription(nameof(SR.ToolBarBorderStyleDescr))
         ]
         public BorderStyle BorderStyle
@@ -341,11 +345,16 @@ namespace System.Windows.Forms
                     //
                     if (IsHandleCreated && buttons != null && buttonCount > 0)
                     {
+                        /*
                         int result = unchecked((int)(long)SendMessage(NativeMethods.TB_GETBUTTONSIZE, 0, 0));
                         if (result > 0)
                         {
                             return new Size(NativeMethods.Util.LOWORD(result), NativeMethods.Util.HIWORD(result));
                         }
+                        */
+                        LRESULT result = PInvoke.SendMessage(this, PInvoke.TB_GETBUTTONSIZE);
+                        if (result != 0)
+                            return new Size(result.LOWORD, result.HIWORD);
                     }
                     if (TextAlign == ToolBarTextAlign.Underneath)
                     {
@@ -391,38 +400,51 @@ namespace System.Windows.Forms
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ClassName = NativeMethods.WC_TOOLBAR;
+                //cp.ClassName = NativeMethods.WC_TOOLBAR;
+                cp.ClassName = PInvoke.TOOLBARCLASSNAME;
 
                 // windows forms has it's own docking code.
                 //
+                /*
                 cp.Style |= NativeMethods.CCS_NOPARENTALIGN
                             | NativeMethods.CCS_NORESIZE;
+                */
+                cp.Style |= PInvoke.CCS_NOPARENTALIGN | PInvoke.CCS_NORESIZE;
                 // | NativeMethods.WS_CHILD was commented out since setTopLevel should be able to work.
 
                 if (!Divider)
                 {
-                    cp.Style |= NativeMethods.CCS_NODIVIDER;
+                    //cp.Style |= NativeMethods.CCS_NODIVIDER;
+                    cp.Style |= PInvoke.CCS_NODIVIDER;
                 }
 
                 if (Wrappable)
                 {
-                    cp.Style |= NativeMethods.TBSTYLE_WRAPPABLE;
+                    //cp.Style |= NativeMethods.TBSTYLE_WRAPPABLE;
+                    cp.Style |= (int)PInvoke.TBSTYLE_WRAPABLE;
                 }
 
                 if (ShowToolTips && !DesignMode)
                 {
-                    cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
+                    //cp.Style |= NativeMethods.TBSTYLE_TOOLTIPS;
+                    cp.Style |= (int)PInvoke.TBSTYLE_TOOLTIPS;
                 }
 
+                /*
                 cp.ExStyle &= (~NativeMethods.WS_EX_CLIENTEDGE);
                 cp.Style &= (~NativeMethods.WS_BORDER);
+                */
+                cp.ExStyle &= (~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE);
+                cp.Style &= (~(int)WINDOW_STYLE.WS_BORDER);
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
-                        cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        //cp.ExStyle |= NativeMethods.WS_EX_CLIENTEDGE;
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
                         break;
                     case BorderStyle.FixedSingle:
-                        cp.Style |= NativeMethods.WS_BORDER;
+                        //cp.Style |= NativeMethods.WS_BORDER;
+                        cp.Style |= (int)WINDOW_STYLE.WS_BORDER;
                         break;
                 }
 
@@ -431,7 +453,8 @@ namespace System.Windows.Forms
                     case ToolBarAppearance.Normal:
                         break;
                     case ToolBarAppearance.Flat:
-                        cp.Style |= NativeMethods.TBSTYLE_FLAT;
+                        //cp.Style |= NativeMethods.TBSTYLE_FLAT;
+                        cp.Style |= (int)PInvoke.TBSTYLE_FLAT;
                         break;
                 }
 
@@ -440,7 +463,8 @@ namespace System.Windows.Forms
                     case ToolBarTextAlign.Underneath:
                         break;
                     case ToolBarTextAlign.Right:
-                        cp.Style |= NativeMethods.TBSTYLE_LIST;
+                        //cp.Style |= NativeMethods.TBSTYLE_LIST;
+                        cp.Style |= (int)PInvoke.TBSTYLE_LIST;
                         break;
                 }
 
@@ -720,7 +744,8 @@ namespace System.Windows.Forms
                         firstVisible = 0;
                     }
 
-                    SendMessage(NativeMethods.TB_GETRECT, firstVisible, ref rect);
+                    //SendMessage(NativeMethods.TB_GETRECT, firstVisible, ref rect);
+                    PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)firstVisible, ref rect);
 
                     // height is the button's height plus some extra goo
                     //
@@ -732,7 +757,8 @@ namespace System.Windows.Forms
                 //
                 if (Wrappable && IsHandleCreated)
                 {
-                    height *= unchecked((int)(long)SendMessage(NativeMethods.TB_GETROWS, 0, 0));
+                    //height *= unchecked((int)(long)SendMessage(NativeMethods.TB_GETROWS, 0, 0));
+                    height *= (int)PInvoke.SendMessage(this, PInvoke.TB_GETROWS);
                 }
 
                 height = (height > 0) ? height : 1;
@@ -790,7 +816,8 @@ namespace System.Windows.Forms
 
                         for (int x = 0; x < buttonCount; x++)
                         {
-                            SendMessage(NativeMethods.TB_GETRECT, 0, ref rect);
+                            //SendMessage(NativeMethods.TB_GETRECT, 0, ref rect);
+                            PInvoke.SendMessage(this, PInvoke.TB_GETRECT, 0, ref rect);
                             if ((rect.right - rect.left) > maxWidth)
                             {
                                 maxWidth = rect.right - rect.left;
@@ -1053,18 +1080,29 @@ namespace System.Windows.Forms
         {
             if (!RecreatingHandle)
             {
-                IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                //IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                using ThemingScope scope = new(Application.UseVisualStyles);
                 try
                 {
+                    /*
                     NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX
                     {
                         dwICC = NativeMethods.ICC_BAR_CLASSES
                     };
                     SafeNativeMethods.InitCommonControlsEx(icc);
+                    */
+                    unsafe
+                    {
+                        PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
+                        {
+                            dwSize = (uint)sizeof(INITCOMMONCONTROLSEX),
+                            dwICC = INITCOMMONCONTROLSEX_ICC.ICC_BAR_CLASSES
+                        });
+                    }
                 }
                 finally
                 {
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
+                    //UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
                 }
             }
             base.CreateHandle();
@@ -1088,7 +1126,8 @@ namespace System.Windows.Forms
                 {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
-                    bool currentDisposing = GetState(STATE_DISPOSING);
+                    //bool currentDisposing = GetState(STATE_DISPOSING);
+                    bool currentDisposing = Disposing;
 
                     try
                     {
@@ -1150,19 +1189,32 @@ namespace System.Windows.Forms
                 for (int x = 0; x < buttonCount; x++)
                 {
 
+                    /*
                     NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO
                     {
                         cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>(),
                         cx = buttons[x].Width
                     };
+                    */
+                    TBBUTTONINFOW tbbi;
+                    unsafe
+                    {
+                        tbbi = new TBBUTTONINFOW
+                        {
+                            cbSize = (uint)sizeof(TBBUTTONINFOW),
+                            cx = (ushort)buttons[x].Width
+                        };
+                    }
 
                     if (tbbi.cx > maxWidth)
                     {
                         maxWidth = tbbi.cx;
                     }
 
-                    tbbi.dwMask = NativeMethods.TBIF_SIZE;
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETBUTTONINFO, x, ref tbbi);
+                    //tbbi.dwMask = NativeMethods.TBIF_SIZE;
+                    tbbi.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
+                    //UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETBUTTONINFO, x, ref tbbi);
+                    PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONINFO, (WPARAM)x, ref tbbi);
                 }
             }
         }
@@ -1221,7 +1273,8 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 NativeMethods.TBBUTTON tbbutton = value.GetTBBUTTON(index);
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_INSERTBUTTON, index, ref tbbutton);
+                //UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_INSERTBUTTON, index, ref tbbutton);
+                PInvoke.SendMessage(this, PInvoke.TB_INSERTBUTTON, (WPARAM)index, ref tbbutton);
             }
             UpdateButtons();
         }
@@ -1258,6 +1311,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
+                /*
                 NativeMethods.TBBUTTONINFO tbbi = value.GetTBBUTTONINFO(updateText, index);
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETBUTTONINFO, index, ref tbbi);
 
@@ -1265,6 +1319,8 @@ namespace System.Windows.Forms
                 {
                     Marshal.FreeHGlobal(tbbi.pszText);
                 }
+                */
+                value.SetButtonInfo(updateText, index);
 
                 if (recreate)
                 {
@@ -1275,7 +1331,8 @@ namespace System.Windows.Forms
                     // after doing anything with the comctl ToolBar control, this
                     // appears to be a good idea.
                     //
-                    SendMessage(NativeMethods.TB_AUTOSIZE, 0, 0);
+                    //SendMessage(NativeMethods.TB_AUTOSIZE, 0, 0);
+                    PInvoke.SendMessage(this, PInvoke.TB_AUTOSIZE);
 
                     ForceButtonWidths();
                     Invalidate();
@@ -1312,20 +1369,26 @@ namespace System.Windows.Forms
 
             // we have to set the button struct size, because they don't.
             //
-            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<NativeMethods.TBBUTTON>(), 0);
+            //SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<NativeMethods.TBBUTTON>(), 0);
+            unsafe
+            {
+                PInvoke.SendMessage(this, PInvoke.TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(NativeMethods.TBBUTTON));
+            }
 
             // set up some extra goo
             //
             if (DropDownArrows)
             {
-                SendMessage(NativeMethods.TB_SETEXTENDEDSTYLE, 0, NativeMethods.TBSTYLE_EX_DRAWDDARROWS);
+                //SendMessage(NativeMethods.TB_SETEXTENDEDSTYLE, 0, NativeMethods.TBSTYLE_EX_DRAWDDARROWS);
+                PInvoke.SendMessage(this, PInvoke.TB_SETEXTENDEDSTYLE, 0, (LPARAM)PInvoke.TBSTYLE_EX_DRAWDDARROWS);
             }
 
             // if we have an imagelist, add it in now.
             //
             if (imageList != null)
             {
-                SendMessage(NativeMethods.TB_SETIMAGELIST, 0, imageList.Handle);
+                //SendMessage(NativeMethods.TB_SETIMAGELIST, 0, imageList.Handle);
+                PInvoke.SendMessage(this, PInvoke.TB_SETIMAGELIST, 0, imageList.Handle);
             }
 
             RealizeButtons();
@@ -1397,7 +1460,8 @@ namespace System.Windows.Forms
                         if (buttons[x].Text.Length > 0)
                         {
                             string addString = buttons[x].Text + '\0'.ToString();
-                            buttons[x].stringIndex = SendMessage(NativeMethods.TB_ADDSTRING, 0, addString);
+                            //buttons[x].stringIndex = SendMessage(NativeMethods.TB_ADDSTRING, 0, addString);
+                            buttons[x].stringIndex = PInvoke.SendMessage(this, PInvoke.TB_ADDSTRING, 0, addString);
                         }
                         else
                         {
@@ -1419,12 +1483,14 @@ namespace System.Windows.Forms
                         buttons[x].parent = this;
                     }
 
-                    SendMessage(NativeMethods.TB_ADDBUTTONS, count, ptbbuttons);
+                    //SendMessage(NativeMethods.TB_ADDBUTTONS, count, ptbbuttons);
+                    PInvoke.SendMessage(this, PInvoke.TB_ADDBUTTONS, (WPARAM)count, ptbbuttons);
 
                     // after doing anything with the comctl ToolBar control, this
                     // appears to be a good idea.
                     //
-                    SendMessage(NativeMethods.TB_AUTOSIZE, 0, 0);
+                    //SendMessage(NativeMethods.TB_AUTOSIZE, 0, 0);
+                    PInvoke.SendMessage(this, PInvoke.TB_AUTOSIZE);
 
                     // The win32 ToolBar control is somewhat unpredictable here. We
                     // have to set the button size after we've created all the
@@ -1476,7 +1542,8 @@ namespace System.Windows.Forms
         ///  Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
         private void SendToolbarButtonSizeMessage()
         {
-            SendMessage(NativeMethods.TB_SETBUTTONSIZE, 0, NativeMethods.Util.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
+            //SendMessage(NativeMethods.TB_SETBUTTONSIZE, 0, NativeMethods.Util.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
+            PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONSIZE, 0, LPARAM.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
         }
 
         /// <summary>
@@ -1540,6 +1607,7 @@ namespace System.Windows.Forms
             return !buttonSize.IsEmpty;
         }
 
+#if false   // TODO: ToolTip
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
@@ -1548,6 +1616,7 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
 
         }
+#endif
 
         /// <summary>
         ///  Returns a string representation for this control.
@@ -1593,6 +1662,7 @@ namespace System.Windows.Forms
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
+#if false   // TODO: Menu
             Menu menu = tbb.DropDownMenu;
             if (menu != null)
             {
@@ -1629,10 +1699,14 @@ namespace System.Windows.Forms
                                                   new HandleRef(this, Handle), tpm);
                 }
             }
+#endif
         }
 
-        private void WmNotifyNeedText(ref Message m)
+        private readonly ToolTipBuffer _toolTipBuffer;
+
+        private unsafe void WmNotifyNeedText(ref Message m)
         {
+            /*
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT)m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             int commandID = (int)ttt.hdr.idFrom;
             ToolBarButton tbb = buttons[commandID];
@@ -1645,17 +1719,25 @@ namespace System.Windows.Forms
             {
                 ttt.lpszText = null;
             }
+            */
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParam;
+            int commandID = (int)ttt->hdr.idFrom;
+            ToolBarButton tbb = buttons[commandID];
+            _toolTipBuffer.SetText(tbb?.ToolTipText);
+            ttt->lpszText = (char*)_toolTipBuffer.Buffer;
 
-            ttt.hinst = IntPtr.Zero;
+            //ttt.hinst = IntPtr.Zero;
+            ttt->hinst = HINSTANCE.Null;
 
             // RightToLeft reading order
             //
             if (RightToLeft == RightToLeft.Yes)
             {
-                ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
+                //ttt.uFlags |= (int)ComCtl32.TTF.RTLREADING;
+                ttt->uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
             }
 
-            Marshal.StructureToPtr(ttt, m.LParam, false);
+            //Marshal.StructureToPtr(ttt, m.LParam, false);
         }
 
         // Track the currently hot item since the user might be using the tab and
@@ -1664,6 +1746,7 @@ namespace System.Windows.Forms
         private void WmNotifyHotItemChange(ref Message m)
         {
             // Should we set the hot item?
+#if false
             NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
             if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
             {
@@ -1701,11 +1784,53 @@ namespace System.Windows.Forms
             {
                 hotItem = nmTbHotItem.idNew;
             }
+#endif
+            unsafe
+            {
+                NMTBHOTITEM* nmTbHotItem = (NMTBHOTITEM*)m.LParam;
+                if (NMTBHOTITEM_FLAGS.HICF_ENTERING == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_ENTERING))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_LEAVING == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_LEAVING))
+                {
+                    hotItem = -1;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_MOUSE == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_MOUSE))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_ARROWKEYS == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_ARROWKEYS))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_ACCELERATOR == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_ACCELERATOR))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_DUPACCEL == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_DUPACCEL))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_RESELECT == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_RESELECT))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_LMOUSE == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_LMOUSE))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+                else if (NMTBHOTITEM_FLAGS.HICF_TOGGLEDROPDOWN == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_TOGGLEDROPDOWN))
+                {
+                    hotItem = nmTbHotItem->idNew;
+                }
+            }
         }
 
         private void WmReflectCommand(ref Message m)
         {
-            int id = NativeMethods.Util.LOWORD(m.WParam);
+            //int id = NativeMethods.Util.LOWORD(m.WParam);
+            int id = PARAM.LOWORD(m.WParam);
             ToolBarButton tbb = buttons[id];
 
             if (tbb != null)
@@ -1719,28 +1844,42 @@ namespace System.Windows.Forms
             ResetMouseEventArgs();
         }
 
-        protected override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            //switch (m.Msg)
+            switch ((uint)m.Msg)
             {
-                case WindowMessages.WM_COMMAND + WindowMessages.WM_REFLECT:
+                //case WindowMessages.WM_COMMAND + WindowMessages.WM_REFLECT:
+                case PInvoke.WM_COMMAND + MessageId.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
+                /*
                 case WindowMessages.WM_NOTIFY:
                 case WindowMessages.WM_NOTIFY + WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
-                    switch (note.code)
+                */
+                case PInvoke.WM_NOTIFY:
+                case PInvoke.WM_NOTIFY + MessageId.WM_REFLECT:
+                    //NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                    NMHDR* note = (NMHDR*)m.LParam;
+                    //switch (note.code)
+                    switch (note->code)
                     {
-                        case NativeMethods.TTN_NEEDTEXT:
+                        //case NativeMethods.TTN_NEEDTEXT:
+                        case PInvoke.TTN_NEEDTEXT:
                             WmNotifyNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;
-                        case NativeMethods.TTN_SHOW:
+                        //case NativeMethods.TTN_SHOW:
+                        case PInvoke.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
+                            /*
                             NativeMethods.WINDOWPLACEMENT wndPlacement = new NativeMethods.WINDOWPLACEMENT();
                             int nRet = UnsafeNativeMethods.GetWindowPlacement(new HandleRef(null, note.hwndFrom), ref wndPlacement);
+                            */
+                            WINDOWPLACEMENT wndPlacement = default;
+                            int nRet = PInvoke.GetWindowPlacement((HWND)note->hwndFrom, ref wndPlacement);
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
@@ -1768,7 +1907,8 @@ namespace System.Windows.Forms
                                 int x = Location.X + buttonRight + 1;
                                 int y = Location.Y + (ButtonSize.Height / 2);
                                 var leftTop = new Point(x, y);
-                                UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
+                                //UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ref leftTop);
+                                PInvoke.ClientToScreen(this, ref leftTop);
 
                                 // Will the tooltip bleed off the top?
                                 if (leftTop.Y < SystemInformation.WorkingArea.Y)
@@ -1791,21 +1931,25 @@ namespace System.Windows.Forms
                                     leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                //SafeNativeMethods.SetWindowPos(new HandleRef(null, note.hwndFrom), NativeMethods.NullHandleRef, leftTop.X, leftTop.Y, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+                                PInvoke.SetWindowPos((HWND)note->hwndFrom, HWND.Null, leftTop.X, leftTop.Y, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
                                 m.Result = (IntPtr)1;
                                 return;
                             }
                             break;
 
-                        case NativeMethods.TBN_HOTITEMCHANGE:
+                        //case NativeMethods.TBN_HOTITEMCHANGE:
+                        case PInvoke.TBN_HOTITEMCHANGE:
                             WmNotifyHotItemChange(ref m);
                             break;
 
-                        case NativeMethods.TBN_QUERYINSERT:
+                        //case NativeMethods.TBN_QUERYINSERT:
+                        case PInvoke.TBN_QUERYINSERT:
                             m.Result = (IntPtr)1;
                             break;
 
-                        case NativeMethods.TBN_DROPDOWN:
+                        //case NativeMethods.TBN_QUERYINSERT:
+                        case PInvoke.TBN_DROPDOWN:
                             WmNotifyDropDown(ref m);
                             break;
                     }
@@ -2029,7 +2173,8 @@ namespace System.Windows.Forms
                 {
                     if (owner.IsHandleCreated)
                     {
-                        owner.SendMessage(NativeMethods.TB_DELETEBUTTON, x - 1, 0);
+                        //owner.SendMessage(NativeMethods.TB_DELETEBUTTON, x - 1, 0);
+                        PInvoke.SendMessage(owner, PInvoke.TB_DELETEBUTTON, (WPARAM)(x - 1), 0);
                     }
                     owner.RemoveAt(x - 1);
                 }
@@ -2173,7 +2318,8 @@ namespace System.Windows.Forms
 
                 if (owner.IsHandleCreated)
                 {
-                    owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);
+                    //owner.SendMessage(NativeMethods.TB_DELETEBUTTON, index, 0);
+                    PInvoke.SendMessage(owner, PInvoke.TB_DELETEBUTTON, (WPARAM)index, 0);
                 }
 
                 owner.RemoveAt(index);
