@@ -1652,9 +1652,17 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmNotifyDropDown(ref Message m)
         {
+            /*
             NativeMethods.NMTOOLBAR nmTB = (NativeMethods.NMTOOLBAR)m.GetLParam(typeof(NativeMethods.NMTOOLBAR));
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
+            */
+            ToolBarButton tbb;
+            unsafe
+            {
+                NativeMethods.NMTOOLBAR* nmTB = (NativeMethods.NMTOOLBAR*)m.LParam;
+                tbb = buttons[nmTB->iItem];
+            }
             if (tbb == null)
             {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
@@ -1702,7 +1710,8 @@ namespace System.Windows.Forms
 #endif
         }
 
-        private readonly ToolTipBuffer _toolTipBuffer;
+        // readonly にすると動作しない。
+        private ToolTipBuffer _toolTipBuffer;
 
         private unsafe void WmNotifyNeedText(ref Message m)
         {
