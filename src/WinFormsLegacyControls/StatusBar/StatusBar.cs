@@ -419,7 +419,7 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         //User32.SendMessageW(this, (User32.WM)SB.SIMPLE, PARAM.FromBool(!showPanels), IntPtr.Zero);
-                        PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SIMPLE, (WPARAM)(BOOL)(!showPanels));
+                        PInvoke.SendMessage(this, PInvoke.SB_SIMPLE, (WPARAM)(BOOL)(!showPanels));
 
                         if (showPanels)
                         {
@@ -571,8 +571,8 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)1, ref offsets[0]);
                 User32.SendMessageW(this, (User32.WM)SB.SETICON, IntPtr.Zero, IntPtr.Zero);
                 */
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETPARTS, 1, ref offsets[0]);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETICON, 0, 0);
+                PInvoke.SendMessage(this, PInvoke.SB_SETPARTS, 1, ref offsets[0]);
+                PInvoke.SendMessage(this, PInvoke.SB_SETICON, 0, 0);
 
                 return;
             }
@@ -590,7 +590,7 @@ namespace System.Windows.Forms
             fixed (int* pOffsets = offsets2)
             {
                 //User32.SendMessageW(this, (User32.WM)SB.SETPARTS, (IntPtr)length, (IntPtr)pOffsets);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETPARTS, (WPARAM)length, (LPARAM)pOffsets);
+                PInvoke.SendMessage(this, PInvoke.SB_SETPARTS, (WPARAM)length, (LPARAM)pOffsets);
             }
 
             // Tooltip setup...
@@ -688,7 +688,7 @@ namespace System.Windows.Forms
             if (!showPanels)
             {
                 //User32.SendMessageW(this, (User32.WM)SB.SIMPLE, (IntPtr)1, IntPtr.Zero);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SIMPLE, (WPARAM)1);
+                PInvoke.SendMessage(this, PInvoke.SB_SIMPLE, (WPARAM)1);
                 SetSimpleText(simpleText);
             }
             else
@@ -756,7 +756,7 @@ namespace System.Windows.Forms
             if (length == 0)
             {
                 //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, string.Empty);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETTEXT, (WPARAM)0, string.Empty);
+                PInvoke.SendMessage(this, PInvoke.SB_SETTEXT, (WPARAM)0, string.Empty);
             }
 
             int i;
@@ -775,7 +775,7 @@ namespace System.Windows.Forms
             for (; i < old; i++)
             {
                 //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, null);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETTEXT, 0, 0);
+                PInvoke.SendMessage(this, PInvoke.SB_SETTEXT, 0, 0);
             }
         }
 
@@ -841,7 +841,7 @@ namespace System.Windows.Forms
                 }
 
                 //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, (IntPtr)wparam, simpleText);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.SB_SETTEXT, (WPARAM)wparam, simpleText);
+                PInvoke.SendMessage(this, PInvoke.SB_SETTEXT, (WPARAM)wparam, simpleText);
             }
         }
 
@@ -1165,16 +1165,23 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            //switch ((User32.WM)m.Msg)
+            switch ((uint)m.Msg)
             {
-                case User32.WM.NCHITTEST:
+                //case User32.WM.NCHITTEST:
+                case PInvoke.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case User32.WM.REFLECT| User32.WM.DRAWITEM:
+                //case User32.WM.REFLECT| User32.WM.DRAWITEM:
+                case MessageId.WM_REFLECT | PInvoke.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
+                /*
                 case User32.WM.NOTIFY:
                 case User32.WM.NOTIFY | User32.WM.REFLECT:
+                */
+                case PInvoke.WM_NOTIFY:
+                case PInvoke.WM_NOTIFY | MessageId.WM_REFLECT:
                     //User32.NMHDR* note = (User32.NMHDR*)m.LParam;
                     NMHDR* note = (NMHDR*)m.LParam;
                     //switch ((NM)note->code)
@@ -1826,7 +1833,7 @@ namespace System.Windows.Forms
 
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     //if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)PInvoke.TTM_ADDTOOLW) == IntPtr.Zero)
+                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, PInvoke.TTM_ADDTOOLW) == IntPtr.Zero)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1839,7 +1846,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     //info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
-                    info.SendMessage(this, (User32.WM)PInvoke.TTM_DELTOOLW);
+                    info.SendMessage(this, PInvoke.TTM_DELTOOLW);
                 }
             }
 
@@ -1849,7 +1856,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     //info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                    info.SendMessage(this, (User32.WM)PInvoke.TTM_SETTOOLINFOW);
+                    info.SendMessage(this, PInvoke.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1878,7 +1885,7 @@ namespace System.Windows.Forms
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
                 //User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.TTM_SETMAXTIPWIDTH, 0, (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
+                PInvoke.SendMessage(this, PInvoke.TTM_SETMAXTIPWIDTH, 0, (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
             }
 
             /// <summary>
@@ -1950,9 +1957,11 @@ namespace System.Windows.Forms
 
             protected void WndProc(ref Message msg)
             {
-                switch ((User32.WM)msg.Msg)
+                //switch ((User32.WM)msg.Msg)
+                switch ((uint)msg.Msg)
                 {
-                    case User32.WM.SETFOCUS:
+                    //case User32.WM.SETFOCUS:
+                    case PInvoke.WM_SETFOCUS:
                         return;
                     default:
                         window.DefWndProc(ref msg);

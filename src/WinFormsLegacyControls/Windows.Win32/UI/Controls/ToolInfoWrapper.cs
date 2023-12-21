@@ -36,7 +36,7 @@ internal unsafe struct ToolInfoWrapper<T>
         _handle = handle;
     }
 
-    public LRESULT SendMessage(IHandle/*<HWND>*/ sender, /*MessageId*/Interop.User32.WM message, bool state = false)
+    public LRESULT SendMessage(IHandle/*<HWND>*/ sender, /*MessageId*/uint message, bool state = false)
     {
         Info.cbSize = (uint)sizeof(TTTOOLINFOW);
         fixed (char* c = Text)

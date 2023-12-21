@@ -192,7 +192,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
                     //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), handle);
-                    PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
+                    PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
                 }
                 UpdateSize();
                 if (Created)
@@ -641,7 +641,7 @@ namespace System.Windows.Forms
                 }
 
                 //int result = (int)User32.SendMessageW(parent, (User32.WM)SB.SETTEXT, (IntPtr)wparam, sendText);
-                int result = (int)PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETTEXT, (WPARAM)wparam, sendText);
+                int result = (int)PInvoke.SendMessage(parent, PInvoke.SB_SETTEXT, (WPARAM)wparam, sendText);
 
                 if (result == 0)
                 {
@@ -651,19 +651,19 @@ namespace System.Windows.Forms
                 if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {
                     //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
-                    PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETICON, (WPARAM)GetIndex(), icon.Handle);
+                    PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), icon.Handle);
                 }
                 else
                 {
                     //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
-                    PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_SETICON, (WPARAM)GetIndex(), 0);
+                    PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), 0);
                 }
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
                     //result = (int)User32.SendMessageW(parent, (User32.WM)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
-                    result = (int)PInvoke.SendMessage(parent, (User32.WM)PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
+                    result = (int)PInvoke.SendMessage(parent, PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
 
                     if (result != 0)
                     {
