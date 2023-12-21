@@ -44,6 +44,42 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
+        ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
+        /// <summary>
+        public static char GetMnemonic(string text, bool convertToUpperCase)
+        {
+            char mnemonic = '\0';
+            if (text != null)
+            {
+                int len = text.Length;
+                for (int i = 0; i < len - 1; i++)
+                {
+                    if (text[i] == '&')
+                    {
+                        if (text[i + 1] == '&')
+                        {
+                            // we have an escaped &, so we need to skip it.
+                            i++;
+                            continue;
+                        }
+
+                        if (convertToUpperCase)
+                        {
+                            mnemonic = char.ToUpper(text[i + 1], CultureInfo.CurrentCulture);
+                        }
+                        else
+                        {
+                            mnemonic = char.ToLower(text[i + 1], CultureInfo.CurrentCulture);
+                        }
+                        break;
+                    }
+                }
+            }
+            return mnemonic;
+        }
+
+        /// <summary>
         ///  Compares the strings using invariant culture for Turkish-I support. Returns true if they match.
         ///
         ///  If your strings are symbolic (returned from APIs, not from user) the following calls

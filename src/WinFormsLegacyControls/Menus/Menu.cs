@@ -218,7 +218,8 @@ namespace System.Windows.Forms
         {
             if (handle != IntPtr.Zero)
             {
-                UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
+                //UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
+                PInvoke.DestroyMenu(this);
             }
             handle = IntPtr.Zero;
             if (created)
@@ -260,7 +261,8 @@ namespace System.Windows.Forms
 
         protected virtual IntPtr CreateMenuHandle()
         {
-            return UnsafeNativeMethods.CreatePopupMenu();
+            //return UnsafeNativeMethods.CreatePopupMenu();
+            return (IntPtr)PInvoke.CreatePopupMenu();
         }
 
         internal void CreateMenuItems()
@@ -283,9 +285,11 @@ namespace System.Windows.Forms
                 {
                     items[i].ClearHandles();
                 }
-                while (UnsafeNativeMethods.GetMenuItemCount(new HandleRef(this, handle)) > 0)
+                //while (UnsafeNativeMethods.GetMenuItemCount(new HandleRef(this, handle)) > 0)
+                while (PInvoke.GetMenuItemCount(this) > 0)
                 {
-                    UnsafeNativeMethods.RemoveMenu(new HandleRef(this, handle), 0, NativeMethods.MF_BYPOSITION);
+                    //UnsafeNativeMethods.RemoveMenu(new HandleRef(this, handle), 0, NativeMethods.MF_BYPOSITION);
+                    PInvoke.RemoveMenu(this, 0, MENU_ITEM_FLAGS.MF_BYPOSITION);
                 }
                 created = false;
             }
@@ -319,7 +323,8 @@ namespace System.Windows.Forms
             }
             if (handle != IntPtr.Zero)
             {
-                UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
+                //UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
+                PInvoke.DestroyMenu(this);
                 handle = IntPtr.Zero;
                 if (disposing)
                 {
@@ -518,8 +523,12 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
+            /*
             int action = multipleMatches ? NativeMethods.MNC_SELECT : NativeMethods.MNC_EXECUTE;
             return (IntPtr)NativeMethods.Util.MAKELONG(firstMatch, action);
+            */
+            uint action = multipleMatches ? PInvoke.MNC_SELECT : PInvoke.MNC_EXECUTE;
+            return (IntPtr)LRESULT.MAKELONG(firstMatch, (int)action);
         }
 
         ///  Delegate type used by MatchKeyToMenuItem
@@ -667,7 +676,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            char menuKey = char.ToUpper((char)NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
+            //char menuKey = char.ToUpper((char)NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
+            char menuKey = char.ToUpper((char)Interop.PARAM.LOWORD(m.WParam), CultureInfo.CurrentCulture);
 
             m.Result = menu.WmMenuCharInternal(menuKey);
         }

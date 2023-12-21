@@ -20,8 +20,9 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultEvent(nameof(Click))]
     [DefaultProperty(nameof(Text))]
-    public class MenuItem : Menu
+    public partial class MenuItem : Menu
     {
+        // TODO: Delete
         private const int StateBarBreak = 0x00000020;
         private const int StateBreak = 0x00000040;
         private const int StateChecked = 0x00000008;
@@ -209,11 +210,13 @@ namespace System.Windows.Forms
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), MenuID, false);
+                        //UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), MenuID, false);
+                        PInvoke.SetMenuDefaultItem(Parent, (uint)MenuID, 0);
                     }
                     else if (DefaultItem)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), -1, false);
+                        //UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), -1, false);
+                        PInvoke.SetMenuDefaultItem(Parent, unchecked((uint)-1), 0);
                     }
                 }
 
@@ -385,14 +388,27 @@ namespace System.Windows.Forms
                     return false;
                 }
 
+                /*
                 var info = new NativeMethods.MENUITEMINFO_T
                 {
                     cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
                     fMask = NativeMethods.MIIM_STATE
                 };
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+                */
+                MENUITEMINFOW info;
+                unsafe
+                {
+                    info = new MENUITEMINFOW
+                    {
+                        cbSize=(uint)sizeof(MENUITEMINFOW),
+                        fMask = MENU_ITEM_MASK.MIIM_STATE
+                    };
+                }
+                //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+                PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
 
-                return (info.fState & StateHiLite) != 0;
+                //return (info.fState & StateHiLite) != 0;
+                return (info.fState & MENU_ITEM_STATE.MFS_HILITE) != 0;
             }
         }
 
@@ -409,17 +425,30 @@ namespace System.Windows.Forms
                     return -1;
                 }
 
-                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
+                //int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
+                int count = PInvoke.GetMenuItemCount(Parent);
                 int id = MenuID;
+                /*
                 NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T
                 {
                     cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
                     fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_SUBMENU
                 };
+                */
+                MENUITEMINFOW info;
+                unsafe
+                {
+                    info = new MENUITEMINFOW
+                    {
+                        cbSize = (uint)sizeof(MENUITEMINFOW),
+                        fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_SUBMENU
+                    };
+                }
 
                 for (int i = 0; i < count; i++)
                 {
-                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), i, true, info);
+                    //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), i, true, info);
+                    PInvoke.GetMenuItemInfo(Parent, (uint)i, true, ref info);
 
                     // For sub menus, the handle is always valid.
                     // For items, however, it is always zero.
@@ -748,8 +777,19 @@ namespace System.Windows.Forms
         {
             if ((_data.State & StateHidden) == 0)
             {
+                /*
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
                 UnsafeNativeMethods.InsertMenuItem(new HandleRef(Parent, Parent.handle), -1, true, info);
+                */
+                MENUITEMINFOW info = CreateMenuItemInfo(out string dwTypeData);
+                unsafe
+                {
+                    fixed(char* ptr = dwTypeData)
+                    {
+                        info.dwTypeData = ptr;
+                        PInvoke.InsertMenuItem(Parent, unchecked((uint)-1), true, ref info);
+                    }
+                }
 
                 _hasHandle = info.hSubMenu != IntPtr.Zero;
                 _dataVersion = _data._version;
@@ -761,25 +801,52 @@ namespace System.Windows.Forms
                 }
 
 #if DEBUG
+                /*
                 NativeMethods.MENUITEMINFO_T infoVerify = new NativeMethods.MENUITEMINFO_T
                 {
                     cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
                     fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE
                 };
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
+                */
+                MENUITEMINFOW infoVerify;
+                unsafe
+                {
+                    infoVerify = new MENUITEMINFOW
+                    {
+                        cbSize = (uint)sizeof(MENUITEMINFOW),
+                        fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                                MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
+                    };
+                }
+                //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
+                PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
 #endif
             }
         }
 
-        private NativeMethods.MENUITEMINFO_T CreateMenuItemInfo()
+        //private NativeMethods.MENUITEMINFO_T CreateMenuItemInfo()
+        private MENUITEMINFOW CreateMenuItemInfo(out string dwTypeData)
         {
+            /*
             var info = new NativeMethods.MENUITEMINFO_T
             {
                 fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                          NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA,
                 fType = _data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw)
             };
+            */
+            MENUITEMINFOW info;
+            unsafe
+            {
+                info = new MENUITEMINFOW
+                {
+                    cbSize = (uint)sizeof(MENUITEMINFOW),
+                    fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                            MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_DATA,
+                    fType = (MENU_ITEM_TYPE)(_data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw))
+                };
+            }
 
             // Top level menu items shouldn't have barbreak or break bits set on them.
             bool isTopLevel = Parent == GetMainMenu();
@@ -789,24 +856,33 @@ namespace System.Windows.Forms
                 if (isTopLevel)
                 {
                     _data._caption = " ";
-                    info.fType |= NativeMethods.MFT_MENUBREAK;
+                    //info.fType |= NativeMethods.MFT_MENUBREAK;
+                    info.fType |= MENU_ITEM_TYPE.MFT_MENUBREAK;
                 }
                 else
                 {
-                    info.fType |= NativeMethods.MFT_SEPARATOR;
+                    //info.fType |= NativeMethods.MFT_SEPARATOR;
+                    info.fType |= MENU_ITEM_TYPE.MFT_SEPARATOR;
                 }
             }
 
-            info.fState = _data.State & (StateChecked | StateDefault | StateDisabled);
+            //info.fState = _data.State & (StateChecked | StateDefault | StateDisabled);
+            info.fState = (MENU_ITEM_STATE)_data.State & (MENU_ITEM_STATE.MFS_CHECKED | MENU_ITEM_STATE.MFS_DEFAULT | MENU_ITEM_STATE.MFS_DISABLED);
 
-            info.wID = MenuID;
+            //info.wID = MenuID;
+            info.wID = (uint)MenuID;
             if (IsParent)
             {
-                info.hSubMenu = Handle;
+                //info.hSubMenu = Handle;
+                info.hSubMenu = (HMENU)Handle;
             }
 
+            /*
             info.hbmpChecked = IntPtr.Zero;
             info.hbmpUnchecked = IntPtr.Zero;
+            */
+            info.hbmpChecked = HBITMAP.Null;
+            info.hbmpUnchecked = HBITMAP.Null;
 
             // Assign a unique ID to this menu item object.
             // The ID is stored in the dwItemData of the corresponding Win32 menu item, so
@@ -841,30 +917,35 @@ namespace System.Windows.Forms
                 // structure.
                 if (_data.OwnerDraw)
                 {
-                    info.dwItemData = AllocMsaaMenuInfo();
+                    //info.dwItemData = AllocMsaaMenuInfo();
+                    info.dwItemData = (nuint)AllocMsaaMenuInfo();
                 }
                 else
                 {
-                    info.dwItemData = (IntPtr)unchecked((int)_uniqueID);
+                    //info.dwItemData = (IntPtr)unchecked((int)_uniqueID);
+                    info.dwItemData = (nuint)unchecked((int)_uniqueID);
                 }
             }
             else
             {
                 // On Win64, there are no reserved address ranges we can use for menu item IDs. So instead we will
                 // have to allocate an MSAMENUINFO heap structure for all menu items, not just owner-drawn ones.
-                info.dwItemData = AllocMsaaMenuInfo();
+                //info.dwItemData = AllocMsaaMenuInfo();
+                info.dwItemData = (nuint)AllocMsaaMenuInfo();
             }
 
             // We won't render the shortcut if: 1) it's not set, 2) we're a parent, 3) we're toplevel
             if (_data._showShortcut && _data._shortcut != 0 && !IsParent && !isTopLevel)
             {
-                info.dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
+                //info.dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
+                dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
             }
             else
             {
                 // Windows issue: Items with empty captions sometimes block keyboard
                 // access to other items in same menu.
-                info.dwTypeData = (_data._caption.Length == 0 ? " " : _data._caption);
+                //info.dwTypeData = (_data._caption.Length == 0 ? " " : _data._caption);
+                dwTypeData = (_data._caption.Length == 0 ? " " : _data._caption);
             }
             info.cch = 0;
 
@@ -927,15 +1008,29 @@ namespace System.Windows.Forms
             {
                 if (uniqueID < FirstUniqueID)
                 {
+                    /*
                     MsaaMenuInfoWithId msaaMenuInfo = Marshal.PtrToStructure<MsaaMenuInfoWithId>(itemData);
                     uniqueID = msaaMenuInfo._uniqueID;
+                    */
+                    unsafe
+                    {
+                        MsaaMenuInfoWithId* msaaMenuInfo = (MsaaMenuInfoWithId*)itemData;
+                        uniqueID = msaaMenuInfo->_uniqueID;
+                    }
                 }
             }
             else
             {
                 // Its always a pointer on Win64 (see CreateMenuItemInfo)
+                /*
                 MsaaMenuInfoWithId msaaMenuInfo = Marshal.PtrToStructure<MsaaMenuInfoWithId>(itemData);
                 uniqueID = msaaMenuInfo._uniqueID;
+                */
+                unsafe
+                {
+                    MsaaMenuInfoWithId* msaaMenuInfo = (MsaaMenuInfoWithId*)itemData;
+                    uniqueID = msaaMenuInfo->_uniqueID;
+                }
             }
 
             return GetMenuItemFromUniqueID(uniqueID);
@@ -949,15 +1044,23 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential)]
         private struct MsaaMenuInfoWithId
         {
+            /*
             public readonly NativeMethods.MSAAMENUINFO _msaaMenuInfo;
             public readonly uint _uniqueID;
+            */
+            public MSAAMENUINFO _msaaMenuInfo;
+            public uint _uniqueID;
 
+            /*
             public MsaaMenuInfoWithId(string text, uint uniqueID)
             {
                 _msaaMenuInfo = new NativeMethods.MSAAMENUINFO(text);
                 _uniqueID = uniqueID;
             }
+            */
         }
+
+        private char[]? _buffer;
 
         /// <summary>
         ///  Creates an MSAAMENUINFO structure (in the unmanaged heap) based on the current state
@@ -977,8 +1080,25 @@ namespace System.Windows.Forms
                 Debug.Assert(((uint)(ulong)_msaaMenuInfoPtr) < FirstUniqueID);
             }
 
+            /*
             MsaaMenuInfoWithId msaaMenuInfoStruct = new MsaaMenuInfoWithId(_data._caption, _uniqueID);
             Marshal.StructureToPtr(msaaMenuInfoStruct, _msaaMenuInfoPtr, false);
+            */
+            int length = _data._caption.Length;
+            _buffer = GC.AllocateUninitializedArray<char>(length + 1, pinned: true);
+            _data._caption.CopyTo(_buffer);
+            _buffer[length] = '\0';
+            unsafe
+            {
+                MsaaMenuInfoWithId* msaaMenuInfoStruct = (MsaaMenuInfoWithId*)_msaaMenuInfoPtr;
+                msaaMenuInfoStruct->_msaaMenuInfo.dwMSAASignature = unchecked((uint)PInvoke.MSAA_MENU_SIG);
+                msaaMenuInfoStruct->_msaaMenuInfo.cchWText = (uint)length;
+                fixed (char* pszWText = _buffer)
+                {
+                    msaaMenuInfoStruct->_msaaMenuInfo.pszWText = pszWText;
+                }
+                msaaMenuInfoStruct->_uniqueID = _uniqueID;
+            }
             Debug.Assert(_msaaMenuInfoPtr != IntPtr.Zero);
             return _msaaMenuInfoPtr;
         }
@@ -992,7 +1112,8 @@ namespace System.Windows.Forms
         {
             if (_msaaMenuInfoPtr != IntPtr.Zero)
             {
-                Marshal.DestroyStructure(_msaaMenuInfoPtr, typeof(MsaaMenuInfoWithId));
+                // 参照型なし
+                //Marshal.DestroyStructure(_msaaMenuInfoPtr, typeof(MsaaMenuInfoWithId));
                 Marshal.FreeHGlobal(_msaaMenuInfoPtr);
                 _msaaMenuInfoPtr = IntPtr.Zero;
             }
@@ -1353,31 +1474,45 @@ namespace System.Windows.Forms
             return s + ", Text: " + menuItemText;
         }
 
-        internal void UpdateItemRtl(bool setRightToLeftBit)
+        internal unsafe void UpdateItemRtl(bool setRightToLeftBit)
         {
             if (!_menuItemIsCreated)
             {
                 return;
             }
 
+            /*
             var info = new NativeMethods.MENUITEMINFO_T
             {
                 fMask = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU,
                 dwTypeData = new string('\0', Text.Length + 2),
                 cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>()
             };
-            info.cch = info.dwTypeData.Length - 1;
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+            */
+            MENUITEMINFOW info = new MENUITEMINFOW
+            {
+                fMask = MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_STATE | MENU_ITEM_MASK.MIIM_SUBMENU,
+                cbSize = (uint)sizeof(MENUITEMINFOW)
+            };
+            char* dwTypeData = stackalloc char[Text.Length + 2];
+            info.dwTypeData = dwTypeData;
+            //info.cch = info.dwTypeData.Length - 1;
+            info.cch = (uint)((Text.Length + 2) - 1);
+            //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+            PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
             if (setRightToLeftBit)
             {
-                info.fType |= NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER;
+                //info.fType |= NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER;
+                info.fType |= MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER;
             }
             else
             {
-                info.fType &= ~(NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER);
+                //info.fType &= ~(NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER);
+                info.fType &= ~(MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER);
             }
 
-            UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+            //UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+            PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
         }
 
         internal void UpdateMenuItem(bool force)
@@ -1389,16 +1524,40 @@ namespace System.Windows.Forms
 
             if (force || Parent is MainMenu || Parent is ContextMenu)
             {
+                /*
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
                 UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
+                */
+                MENUITEMINFOW info = CreateMenuItemInfo(out string dwTypeData);
+                unsafe
+                {
+                    fixed(char* ptr = dwTypeData)
+                    {
+                        info.dwTypeData = ptr;
+                        PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
+                    }
+                }
 #if DEBUG
+                /*
                 var infoVerify = new NativeMethods.MENUITEMINFO_T
                 {
                     cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
                     fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE
                 };
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
+                */
+                MENUITEMINFOW infoVerify;
+                unsafe
+                {
+                    infoVerify = new MENUITEMINFOW
+                    {
+                        cbSize = (uint)sizeof(MENUITEMINFOW),
+                        fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                                MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
+                    };
+                }
+                //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
+                PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
 #endif
 
                 if (_hasHandle && info.hSubMenu == IntPtr.Zero)
@@ -1413,24 +1572,31 @@ namespace System.Windows.Forms
                     Form f = mainMenu.GetFormUnsafe();
                     if (f != null)
                     {
-                        SafeNativeMethods.DrawMenuBar(new HandleRef(f, f.Handle));
+                        //SafeNativeMethods.DrawMenuBar(new HandleRef(f, f.Handle));
+                        PInvoke.DrawMenuBar(f);
                     }
                 }
             }
         }
 
-        internal void WmDrawItem(ref Message m)
+        internal unsafe void WmDrawItem(ref Message m)
         {
             // Handles the OnDrawItem message sent from ContainerControl
+            /*
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
             Debug.WriteLineIf(Control.s_paletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
-            IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
+            */
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
+            //IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
+            IntPtr oldPal = SetUpPalette(dis->hDC, false, false);
             try
             {
-                Graphics g = Graphics.FromHdcInternal(dis.hDC);
+                //Graphics g = Graphics.FromHdcInternal(dis.hDC);
+                Graphics g = Graphics.FromHdcInternal(dis->hDC);
                 try
                 {
-                    OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), Index, (DrawItemState)dis.itemState));
+                    //OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), Index, (DrawItemState)dis.itemState));
+                    OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, dis->rcItem, Index, (DrawItemState)dis->itemState));
                 }
                 finally
                 {
@@ -1441,19 +1607,20 @@ namespace System.Windows.Forms
             {
                 if (oldPal != IntPtr.Zero)
                 {
-                    SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
+                    //SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
+                    PInvoke.SelectPalette(dis->hDC, (HPALETTE)oldPal, BOOL.FALSE);
                 }
             }
 
             m.Result = (IntPtr)1;
         }
 
-        internal void WmMeasureItem(ref Message m)
+        internal unsafe void WmMeasureItem(ref Message m)
         {
             // Handles the OnMeasureItem message sent from ContainerControl
 
             // Obtain the measure item struct
-            NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
+            //NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
 
             // The OnMeasureItem handler now determines the height and width of the item
             using ScreenDC screendc = ScreenDC.Create();
@@ -1465,9 +1632,14 @@ namespace System.Windows.Forms
             }
 
             // Update the measure item struct with the new width and height
+            /*
             mis.itemHeight = mie.ItemHeight;
             mis.itemWidth = mie.ItemWidth;
             Marshal.StructureToPtr(mis, m.LParam, false);
+            */
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
+            mis->itemHeight = (uint)mie.ItemHeight;
+            mis->itemWidth = (uint)mie.ItemWidth;
 
             m.Result = (IntPtr)1;
         }

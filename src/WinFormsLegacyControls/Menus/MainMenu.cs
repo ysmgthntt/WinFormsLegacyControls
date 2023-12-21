@@ -122,7 +122,8 @@ namespace System.Windows.Forms
 
         protected override IntPtr CreateMenuHandle()
         {
-            return UnsafeNativeMethods.CreateMenu();
+            //return UnsafeNativeMethods.CreateMenu();
+            return PInvoke.CreateMenu();
         }
 
         /// <summary>
@@ -136,7 +137,9 @@ namespace System.Windows.Forms
             {
                 if (form != null && (ownerForm == null || form == ownerForm))
                 {
+                    /* TODO: Menu Property
                     form.Menu = null;
+                    */
                 }
             }
             base.Dispose(disposing);
@@ -160,7 +163,9 @@ namespace System.Windows.Forms
             base.ItemsChanged(change);
             if (form != null)
             {
+                /* TODO: Menu Property
                 form.MenuChanged(change, this);
+                */
             }
         }
 
@@ -168,7 +173,9 @@ namespace System.Windows.Forms
         {
             if (form != null)
             {
+                /* TODO: Menu Property
                 form.MenuChanged(change, menu);
+                */
             }
         }
 

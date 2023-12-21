@@ -173,7 +173,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(Control control, Point pos)
         {
-            Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
+            //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
+            Show(control, pos, (int)(TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON));
         }
 
         /// <summary>
@@ -188,11 +189,13 @@ namespace System.Windows.Forms
             // menu with the point (which aligns it Left visually)
             if (alignment == LeftRightAlignment.Left)
             {
-                Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_RIGHTALIGN);
+                //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_RIGHTALIGN);
+                Show(control, pos, (int)(TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN));
             }
             else
             {
-                Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_LEFTALIGN);
+                //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_LEFTALIGN);
+                Show(control, pos, (int)(TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_LEFTALIGN));
             }
         }
 
@@ -212,12 +215,15 @@ namespace System.Windows.Forms
 
             OnPopup(EventArgs.Empty);
             pos = control.PointToScreen(pos);
+            /*
             SafeNativeMethods.TrackPopupMenuEx(new HandleRef(this, Handle),
                 flags,
                 pos.X,
                 pos.Y,
                 new HandleRef(control, control.Handle),
                 null);
+            */
+            PInvoke.TrackPopupMenuEx(this, (uint)flags, pos.X, pos.Y, control, 0);
         }
 
     }
