@@ -4,10 +4,10 @@ namespace Windows.Win32
 {
     partial class PInvoke
     {
-        public static BOOL DrawMenuBar(Control control)
+        public static BOOL DrawMenuBar(IWin32Window hWnd)
         {
-            BOOL result = DrawMenuBar((HWND)control.Handle);
-            GC.KeepAlive(control);
+            BOOL result = DrawMenuBar((HWND)hWnd.Handle);
+            GC.KeepAlive(hWnd);
             return result;
         }
     }

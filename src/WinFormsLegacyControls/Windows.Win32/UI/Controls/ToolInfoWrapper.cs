@@ -4,7 +4,7 @@
 namespace Windows.Win32.UI.Controls;
 
 internal unsafe struct ToolInfoWrapper<T>
-    where T : /*IHandle<HWND>*/global::System.Windows.Forms.Control
+    where T : /*IHandle<HWND>*/global::System.Windows.Forms.IWin32Window
 {
     public TTTOOLINFOW Info;
     public string? Text { get; set; }
@@ -36,7 +36,7 @@ internal unsafe struct ToolInfoWrapper<T>
         _handle = handle;
     }
 
-    public LRESULT SendMessage(IHandle/*<HWND>*/ sender, /*MessageId*/uint message, bool state = false)
+    public LRESULT SendMessage(/*IHandle<HWND>*/global::System.Runtime.InteropServices.HandleRef sender, /*MessageId*/uint message, bool state = false)
     {
         Info.cbSize = (uint)sizeof(TTTOOLINFOW);
         fixed (char* c = Text)

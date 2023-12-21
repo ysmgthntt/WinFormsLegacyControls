@@ -24,7 +24,6 @@ namespace System.Windows.Forms
     DefaultProperty(nameof(Buttons))
     ]
     public partial class ToolBar : Control
-        , IHandle
     {
         private readonly ToolBarButtonCollection buttonsCollection;
 

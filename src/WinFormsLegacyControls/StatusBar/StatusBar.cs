@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -29,7 +30,6 @@ namespace System.Windows.Forms
     */
     ]
     public class StatusBar : Control
-        , IHandle
     {
         private int sizeGripWidth = 0;
         private const int SIMPLE_INDEX = 0xFF;
@@ -1670,7 +1670,7 @@ namespace System.Windows.Forms
         ///  this control binds to rectangular regions, instead of
         ///  full controls.
         /// </summary>
-        private class ControlToolTip : IHandle
+        private sealed class ControlToolTip : /*IHandle*/IWin32Window
         {
             public class Tool
             {
@@ -1825,6 +1825,9 @@ namespace System.Windows.Forms
                 return (Tool)tools[key];
             }
 
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name ="get_Handle")]
+            private static extern IntPtr GetToolTipHandle(ToolTip toolTip);
+
             private void AddTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0)
@@ -1833,7 +1836,12 @@ namespace System.Windows.Forms
 
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     //if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
-                    if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, PInvoke.TTM_ADDTOOLW) == IntPtr.Zero)
+                    HandleRef handle;
+                    if (p.mainToolTip is not null)
+                        handle = new HandleRef(p.mainToolTip, GetToolTipHandle(p.mainToolTip));
+                    else
+                        handle = new HandleRef(this, Handle);
+                    if (info.SendMessage(handle, PInvoke.TTM_ADDTOOLW) == 0)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1846,7 +1854,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     //info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
-                    info.SendMessage(this, PInvoke.TTM_DELTOOLW);
+                    info.SendMessage(new HandleRef(this, Handle), PInvoke.TTM_DELTOOLW);
                 }
             }
 
@@ -1856,7 +1864,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     //info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                    info.SendMessage(this, PInvoke.TTM_SETTOOLINFOW);
+                    info.SendMessage(new HandleRef(this, Handle), PInvoke.TTM_SETTOOLINFOW);
                 }
             }
 

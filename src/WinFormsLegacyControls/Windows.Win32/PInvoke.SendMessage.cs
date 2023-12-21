@@ -1,11 +1,12 @@
-﻿using System;
+﻿using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Windows.Win32
 {
     partial class PInvoke
     {
         public static LRESULT SendMessage(
-            IHandle hWnd,
+            IWin32Window hWnd,
             uint Msg,
             WPARAM wParam = default,
             LPARAM lParam = default)
@@ -15,8 +16,19 @@ namespace Windows.Win32
             return result;
         }
 
+        public static LRESULT SendMessage(
+            HandleRef hWnd,
+            uint Msg,
+            WPARAM wParam = default,
+            LPARAM lParam = default)
+        {
+            LRESULT result = SendMessage((HWND)hWnd.Handle, Msg, wParam, lParam);
+            GC.KeepAlive(hWnd.Wrapper);
+            return result;
+        }
+
         public static unsafe LRESULT SendMessage(
-            IHandle hWnd,
+            IWin32Window hWnd,
             uint Msg,
             WPARAM wParam,
             string? lParam)
@@ -28,7 +40,7 @@ namespace Windows.Win32
         }
 
         public static unsafe nint SendMessage<TLParam>(
-            IHandle hWnd,
+            IWin32Window hWnd,
             uint Msg,
             WPARAM wParam,
             ref TLParam lParam)
