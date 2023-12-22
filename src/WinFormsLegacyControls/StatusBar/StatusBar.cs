@@ -964,10 +964,18 @@ namespace System.Windows.Forms
         }
 
         // call this when System.Windows.forms.toolTip is Associated with Statusbar....
+        /*
         internal void SetToolTip(ToolTip t)
         {
             mainToolTip = t;
             toolTipSet = true;
+        }
+        */
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void SetToolTip(ToolTip t)
+        {
+            mainToolTip = t;
+            toolTipSet = t is not null;
         }
 
         internal void UpdateTooltip(StatusBarPanel panel)
