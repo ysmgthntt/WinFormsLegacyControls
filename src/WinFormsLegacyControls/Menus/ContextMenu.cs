@@ -223,7 +223,9 @@ namespace System.Windows.Forms
                 new HandleRef(control, control.Handle),
                 null);
             */
-            PInvoke.TrackPopupMenuEx(this, (uint)flags, pos.X, pos.Y, control, 0);
+            IntPtr createHandle = this.Handle;
+            BOOL result = PInvoke.TrackPopupMenuEx(this, (uint)flags, pos.X, pos.Y, control, 0);
+            Debug.Assert(result);
         }
 
     }

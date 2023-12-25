@@ -4,6 +4,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using static Interop;
 
 namespace WinFormsLegacyControls.Menus.Migration
 {
@@ -385,8 +386,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                 {
                     //UnsafeNativeMethods.SetMenu(new HandleRef(this, Handle), new HandleRef(menu, menu.Handle));
                     IntPtr createHandle = menu.Handle;
-                    BOOL setMenuResult = PInvoke.SetMenu(_form, menu);
-                    Debug.Assert(setMenuResult == BOOL.TRUE);
+                    BOOL result = PInvoke.SetMenu(_form, menu);
+                    Debug.Assert(result);
                 }
                 else
                 {
@@ -576,10 +577,29 @@ namespace WinFormsLegacyControls.Menus.Migration
                 case PInvoke.WM_NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
+                case PInvoke.WM_COMMAND:
+                    WmCommand(ref m);
+                    break;
                 default:
                     base.WndProc(ref m);
                     break;
             }
+        }
+
+        /// <summary>
+        ///  Handles the WM_COMMAND message
+        /// </summary>
+        private void WmCommand(ref Message m)
+        {
+            if (IntPtr.Zero == m.LParam)
+            {
+                //if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam)))
+                if (Command.DispatchID(PARAM.LOWORD(m.WParam)))
+                {
+                    return;
+                }
+            }
+            base.WndProc(ref m);
         }
     }
 }

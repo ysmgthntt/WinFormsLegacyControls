@@ -6,14 +6,16 @@ namespace WinFormsLegacyControls
 {
     public static class ExtendMenuProperties
     {
-        private static readonly Dictionary<Form, MainMenuSupportFormNativeWindow> _mainManus = new();
-
         private static void Key_Disposed<K, V>(this Dictionary<K, V> dictionary, object? sender, EventArgs e)
             where K : notnull
         {
             if (sender is K key)
                 dictionary.Remove(key);
         }
+
+        // Form.Menu Property
+
+        private static readonly Dictionary<Form, MainMenuSupportFormNativeWindow> _mainManus = new();
 
         public static MainMenu? GetMenu(this Form form)
         {
@@ -62,6 +64,43 @@ namespace WinFormsLegacyControls
         {
             if (_mainManus.TryGetValue(form, out var window))
                 window.MenuChanged(change, menu);
+        }
+
+        // Control.ContextMenu Property
+
+        private static readonly Dictionary<Control, ContextMenuSupportControlNativeWindow> _contextMenus = new();
+
+        public static ContextMenu? GetContextMenu(this Control control)
+        {
+            ArgumentNullException.ThrowIfNull(control);
+
+            if (_contextMenus.TryGetValue(control, out var window))
+                return window.ContextMenu;
+            return null;
+        }
+
+        public static void SetContextMenu(this Control control, ContextMenu? contextMenu)
+        {
+            ArgumentNullException.ThrowIfNull(control);
+            ObjectDisposedException.ThrowIf(control.IsDisposed, control);
+
+            if (_contextMenus.TryGetValue(control, out var window))
+            {
+                window.ContextMenu = contextMenu;
+                if (contextMenu is null)
+                {
+                    window.Detach();
+                    control.Disposed -= _mainManus.Key_Disposed;
+                    _contextMenus.Remove(control);
+                }
+            }
+            else if (control is not null)
+            {
+                window = new ContextMenuSupportControlNativeWindow(control);
+                _contextMenus[control] = window;
+                control.Disposed += _mainManus.Key_Disposed;
+                window.ContextMenu = contextMenu;
+            }
         }
     }
 }
