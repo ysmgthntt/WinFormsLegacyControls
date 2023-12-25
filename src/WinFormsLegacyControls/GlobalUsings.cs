@@ -9,3 +9,5 @@ global using System;
 global using System.IO;
 global using System.Diagnostics.CodeAnalysis;
 global using Debug = System.Diagnostics.Debug;
+
+global using WinFormsLegacyControls;

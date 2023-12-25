@@ -9,7 +9,7 @@ namespace Windows.Win32
             BOOL result;
             unsafe
             {
-                result = TrackPopupMenuEx((HMENU)menu.Handle, uFlags, x, y, (HWND)hwnd.Handle, (TPMPARAMS*)lptpm);
+                result = TrackPopupMenuEx((HMENU)menu.handle, uFlags, x, y, (HWND)hwnd.Handle, (TPMPARAMS*)lptpm);
             }
             GC.KeepAlive(menu);
             GC.KeepAlive(hwnd);

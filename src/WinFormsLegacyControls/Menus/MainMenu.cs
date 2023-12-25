@@ -137,9 +137,9 @@ namespace System.Windows.Forms
             {
                 if (form != null && (ownerForm == null || form == ownerForm))
                 {
-                    /* TODO: Menu Property
-                    form.Menu = null;
-                    */
+                    //form.Menu = null;
+                    if (form.TryGetMainMenuSupportFormNativeWindow(out var window))
+                        window.Menu = null;
                 }
             }
             base.Dispose(disposing);
@@ -163,9 +163,7 @@ namespace System.Windows.Forms
             base.ItemsChanged(change);
             if (form != null)
             {
-                /* TODO: Menu Property
                 form.MenuChanged(change, this);
-                */
             }
         }
 
@@ -173,9 +171,7 @@ namespace System.Windows.Forms
         {
             if (form != null)
             {
-                /* TODO: Menu Property
                 form.MenuChanged(change, menu);
-                */
             }
         }
 
