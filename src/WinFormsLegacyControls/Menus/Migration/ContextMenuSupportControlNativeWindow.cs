@@ -9,11 +9,12 @@ using static Interop;
 namespace WinFormsLegacyControls.Menus.Migration
 {
     internal sealed class ContextMenuSupportControlNativeWindow : NativeWindow
+        , ISupportNativeWindow<Control, ContextMenu, ContextMenuSupportControlNativeWindow>
     {
         private readonly Control _control;
         private ContextMenu _contextMenu;
 
-        public ContextMenuSupportControlNativeWindow(Control control)
+        private ContextMenuSupportControlNativeWindow(Control control)
         {
             _control = control;
             _control.Disposed += Control_Disposed;
@@ -22,11 +23,20 @@ namespace WinFormsLegacyControls.Menus.Migration
                 AssignHandle(_control.Handle);
         }
 
+        public static ContextMenuSupportControlNativeWindow Create(Control control)
+            => new(control);
+
         public void Detach()
         {
             _control.Disposed -= Control_Disposed;
             _control.HandleCreated -= Control_HandleCreated;
             ReleaseHandle();
+        }
+
+        ContextMenu ISupportNativeWindow<Control, ContextMenu, ContextMenuSupportControlNativeWindow>.Property
+        {
+            get => ContextMenu;
+            set => ContextMenu = value;
         }
 
         private void Control_Disposed(object sender, EventArgs e)
@@ -145,18 +155,22 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
         }
 
-        // TODO:
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            //ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
-            ContextMenu contextMenu = _contextMenu;
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
+            ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             if (contextMenu != null && contextMenu.ProcessCmdKey(ref msg, keyData, this))
             {
                 return true;
             }
 
+            if (_parent != null)
+            {
+                return _parent.ProcessCmdKey(ref msg, keyData);
+            }
             return false;
         }
+          -> MenuShortcutProcessMessageFilter
         */
 
         /// <summary>

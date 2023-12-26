@@ -6,6 +6,8 @@ namespace WinFormsLegacyControls
 {
     public static class ExtendMenuProperties
     {
+        private static bool _messageFilterInstalled;
+
         private static void Key_Disposed<K, V>(this Dictionary<K, V> dictionary, object? sender, EventArgs e)
             where K : notnull
         {
@@ -13,94 +15,84 @@ namespace WinFormsLegacyControls
                 dictionary.Remove(key);
         }
 
-        // Form.Menu Property
-
-        private static readonly Dictionary<Form, MainMenuSupportFormNativeWindow> _mainManus = new();
-
-        public static MainMenu? GetMenu(this Form form)
+        private static class Holder<K, V, P>
+            where K : notnull, Control
+            where V : ISupportNativeWindow<K, P, V>
         {
-            ArgumentNullException.ThrowIfNull(form);
+            private static readonly Dictionary<K, V> _property = new();
 
-            if (_mainManus.TryGetValue(form, out var window))
-                return window.Menu;
-            return null;
-        }
-
-        public static void SetMenu(this Form form, MainMenu? menu)
-        {
-            ArgumentNullException.ThrowIfNull(form);
-            ObjectDisposedException.ThrowIf(form.IsDisposed, form);
-
-            if (_mainManus.TryGetValue(form, out var window))
+            public static P? GetValue(K key)
             {
-                window.Menu = menu;
-                if (menu is null)
+                ArgumentNullException.ThrowIfNull(key);
+
+                if (_property.TryGetValue(key, out var window))
+                    return window.Property;
+                return default;
+            }
+
+            public static void SetValue(K key, P? value)
+            {
+                ArgumentNullException.ThrowIfNull(key);
+                ObjectDisposedException.ThrowIf(key.IsDisposed, key);
+
+                if (_property.TryGetValue(key, out var window))
                 {
-                    window.Detach();
-                    form.Disposed -= _mainManus.Key_Disposed;
-                    _mainManus.Remove(form);
+                    window.Property = value;
+                    if (value is null)
+                    {
+                        window.Detach();
+                        key.Disposed -= _property.Key_Disposed;
+                        _property.Remove(key);
+                    }
+                }
+                else if (value is not null)
+                {
+                    if (!_messageFilterInstalled)
+                    {
+                        Application.AddMessageFilter(new MenuShortcutProcessMessageFilter());
+                        _messageFilterInstalled = true;
+                    }
+                    window = V.Create(key);
+                    _property[key] = window;
+                    key.Disposed += _property.Key_Disposed;
+                    window.Property = value;
                 }
             }
-            else if (menu is not null)
-            {
-                window = new MainMenuSupportFormNativeWindow(form);
-                _mainManus[form] = window;
-                form.Disposed += _mainManus.Key_Disposed;
-                window.Menu = menu;
-            }
+
+            public static bool TryGetValue(K key, [NotNullWhen(true)] out V? window)
+                => _property.TryGetValue(key, out window);
         }
+
+        // Form.Menu Property
+
+        public static MainMenu? GetMenu(this Form form)
+            => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.GetValue(form);
+
+        public static void SetMenu(this Form form, MainMenu? menu)
+            => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.SetValue(form, menu);
 
         internal static MainMenuSupportFormNativeWindow? GetMainMenuSupportFormNativeWindow(this Form form)
         {
-            if (_mainManus.TryGetValue(form, out var window))
+            if (Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetValue(form, out var window))
                 return window;
             return null;
         }
 
         internal static bool TryGetMainMenuSupportFormNativeWindow(this Form form, [NotNullWhen(true)] out MainMenuSupportFormNativeWindow? window)
-            => _mainManus.TryGetValue(form, out window);
+            => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetValue(form, out window);
 
-        internal static void MenuChanged(this Form form, int change, Menu menu)
+        internal static void MenuChanged(this Form form, int change, Menu? menu)
         {
-            if (_mainManus.TryGetValue(form, out var window))
+            if (Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetValue(form, out var window))
                 window.MenuChanged(change, menu);
         }
 
         // Control.ContextMenu Property
 
-        private static readonly Dictionary<Control, ContextMenuSupportControlNativeWindow> _contextMenus = new();
-
         public static ContextMenu? GetContextMenu(this Control control)
-        {
-            ArgumentNullException.ThrowIfNull(control);
-
-            if (_contextMenus.TryGetValue(control, out var window))
-                return window.ContextMenu;
-            return null;
-        }
+            => Holder<Control, ContextMenuSupportControlNativeWindow, ContextMenu>.GetValue(control);
 
         public static void SetContextMenu(this Control control, ContextMenu? contextMenu)
-        {
-            ArgumentNullException.ThrowIfNull(control);
-            ObjectDisposedException.ThrowIf(control.IsDisposed, control);
-
-            if (_contextMenus.TryGetValue(control, out var window))
-            {
-                window.ContextMenu = contextMenu;
-                if (contextMenu is null)
-                {
-                    window.Detach();
-                    control.Disposed -= _mainManus.Key_Disposed;
-                    _contextMenus.Remove(control);
-                }
-            }
-            else if (control is not null)
-            {
-                window = new ContextMenuSupportControlNativeWindow(control);
-                _contextMenus[control] = window;
-                control.Disposed += _mainManus.Key_Disposed;
-                window.ContextMenu = contextMenu;
-            }
-        }
+            => Holder<Control, ContextMenuSupportControlNativeWindow, ContextMenu>.SetValue(control, contextMenu);
     }
 }

@@ -9,6 +9,7 @@ using static Interop;
 namespace WinFormsLegacyControls.Menus.Migration
 {
     internal sealed class MainMenuSupportFormNativeWindow : NativeWindow
+        , ISupportNativeWindow<Form, MainMenu, MainMenuSupportFormNativeWindow>
     {
         private readonly Form _form;
         private MainMenu? _mainMenu;
@@ -16,7 +17,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         private MainMenu? _curMenu;
         private MainMenu? _mergedMenu;
 
-        public MainMenuSupportFormNativeWindow(Form form)
+        private MainMenuSupportFormNativeWindow(Form form)
         {
             _form = form;
             _form.Disposed += Form_Disposed;
@@ -27,6 +28,9 @@ namespace WinFormsLegacyControls.Menus.Migration
                 AssignHandle(_form.Handle);
         }
 
+        public static MainMenuSupportFormNativeWindow Create(Form form)
+            => new(form);
+
         public void Detach()
         {
             _form.Disposed -= Form_Disposed;
@@ -34,6 +38,12 @@ namespace WinFormsLegacyControls.Menus.Migration
             //_form.HandleDestroyed -= Form_HandleDestroyed;
             _form.VisibleChanged -= Form_VisibleChanged;
             ReleaseHandle();
+        }
+
+        MainMenu ISupportNativeWindow<Form, MainMenu, MainMenuSupportFormNativeWindow>.Property
+        {
+            get => Menu;
+            set => Menu = value;
         }
 
         private void Form_Disposed(object sender, EventArgs e)
@@ -306,14 +316,16 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
         }
 
-        // TODO:
-        //★protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         /*
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
             MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
             if (curMenu != null && curMenu.ProcessCmdKey(ref msg, keyData))
             {
                 return true;
             }
+        }
+          -> MenuShortcutProcessMessageFilter
         */
 
         private void UpdateMenuHandles()
