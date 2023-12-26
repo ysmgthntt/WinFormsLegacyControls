@@ -16,8 +16,12 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(Popup))]
     public class ContextMenu : Menu
     {
+        /*
         private EventHandler onPopup;
         private EventHandler onCollapse;
+        */
+        private static readonly object _popupEvent = new();
+        private static readonly object _collapseEvent = new();
         internal Control sourceControl;
 
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
@@ -58,8 +62,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup
         {
+            /*
             add => onPopup += value;
             remove => onPopup -= value;
+            */
+            add => Events.AddHandler(_popupEvent, value);
+            remove => Events.RemoveHandler(_popupEvent, value);
         }
 
         /// <summary>
@@ -68,8 +76,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse
         {
+            /*
             add => onCollapse += value;
             remove => onCollapse -= value;
+            */
+            add => Events.AddHandler(_collapseEvent, value);
+            remove => Events.RemoveHandler(_collapseEvent, value);
         }
 
         /// <summary>
@@ -133,7 +145,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual void OnPopup(EventArgs e)
         {
-            onPopup?.Invoke(this, e);
+            //onPopup?.Invoke(this, e);
+            ((EventHandler?)Events[_popupEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -141,7 +154,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
-            onCollapse?.Invoke(this, e);
+            //onCollapse?.Invoke(this, e);
+            ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
         }
 
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control)

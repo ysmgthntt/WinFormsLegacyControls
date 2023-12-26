@@ -97,8 +97,12 @@ namespace System.Windows.Forms
 
         // event handlers
         //
+        /*
         private ToolBarButtonClickEventHandler onButtonClick = null;
         private ToolBarButtonClickEventHandler onButtonDropDown = null;
+        */
+        private static readonly object _buttonClickEvent = new();
+        private static readonly object _buttonDropDownEvent = new();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBar'/> class.
@@ -1014,8 +1018,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick
         {
+            /*
             add => onButtonClick += value;
             remove => onButtonClick -= value;
+            */
+            add => Events.AddHandler(_buttonClickEvent, value);
+            remove => Events.RemoveHandler(_buttonClickEvent, value);
         }
 
         /// <summary>
@@ -1024,8 +1032,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown
         {
+            /*
             add => onButtonDropDown += value;
             remove => onButtonDropDown -= value;
+            */
+            add => Events.AddHandler(_buttonDropDownEvent, value);
+            remove => Events.RemoveHandler(_buttonDropDownEvent, value);
         }
 
         /// <summary>
@@ -1345,7 +1357,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
         {
-            onButtonClick?.Invoke(this, e);
+            //onButtonClick?.Invoke(this, e);
+            ((ToolBarButtonClickEventHandler?)Events[_buttonClickEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1354,7 +1367,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
         {
-            onButtonDropDown?.Invoke(this, e);
+            //onButtonDropDown?.Invoke(this, e);
+            ((ToolBarButtonClickEventHandler?)Events[_buttonDropDownEvent])?.Invoke(this, e);
         }
 
         /// <summary>

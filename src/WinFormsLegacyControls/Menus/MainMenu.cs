@@ -15,7 +15,8 @@ namespace System.Windows.Forms
         internal Form form;
         internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
-        private EventHandler onCollapse;
+        //private EventHandler onCollapse;
+        private static readonly object _collapseEvent = new();
 
         /// <summary>
         ///  Creates a new MainMenu control.
@@ -50,8 +51,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse
         {
+            /*
             add => onCollapse += value;
             remove => onCollapse -= value;
+            */
+            add => Events.AddHandler(_collapseEvent, value);
+            remove => Events.RemoveHandler(_collapseEvent, value);
         }
 
         /// <summary>
@@ -180,7 +185,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
-            onCollapse?.Invoke(this, e);
+            //onCollapse?.Invoke(this, e);
+            ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
         }
 
         /// <summary>
