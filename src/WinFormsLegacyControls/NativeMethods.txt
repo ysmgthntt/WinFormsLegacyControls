@@ -21,6 +21,7 @@ HTCLIENT
 HWND_*
 InitCommonControlsEx
 InsertMenuItem
+MapWindowPoints
 MEASUREITEMSTRUCT
 MENUITEMINFOW
 MSAA_MENU_SIG

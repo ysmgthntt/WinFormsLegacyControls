@@ -54,13 +54,11 @@ namespace System.Windows.Forms
         /// </summary>
         internal ToolBar parent;
 
-#if false// TODO: Menu
         /// <summary>
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
         internal Menu dropDownMenu = null;
-#endif
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
@@ -112,7 +110,6 @@ namespace System.Windows.Forms
             }
         }
 
-#if false // TODO: Menu
         /// <summary>
         ///
         ///  Indicates the menu to be displayed in
@@ -141,7 +138,6 @@ namespace System.Windows.Forms
                 dropDownMenu = value;
             }
         }
-#endif
 
         /// <summary>
         ///  Indicates whether the button is enabled or not.

@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         public void Show(Control control, Point pos)
         {
             //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
-            Show(control, pos, (int)(TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON));
+            Show(control, pos, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON);
         }
 
         /// <summary>
@@ -204,16 +204,16 @@ namespace System.Windows.Forms
             if (alignment == LeftRightAlignment.Left)
             {
                 //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_RIGHTALIGN);
-                Show(control, pos, (int)(TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN));
+                Show(control, pos, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN);
             }
             else
             {
                 //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_LEFTALIGN);
-                Show(control, pos, (int)(TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_LEFTALIGN));
+                Show(control, pos, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_LEFTALIGN);
             }
         }
 
-        private void Show(Control control, Point pos, int flags)
+        private void Show(Control control, Point pos, TRACK_POPUP_MENU_FLAGS flags)
         {
             if (control == null)
             {
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
                 null);
             */
             IntPtr createHandle = this.Handle;
-            BOOL result = PInvoke.TrackPopupMenuEx(this, (uint)flags, pos.X, pos.Y, control, 0);
+            BOOL result = PInvoke.TrackPopupMenuEx(this, flags, pos.X, pos.Y, control, 0);
             Debug.Assert(result);
         }
 

@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Windows.Win32.Foundation;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -1670,12 +1671,15 @@ namespace System.Windows.Forms
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
             */
-            ToolBarButton tbb;
+            int iItem;
+            HWND hwndFrom;
             unsafe
             {
                 NativeMethods.NMTOOLBAR* nmTB = (NativeMethods.NMTOOLBAR*)m.LParam;
-                tbb = buttons[nmTB->iItem];
+                iItem = nmTB->iItem;
+                hwndFrom = nmTB->hdr.hwndFrom;
             }
+            ToolBarButton tbb = buttons[iItem];
             if (tbb == null)
             {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
@@ -1683,14 +1687,15 @@ namespace System.Windows.Forms
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
-#if false   // TODO: Menu
             Menu menu = tbb.DropDownMenu;
             if (menu != null)
             {
                 RECT rc = new RECT();
-                NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
+                //NativeMethods.TPMPARAMS tpm = new NativeMethods.TPMPARAMS();
+                TPMPARAMS tpm;
 
-                SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
+                //SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
+                PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)iItem, ref rc);
 
                 if ((menu.GetType()).IsAssignableFrom(typeof(ContextMenu)))
                 {
@@ -1704,13 +1709,25 @@ namespace System.Windows.Forms
                         main.ProcessInitMenuPopup(menu.Handle);
                     }
 
-                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(nmTB.hdr, nmTB.hdr.hwndFrom), NativeMethods.NullHandleRef, ref rc, 2);
+                    //UnsafeNativeMethods.MapWindowPoints(new HandleRef(nmTB.hdr, nmTB.hdr.hwndFrom), NativeMethods.NullHandleRef, ref rc, 2);
+                    PInvoke.MapWindowPoints(hwndFrom, HWND.Null, ref rc);
 
+                    /*
                     tpm.rcExclude_left = rc.left;
                     tpm.rcExclude_top = rc.top;
                     tpm.rcExclude_right = rc.right;
                     tpm.rcExclude_bottom = rc.bottom;
+                    */
+                    unsafe
+                    {
+                        tpm = new TPMPARAMS
+                        {
+                            cbSize = (uint)sizeof(TPMPARAMS),
+                            rcExclude = rc
+                        };
+                    }
 
+                    /*
                     SafeNativeMethods.TrackPopupMenuEx(
                                                   new HandleRef(menu, menu.Handle),
                                                   NativeMethods.TPM_LEFTALIGN |
@@ -1718,9 +1735,16 @@ namespace System.Windows.Forms
                                                   NativeMethods.TPM_VERTICAL,
                                                   rc.left, rc.bottom,
                                                   new HandleRef(this, Handle), tpm);
+                    */
+                    IntPtr createHandle = menu.Handle;
+                    BOOL result = PInvoke.TrackPopupMenuEx(menu,
+                        TRACK_POPUP_MENU_FLAGS.TPM_LEFTALIGN |
+                        TRACK_POPUP_MENU_FLAGS.TPM_LEFTBUTTON |
+                        TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL,
+                        rc.left, rc.bottom, this, ref tpm);
+                    Debug.Assert(result);
                 }
             }
-#endif
         }
 
         // readonly にすると動作しない。
