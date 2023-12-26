@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms
                             m.Result = (IntPtr)1;
                             break;
 
-                        //case NativeMethods.TBN_QUERYINSERT:
+                        //case NativeMethods.TBN_DROPDOWN:
                         case PInvoke.TBN_DROPDOWN:
                             WmNotifyDropDown(ref m);
                             break;

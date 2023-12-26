@@ -5,7 +5,5 @@
         public static BOOL TRUE { get; } = new(true);
 
         public static BOOL FALSE { get; } = new(false);
-
-        public bool IsTrue() => this;
     }
 }

@@ -756,7 +756,7 @@ namespace System.Windows.Forms
             if (length == 0)
             {
                 //User32.SendMessageW(this, (User32.WM)SB.SETTEXT, IntPtr.Zero, string.Empty);
-                PInvoke.SendMessage(this, PInvoke.SB_SETTEXT, (WPARAM)0, string.Empty);
+                PInvoke.SendMessage(this, PInvoke.SB_SETTEXT, 0, string.Empty);
             }
 
             int i;

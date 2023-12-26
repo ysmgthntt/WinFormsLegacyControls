@@ -9,7 +9,7 @@ namespace System.Windows.Forms
 
         private short _updateCount;
 
-        internal void BeginUpdateInternal()
+        private void BeginUpdateInternal()
         {
             if (!IsHandleCreated)
             {
@@ -24,12 +24,12 @@ namespace System.Windows.Forms
             _updateCount++;
         }
 
-        internal bool EndUpdateInternal()
+        private bool EndUpdateInternal()
         {
             return EndUpdateInternal(true);
         }
 
-        internal bool EndUpdateInternal(bool invalidate)
+        private bool EndUpdateInternal(bool invalidate)
         {
             if (_updateCount > 0)
             {
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
 
         // internal methods
 
-        internal const int STATE_DISPOSING = 0x00001000;
+        private const int STATE_DISPOSING = 0x00001000;
 
         private static MethodInfo? _miSetState;
 
