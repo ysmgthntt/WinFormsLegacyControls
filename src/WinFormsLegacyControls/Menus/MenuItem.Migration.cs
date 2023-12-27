@@ -4,7 +4,7 @@ namespace System.Windows.Forms
 {
     partial class MenuItem
     {
-        internal static IntPtr SetUpPalette(IntPtr dc, bool force, bool realizePalette)
+        private static IntPtr SetUpPalette(IntPtr dc, bool force, bool realizePalette)
         {
             IntPtr halftonePalette = Graphics.GetHalftonePalette();
 
