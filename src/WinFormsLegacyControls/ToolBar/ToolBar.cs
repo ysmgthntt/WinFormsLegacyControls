@@ -1284,7 +1284,9 @@ namespace System.Windows.Forms
             Insert(index, value);
             if (IsHandleCreated)
             {
-                NativeMethods.TBBUTTON tbbutton = value.GetTBBUTTON(index);
+                //NativeMethods.TBBUTTON tbbutton = value.GetTBBUTTON(index);
+                NativeMethods.TBBUTTON tbbutton = new NativeMethods.TBBUTTON();
+                value.GetTBBUTTON(index, ref tbbutton);
                 //UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_INSERTBUTTON, index, ref tbbutton);
                 PInvoke.SendMessage(this, PInvoke.TB_INSERTBUTTON, (WPARAM)index, ref tbbutton);
             }
@@ -1463,7 +1465,7 @@ namespace System.Windows.Forms
         {
             if (buttons != null)
             {
-                IntPtr ptbbuttons = IntPtr.Zero;
+                //IntPtr ptbbuttons = IntPtr.Zero;
                 try
                 {
                     BeginUpdate();
@@ -1487,18 +1489,26 @@ namespace System.Windows.Forms
                     //
                     int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
                     int count = buttonCount;
-                    ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
+                    //ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
+                    Span<NativeMethods.TBBUTTON> ptbbuttons = stackalloc NativeMethods.TBBUTTON[count];
 
                     for (int x = 0; x < count; x++)
                     {
 
-                        NativeMethods.TBBUTTON tbbutton = buttons[x].GetTBBUTTON(x);
-                        Marshal.StructureToPtr(tbbutton, (IntPtr)(checked((long)ptbbuttons + (cb * x))), true);
+                        //NativeMethods.TBBUTTON tbbutton = buttons[x].GetTBBUTTON(x);
+                        //Marshal.StructureToPtr(tbbutton, (IntPtr)(checked((long)ptbbuttons + (cb * x))), true);
+                        buttons[x].GetTBBUTTON(x, ref ptbbuttons[x]);
                         buttons[x].parent = this;
                     }
 
                     //SendMessage(NativeMethods.TB_ADDBUTTONS, count, ptbbuttons);
-                    PInvoke.SendMessage(this, PInvoke.TB_ADDBUTTONS, (WPARAM)count, ptbbuttons);
+                    unsafe
+                    {
+                        fixed (void* ptr = ptbbuttons)
+                        {
+                            PInvoke.SendMessage(this, PInvoke.TB_ADDBUTTONS, (WPARAM)count, ptr);
+                        }
+                    }
 
                     // after doing anything with the comctl ToolBar control, this
                     // appears to be a good idea.
@@ -1523,7 +1533,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    Marshal.FreeHGlobal(ptbbuttons);
+                    //Marshal.FreeHGlobal(ptbbuttons);
                     EndUpdate();
                 }
             }

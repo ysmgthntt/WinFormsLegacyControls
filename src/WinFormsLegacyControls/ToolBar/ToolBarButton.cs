@@ -666,15 +666,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a TBBUTTON object that represents this ToolBarButton.
         /// </summary>
-        internal NativeMethods.TBBUTTON GetTBBUTTON(int commandId)
+        //internal NativeMethods.TBBUTTON GetTBBUTTON(int commandId)
+        internal void GetTBBUTTON(int commandId, ref NativeMethods.TBBUTTON button)
         {
-            NativeMethods.TBBUTTON button = new NativeMethods.TBBUTTON
+            //NativeMethods.TBBUTTON button = new NativeMethods.TBBUTTON
             {
-                iBitmap = ImageIndexer.ActualIndex,
+                //iBitmap = ImageIndexer.ActualIndex,
+                button.iBitmap = ImageIndexer.ActualIndex;
 
                 // set up the state of the button
                 //
-                fsState = 0
+                //fsState = 0
+                button.fsState = 0;
             };
             if (enabled)
             {
@@ -728,7 +731,7 @@ namespace System.Windows.Forms
             this.commandId = commandId;
             button.idCommand = commandId;
 
-            return button;
+            //return button;
         }
 
         /// <summary>

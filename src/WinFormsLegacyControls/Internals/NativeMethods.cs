@@ -12,6 +12,7 @@ internal class NativeMethods
         public IntPtr pszText;
     }
 
+    // CsWin32 だと x86 と x64 で定義が変わる。
     [StructLayout(LayoutKind.Sequential)]
     public struct TBBUTTON
     {
@@ -21,6 +22,7 @@ internal class NativeMethods
         public byte fsStyle;
         public byte bReserved0;
         public byte bReserved1;
+        // x64 では 4 byte padding される。
         public IntPtr dwData;
         public IntPtr iString;
     }
