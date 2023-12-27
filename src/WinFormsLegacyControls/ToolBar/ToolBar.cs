@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms
 
                     // insert the buttons and set their parent pointers
                     //
-                    int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
+                    //int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
                     int count = buttonCount;
                     //ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
                     Span<NativeMethods.TBBUTTON> ptbbuttons = stackalloc NativeMethods.TBBUTTON[count];

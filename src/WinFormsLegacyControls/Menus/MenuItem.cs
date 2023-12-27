@@ -1060,6 +1060,13 @@ namespace System.Windows.Forms
             */
         }
 
+#if DEBUG
+        static unsafe MenuItem()
+        {
+            Debug.Assert(sizeof(MsaaMenuInfoWithId) == Marshal.SizeOf<MsaaMenuInfoWithId>());
+        }
+#endif
+
         private char[]? _buffer;
 
         /// <summary>
@@ -1071,7 +1078,11 @@ namespace System.Windows.Forms
         private IntPtr AllocMsaaMenuInfo()
         {
             FreeMsaaMenuInfo();
-            _msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf<MsaaMenuInfoWithId>());
+            //_msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf<MsaaMenuInfoWithId>());
+            unsafe
+            {
+                _msaaMenuInfoPtr = Marshal.AllocHGlobal(sizeof(MsaaMenuInfoWithId));
+            }
 
             if (IntPtr.Size == 4)
             {
