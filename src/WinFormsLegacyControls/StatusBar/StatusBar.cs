@@ -1833,9 +1833,6 @@ namespace System.Windows.Forms
                 return (Tool)tools[key];
             }
 
-            [UnsafeAccessor(UnsafeAccessorKind.Method, Name ="get_Handle")]
-            private static extern IntPtr GetToolTipHandle(ToolTip toolTip);
-
             private void AddTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0)
@@ -1846,7 +1843,8 @@ namespace System.Windows.Forms
                     //if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
                     HandleRef handle;
                     if (p.mainToolTip is not null)
-                        handle = new HandleRef(p.mainToolTip, GetToolTipHandle(p.mainToolTip));
+                        // TODO: ループ前に取得する。
+                        handle = new HandleRef(p.mainToolTip, WinFormsLegacyControls.Migration.ToolTipSupport.GetToolTipHandle(p.mainToolTip));
                     else
                         handle = new HandleRef(this, Handle);
                     if (info.SendMessage(handle, PInvoke.TTM_ADDTOOLW) == 0)

@@ -1284,6 +1284,7 @@ namespace System.Windows.Forms
             Insert(index, value);
             if (IsHandleCreated)
             {
+                // TODO: UpdateButtons で RecreateHandle されるので、必要ないのでは？
                 //NativeMethods.TBBUTTON tbbutton = value.GetTBBUTTON(index);
                 NativeMethods.TBBUTTON tbbutton = new NativeMethods.TBBUTTON();
                 value.GetTBBUTTON(index, ref tbbutton);
@@ -1382,6 +1383,13 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+
+            if (_toolTip is not null)
+            {
+                nint handle = WinFormsLegacyControls.Migration.ToolTipSupport.GetToolTipHandle(_toolTip);
+                PInvoke.SendMessage(this, PInvoke.TB_SETTOOLTIPS, (WPARAM)handle, 0);
+                GC.KeepAlive(_toolTip);
+            }
 
             // we have to set the button struct size, because they don't.
             //
@@ -1631,7 +1639,7 @@ namespace System.Windows.Forms
             return !buttonSize.IsEmpty;
         }
 
-#if false   // TODO: ToolTip
+        /*
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
@@ -1640,7 +1648,16 @@ namespace System.Windows.Forms
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
 
         }
-#endif
+        */
+        private ToolTip? _toolTip;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void SetToolTip(ToolTip? t)
+        {
+            _toolTip = t;
+            if (IsHandleCreated)
+                RecreateHandle();
+        }
 
         /// <summary>
         ///  Returns a string representation for this control.
