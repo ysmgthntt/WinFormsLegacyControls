@@ -258,12 +258,13 @@ namespace WinFormsLegacyControls.Menus.Migration
                 return;
             }
 
-            MdiClient? ctlClient = GetMdiClient(_form);
+            MdiClient? ctlClient;
 
             switch (change)
             {
                 case global::System.Windows.Forms.Menu.CHANGE_ITEMS:
                 case global::System.Windows.Forms.Menu.CHANGE_MERGE:
+                    ctlClient = GetMdiClient(_form);
                     if (ctlClient == null || !ctlClient.IsHandleCreated)
                     {
                         if (menu == Menu && change == global::System.Windows.Forms.Menu.CHANGE_ITEMS)
@@ -302,12 +303,14 @@ namespace WinFormsLegacyControls.Menus.Migration
                     break;
                 case global::System.Windows.Forms.Menu.CHANGE_VISIBLE:
                     //if (menu == Menu || (ActiveMdiChildInternal != null && menu == ActiveMdiChildInternal.Menu))
+                    // TODO: ActiveMdiChild の取得を 1 回にする。
                     if (menu == Menu || (_form.ActiveMdiChild/*Internal*/ != null && menu == _form.ActiveMdiChild/*Internal*/.GetMenu()))
                     {
                         UpdateMenuHandles();
                     }
                     break;
                 case global::System.Windows.Forms.Menu.CHANGE_MDI:
+                    ctlClient = GetMdiClient(_form);
                     if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
                         UpdateMenuHandles();
