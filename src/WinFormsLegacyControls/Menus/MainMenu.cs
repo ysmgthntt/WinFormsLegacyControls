@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     ///  Represents a menu structure for a form.
     /// </summary>
     [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
-    public class MainMenu : Menu
+    public partial class MainMenu : Menu
     {
         internal Form form;
         internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.

@@ -1,13 +1,23 @@
-﻿internal static class SR
+﻿using System.Resources;
+using System.Windows.Forms;
+
+internal static class SR
 {
+    private static ResourceManager? _resourceManager;
+
     internal static string GetResourceString(string value)
-        => value;
+    {
+        _resourceManager ??= new ResourceManager("System.SR", typeof(Control).Assembly);
+        return _resourceManager.GetString(value) ?? value;
+    }
+
     //
-    internal static string CatAppearance => nameof(CatAppearance);
-    internal static string CatBehavior => nameof(CatBehavior);
-    internal static string CatData => nameof(CatData);
-    internal static string CatMouse => nameof(CatMouse);
-    internal static string CatPropertyChanged => nameof(CatPropertyChanged);
+    internal static string CatAppearance => GetResourceString(CatAppearance);
+    internal static string CatBehavior => GetResourceString(CatBehavior);
+    internal static string CatData => GetResourceString(CatData);
+    internal static string CatMouse => GetResourceString(CatMouse);
+    internal static string CatPropertyChanged => GetResourceString(CatPropertyChanged);
+    internal static string CatWindowStyle => GetResourceString(CatWindowStyle);
     //
     internal static string ControlTagDescr => nameof(ControlTagDescr);
     internal static string InvalidArgument => nameof(InvalidArgument);
