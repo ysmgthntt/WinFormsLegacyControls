@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         }
 
         [
-        Browsable(false),
+        //Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         SRDescription(nameof(SR.MenuMenuItemsDescr)),
         MergableProperty(false)
