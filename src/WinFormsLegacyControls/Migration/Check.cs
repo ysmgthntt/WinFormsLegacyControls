@@ -7,7 +7,9 @@ namespace WinFormsLegacyControls.Migration
 {
     internal static class Check
     {
+#pragma warning disable CA2255 // 'ModuleInitializer' 属性はライブラリで使用しないでください
         [ModuleInitializer]
+#pragma warning restore CA2255 // 'ModuleInitializer' 属性はライブラリで使用しないでください
         internal static unsafe void SizeOfCheck()
         {
             Debug.Assert(sizeof(INITCOMMONCONTROLSEX) == Marshal.SizeOf<INITCOMMONCONTROLSEX>());

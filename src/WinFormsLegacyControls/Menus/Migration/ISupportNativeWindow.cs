@@ -4,6 +4,6 @@
     {
         static abstract TSelf Create(TControl control);
         void Detach();
-        TProperty Property { get; set; }
+        TProperty? Property { get; set; }
     }
 }
