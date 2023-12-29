@@ -179,9 +179,7 @@ namespace System.Windows.Forms
         /// </summary>
         [
         TypeConverter(typeof(ImageIndexConverter)),
-        /* TODO: Desinger
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        */
         DefaultValue(-1),
         RefreshProperties(RefreshProperties.Repaint),
         Localizable(true),
@@ -214,9 +212,7 @@ namespace System.Windows.Forms
         /// </summary>
         [
         TypeConverter(typeof(ImageKeyConverter)),
-        /* TODO: Desinger
         Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        */
         DefaultValue(""),
         Localizable(true),
         RefreshProperties(RefreshProperties.Repaint),
