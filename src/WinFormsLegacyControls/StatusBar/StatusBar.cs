@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         private ControlToolTip tooltips;
 
         private ToolTip mainToolTip = null;
-        private bool toolTipSet = false;
+        //private bool toolTipSet = false;
 
         /// <summary>
         ///  Initializes a new default instance of the <see cref='StatusBar'/> class.
@@ -483,6 +483,7 @@ namespace System.Windows.Forms
             }
         }
 
+        /*
         internal bool ToolTipSet
         {
             get
@@ -498,6 +499,7 @@ namespace System.Windows.Forms
                 return mainToolTip;
             }
         }
+        */
 
         /// <summary>
         ///  Occurs when a visual aspect of an owner-drawn status bar changes.
@@ -975,7 +977,8 @@ namespace System.Windows.Forms
         public void SetToolTip(ToolTip t)
         {
             mainToolTip = t;
-            toolTipSet = t is not null;
+            if (IsHandleCreated)
+                RecreateHandle();
         }
 
         internal void UpdateTooltip(StatusBarPanel panel)
@@ -1689,13 +1692,13 @@ namespace System.Windows.Forms
 
             private readonly Hashtable tools = new Hashtable();
             private readonly ToolTipNativeWindow window = null;
-            private readonly Control parent = null;
+            private readonly /*Control*/StatusBar parent = null;
             private int nextId = 0;
 
             /// <summary>
             ///  Creates a new ControlToolTip.
             /// </summary>
-            public ControlToolTip(Control parent)
+            public ControlToolTip(/*Control*/StatusBar parent)
             {
                 window = new ToolTipNativeWindow(this);
                 this.parent = parent;
@@ -1833,21 +1836,28 @@ namespace System.Windows.Forms
                 return (Tool)tools[key];
             }
 
+            // 指定した StatusBarPanel の ToolTipText が変更、削除できない。
+            // TTM_SETTOOLINFOW, TTM_DELTOOLW も TTM_ADDTOOLW した Handle に送信する必要がある。
+            private LRESULT SendMessage(ToolInfoWrapper<Control> info, uint message)
+            {
+                ToolTip t = parent.mainToolTip;
+                HandleRef handle;
+                if (t is not null)
+                    handle = new HandleRef(t, WinFormsLegacyControls.Migration.ToolTipSupport.GetToolTipHandle(t));
+                else
+                    handle = new HandleRef(this, Handle);
+                return info.SendMessage(handle, message);
+            }
+
             private void AddTool(Tool tool)
             {
                 if (tool != null && tool.text != null && tool.text.Length > 0)
                 {
-                    StatusBar p = (StatusBar)parent;
+                    //StatusBar p = (StatusBar)parent;
 
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     //if (info.SendMessage(p.ToolTipSet ? (IHandle)p.mainToolTip : this, (User32.WM)TTM.ADDTOOLW) == IntPtr.Zero)
-                    HandleRef handle;
-                    if (p.mainToolTip is not null)
-                        // TODO: ループ前に取得する。
-                        handle = new HandleRef(p.mainToolTip, WinFormsLegacyControls.Migration.ToolTipSupport.GetToolTipHandle(p.mainToolTip));
-                    else
-                        handle = new HandleRef(this, Handle);
-                    if (info.SendMessage(handle, PInvoke.TTM_ADDTOOLW) == 0)
+                    if (SendMessage(info, PInvoke.TTM_ADDTOOLW) == 0)
                     {
                         throw new InvalidOperationException(SR.StatusBarAddFailed);
                     }
@@ -1860,7 +1870,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     //info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
-                    info.SendMessage(new HandleRef(this, Handle), PInvoke.TTM_DELTOOLW);
+                    SendMessage(info, PInvoke.TTM_DELTOOLW);
                 }
             }
 
@@ -1870,7 +1880,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     //info.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                    info.SendMessage(new HandleRef(this, Handle), PInvoke.TTM_SETTOOLINFOW);
+                    SendMessage(info, PInvoke.TTM_SETTOOLINFOW);
                 }
             }
 
@@ -1938,7 +1948,12 @@ namespace System.Windows.Forms
 
                 return new ToolInfoWrapper<Control>(
                     parent,
-                    id: parent is StatusBar sb ? sb.Handle : tool.id);
+                    // https://github.com/dotnet/winforms/pull/1612/files#diff-8d43c48c6ec7a62bb08bf0bb5f4669378adcba9417e33f554f9ff8fdab508aef
+                    //id: parent is StatusBar sb ? sb.Handle : tool.id);
+                    //id: parent is StatusBar sb && sb.mainToolTip is not null ? sb.Handle : tool.id);
+                    // 指定した StatusBarPanel の ToolTipText が変更、削除できない。
+                    // TTM_SETTOOLINFOW, TTM_DELTOOLW は TTTOOLINFOW.uId を使用して対象を識別する。
+                    id: tool.id);
             }
 
             /// <summary>
