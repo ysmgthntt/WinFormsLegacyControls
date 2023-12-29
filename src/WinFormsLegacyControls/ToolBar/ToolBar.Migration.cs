@@ -51,19 +51,5 @@ namespace System.Windows.Forms
                 return false;
             }
         }
-
-        // internal methods
-
-        private const int STATE_DISPOSING = 0x00001000;
-
-        private static MethodInfo? _miSetState;
-
-        private void SetState(int flag, bool value)
-        {
-            if (_miSetState is null)
-                _miSetState = typeof(Control).GetMethod("SetState", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            _miSetState!.Invoke(this, [flag, value]);
-        }
     }
 }

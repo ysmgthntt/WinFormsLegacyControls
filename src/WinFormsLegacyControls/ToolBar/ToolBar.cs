@@ -1139,11 +1139,10 @@ namespace System.Windows.Forms
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
                     //bool currentDisposing = GetState(STATE_DISPOSING);
-                    bool currentDisposing = Disposing;
 
                     try
                     {
-                        SetState(STATE_DISPOSING, true);
+                        //SetState(STATE_DISPOSING, true);
 
                         if (imageList != null)
                         {
@@ -1151,8 +1150,10 @@ namespace System.Windows.Forms
                             imageList = null;
                         }
 
-                        if (buttonsCollection != null)
+                        //if (buttonsCollection != null)
+                        if (buttons is not null)
                         {
+                            /*
                             ToolBarButton[] buttonCopy = new ToolBarButton[buttonsCollection.Count];
                             ((ICollection)buttonsCollection).CopyTo(buttonCopy, 0);
                             buttonsCollection.Clear();
@@ -1161,11 +1162,23 @@ namespace System.Windows.Forms
                             {
                                 b.Dispose();
                             }
+                            */
+                            for (int i = 0; i < buttonCount; i++)
+                            {
+                                ToolBarButton b = buttons[i];
+                                // from ToolBar.RemoveAt
+                                b.parent = null;
+                                b.stringIndex = (IntPtr)(-1);
+                                b.Dispose();
+                            }
+                            // from ToolBarButtonCollection.Clear
+                            buttons = null;
+                            buttonCount = 0;
                         }
                     }
                     finally
                     {
-                        SetState(STATE_DISPOSING, currentDisposing);
+                        //SetState(STATE_DISPOSING, currentDisposing);
                     }
                 }
             }
