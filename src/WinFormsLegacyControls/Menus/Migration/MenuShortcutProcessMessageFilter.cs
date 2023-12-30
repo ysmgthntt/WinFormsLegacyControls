@@ -24,10 +24,9 @@ namespace WinFormsLegacyControls.Menus.Migration
                             if (contextMenu is not null && contextMenu.ProcessCmdKey(ref m, keyData, target))
                                 return true;
 
-                            if (target is Form form)
+                            if (target is Form form && form.TryGetMainMenuSupportFormNativeWindow(out var window))
                             {
-                                MainMenu? mainMenu = form.GetMenu();
-                                if (mainMenu is not null && mainMenu.ProcessCmdKey(ref m, keyData))
+                                if (window.ProcessCmdKey(ref m, keyData))
                                     return true;
                             }
 

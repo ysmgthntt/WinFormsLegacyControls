@@ -399,17 +399,17 @@ namespace WinFormsLegacyControls.Menus.Migration
             UpdateMenuHandles();
         }
 
-        /*
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        internal bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
+            //MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
+            MainMenu curMenu = _curMenu;
             if (curMenu != null && curMenu.ProcessCmdKey(ref msg, keyData))
             {
                 return true;
             }
+            return false;
         }
-          -> MenuShortcutProcessMessageFilter
-        */
 
         private int _updateMenuHandlesSuspendCount;
         private bool _updateMenuHandlesDeferred;
