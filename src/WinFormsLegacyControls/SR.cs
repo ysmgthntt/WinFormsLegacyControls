@@ -104,4 +104,5 @@ internal static class SR
     internal static string MenuMenuItemsDescr => nameof(MenuMenuItemsDescr);
     internal static string MenuMergeWithSelf => nameof(MenuMergeWithSelf);
     internal static string MenuRightToLeftDescr => nameof(MenuRightToLeftDescr);
+    internal static string TooManyResumeUpdateMenuHandles => nameof(TooManyResumeUpdateMenuHandles);
 }

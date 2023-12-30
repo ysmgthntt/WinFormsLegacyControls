@@ -24,6 +24,8 @@ namespace WinFormsLegacyControls.Menus.Migration
             _form.HandleCreated += Form_HandleCreated;
             //_form.HandleDestroyed += Form_HandleDestroyed;
             _form.VisibleChanged += Form_VisibleChanged;
+            _form.MdiChildActivate += Form_MdiChildActivate;
+            _form.ControlRemoved += Form_ControlRemoved;
             if (_form.IsHandleCreated)
                 AssignHandle(_form.Handle);
         }
@@ -37,6 +39,8 @@ namespace WinFormsLegacyControls.Menus.Migration
             _form.HandleCreated -= Form_HandleCreated;
             //_form.HandleDestroyed -= Form_HandleDestroyed;
             _form.VisibleChanged -= Form_VisibleChanged;
+            _form.MdiChildActivate -= Form_MdiChildActivate;
+            _form.ControlRemoved -= Form_ControlRemoved;
             ReleaseHandle();
         }
 
@@ -46,31 +50,31 @@ namespace WinFormsLegacyControls.Menus.Migration
             set => Menu = value;
         }
 
-        private void Form_Disposed(object sender, EventArgs e)
-        {
-            FormDispose();
-        }
-
         private void Form_HandleCreated(object sender, EventArgs e)
         {
             AssignHandle(_form.Handle);
-            //protected override void CreateHandle()
-            if (Menu != null || !_form.TopLevel || _form.IsMdiContainer)
-                UpdateMenuHandles();
+            OnHandleCreated();
         }
 
+        /*
         private void Form_HandleDestroyed(object sender, EventArgs e)
         {
             // WM_NCDESTROY のハンドリングが必要。かつ NativeWindow 内の WM_NCDESTROY で ReleaseHandle される。
             //ReleaseHandle();
         }
+        */
 
-        private void Form_VisibleChanged(object sender, EventArgs e)
+        private void Form_ControlRemoved(object sender, ControlEventArgs e)
         {
-            //protected override void SetVisibleCore(bool value)
-            if (_form.IsMdiChild && !_form.Visible)
-                InvalidateMergedMenu();
+            if (e.Control is MdiClient mdiClient)
+                AfterControlRemoved(mdiClient);
         }
+
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_ActiveMdiChildInternal")]
+        private static extern Form? GetActiveMdiChildInternal(Form form);
+
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_MdiClient")]
+        private static extern MdiClient? GetMdiClient(Form form);
 
         /// <summary>
         ///  Gets or sets the <see cref='MainMenu'/>
@@ -99,6 +103,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                         if (value.form != null)
                         {
                             //value.form.Menu = null;
+                            Debug.Assert(value.form != _form);
                             value.form.SetMenu(null);
                         }
                         value.form = _form;
@@ -115,8 +120,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         // TODO:
-        //★private Form MdiParentInternal
-        //    InvalidateMergedMenu();
+        //private Form MdiParentInternal
+        //  InvalidateMergedMenu();
+        //  UpdateMenuHandles();
 
         /// <summary>
         ///  Gets the merged menu for the
@@ -168,11 +174,83 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         //protected override void SetVisibleCore(bool value)
+        private void Form_VisibleChanged(object sender, EventArgs e)
+        {
+            if (_form.IsMdiChild && !_form.Visible)
+                InvalidateMergedMenu();
+        }
+
+        private bool _mdiClientRemoving;
+
+        //internal override void AfterControlRemoved(Control control, Control oldParent)
+        private void AfterControlRemoved(Control control)
+        {
+            MdiClient? ctlClient = GetMdiClient(_form);
+
+            if (control == ctlClient)
+            {
+                //ctlClient = null;
+                _mdiClientRemoving = true;
+                try
+                {
+                    UpdateMenuHandles();
+                }
+                finally
+                {
+                    _mdiClientRemoving = false;
+                }
+            }
+        }
 
         //protected override void CreateHandle()
+        private void OnHandleCreated()
+        {
+            // In the windows MDI code we have to suspend menu
+            // updates on the parent while creating the handle. Otherwise if the
+            // child is created maximized, the menu ends up with two sets of
+            // MDI child ornaments.
+            //Form form = (Form)Properties.GetObject(PropFormMdiParent);
+            Form? formMdiParent = _form.MdiParent;
+            MainMenuSupportFormNativeWindow? form = formMdiParent?.GetMainMenuSupportFormNativeWindow();
+            if (form != null)
+            {
+                form.SuspendUpdateMenuHandles();
+            }
+
+            try
+            {
+                // avoid extra SetMenu calls for perf
+                if (Menu != null || !_form.TopLevel || _form.IsMdiContainer)
+                    UpdateMenuHandles();
+            }
+            finally
+            {
+                if (form != null)
+                {
+                    form.ResumeUpdateMenuHandles();
+                }
+            }
+        }
+
+        // Deactivates active MDI child and temporarily marks it as unfocusable,
+        // so that WM_SETFOCUS sent to MDIClient does not activate that child.
+        private void DeactivateMdiChild()
+        {
+            //Form activeMdiChild = ActiveMdiChildInternal;
+            Form activeMdiChild = GetActiveMdiChildInternal(_form);
+            if (null != activeMdiChild)
+            {
+                // Note: WM_MDIACTIVATE message is sent to the form being activated and to the form being deactivated, ideally
+                // we would raise the event here accordingly but it would constitute a breaking change.
+                //OnMdiChildActivate(EventArgs.Empty);
+
+                // undo merge
+                UpdateMenuHandles();
+            }
+        }
 
         //protected override void Dispose(bool disposing)
-        private void FormDispose()
+        private void Form_Disposed(object sender, EventArgs e)
         {
             MainMenu mainMenu = Menu;
 
@@ -245,14 +323,11 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
         }
 
-        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "get_MdiClient")]
-        private static extern MdiClient? GetMdiClient(Form form);
-
         // Package scope for menu interop
         internal void MenuChanged(int change, Menu menu)
         {
             Form parForm = _form.ParentForm;
-            if (parForm != null && _form == parForm.ActiveMdiChild/*Internal*/)
+            if (parForm != null && _form == /*parForm.ActiveMdiChildInternal*/GetActiveMdiChildInternal(parForm))
             {
                 parForm.MenuChanged(change, menu);
                 return;
@@ -303,8 +378,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                     break;
                 case global::System.Windows.Forms.Menu.CHANGE_VISIBLE:
                     //if (menu == Menu || (ActiveMdiChildInternal != null && menu == ActiveMdiChildInternal.Menu))
-                    // TODO: ActiveMdiChild の取得を 1 回にする。
-                    if (menu == Menu || (_form.ActiveMdiChild/*Internal*/ != null && menu == _form.ActiveMdiChild/*Internal*/.GetMenu()))
+                    if (menu == Menu || (GetActiveMdiChildInternal(_form) is Form activeMdiChild && menu == activeMdiChild.GetMenu()))
                     {
                         UpdateMenuHandles();
                     }
@@ -319,6 +393,12 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
         }
 
+        //protected virtual void OnMdiChildActivate(EventArgs e)
+        private void Form_MdiChildActivate(object sender, EventArgs e)
+        {
+            UpdateMenuHandles();
+        }
+
         /*
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -330,6 +410,43 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
           -> MenuShortcutProcessMessageFilter
         */
+
+        private int _updateMenuHandlesSuspendCount;
+        private bool _updateMenuHandlesDeferred;
+
+        /// <summary>
+        ///  Decrements updateMenuHandleSuspendCount. If updateMenuHandleSuspendCount
+        ///  becomes zero and updateMenuHandlesDeferred is true, updateMenuHandles
+        ///  is called.
+        /// </summary>
+        private void ResumeUpdateMenuHandles()
+        {
+            //int suspendCount = formStateEx[FormStateExUpdateMenuHandlesSuspendCount];
+            if (/*suspendCount*/_updateMenuHandlesSuspendCount <= 0)
+            {
+                throw new InvalidOperationException(SR.TooManyResumeUpdateMenuHandles);
+            }
+
+            //formStateEx[FormStateExUpdateMenuHandlesSuspendCount] = --suspendCount;
+            _updateMenuHandlesSuspendCount--;
+            //if (suspendCount == 0 && formStateEx[FormStateExUpdateMenuHandlesDeferred] != 0)
+            if (_updateMenuHandlesSuspendCount == 0 && _updateMenuHandlesDeferred)
+            {
+                UpdateMenuHandles();
+            }
+        }
+
+        /// <summary>
+        ///  Increments updateMenuHandleSuspendCount.
+        /// </summary>
+        private void SuspendUpdateMenuHandles()
+        {
+            /*
+            int suspendCount = formStateEx[FormStateExUpdateMenuHandlesSuspendCount];
+            formStateEx[FormStateExUpdateMenuHandlesSuspendCount] = ++suspendCount;
+            */
+            _updateMenuHandlesSuspendCount++;
+        }
 
         private void UpdateMenuHandles()
         {
@@ -351,11 +468,17 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
                 else
                 {
-                    form = _form.ActiveMdiChild/*Internal*/;
+                    //form = ActiveMdiChildInternal;
+                    form = GetActiveMdiChildInternal(_form);
                     if (form != null)
                     {
                         //UpdateMenuHandles(form.MergedMenuPrivate, true);
-                        UpdateMenuHandles(form.GetMainMenuSupportFormNativeWindow()?.MergedMenu, true);
+                        MainMenu? mergedMenu;
+                        if (form.TryGetMainMenuSupportFormNativeWindow(out var window))
+                            mergedMenu = window.MergedMenu;
+                        else
+                            mergedMenu = form.MdiParent?.GetMenu();
+                        UpdateMenuHandles(mergedMenu, true);
                     }
                     else
                     {
@@ -364,8 +487,6 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
             }
         }
-
-        private int _updateMenuHandlesSuspendCount;
 
         private void UpdateMenuHandles(MainMenu menu, bool forceRedraw)
         {
@@ -376,7 +497,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             if (suspendCount > 0 && menu != null)
             {
                 //formStateEx[FormStateExUpdateMenuHandlesDeferred] = 1;
-                _updateMenuHandlesSuspendCount = 1;
+                _updateMenuHandlesDeferred = true;
                 return;
             }
 
@@ -393,7 +514,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 _curMenu = curMenu;
             }
 
-            MdiClient? ctlClient = GetMdiClient(_form);
+            MdiClient? ctlClient = _mdiClientRemoving ? null : GetMdiClient(_form);
 
             if (ctlClient == null || !ctlClient.IsHandleCreated)
             {
@@ -469,10 +590,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                 PInvoke.DrawMenuBar(_form);
             }
             //formStateEx[FormStateExUpdateMenuHandlesDeferred] = 0;
-            _updateMenuHandlesSuspendCount = 0;
+            _updateMenuHandlesDeferred = false;
         }
-
-        //private void UpdateMdiControlStrip(bool maximized)
 
         /// <summary>
         ///  WM_INITMENUPOPUP handler
@@ -530,6 +649,36 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         /// <summary>
+        ///  WM_MDIACTIVATE handler
+        /// </summary>
+        private void WmMdiActivate(ref Message m)
+        {
+            base.WndProc(ref m);
+            //Debug.Assert(Properties.GetObject(PropFormMdiParent) != null, "how is formMdiParent null?");
+            //Debug.Assert(IsHandleCreated, "how is handle 0?");
+
+            //Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
+            Form formMdiParent = _form.MdiParent;
+
+            if (formMdiParent != null)
+            {
+                // This message is propagated twice by the MDIClient window. Once to the
+                // window being deactivated and once to the window being activated.
+                if (Handle == m.WParam)
+                {
+                    //formMdiParent.DeactivateMdiChild();
+                    formMdiParent.GetMainMenuSupportFormNativeWindow()?.DeactivateMdiChild();
+                }
+                /*
+                else if (Handle == m.LParam)
+                {
+                    formMdiParent.ActivateMdiChild(this);
+                }
+                */
+            }
+        }
+
+        /// <summary>
         ///  WM_NCDESTROY handler
         /// </summary>
         private void WmNCDestroy(ref Message m)
@@ -580,6 +729,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         {
             switch ((uint)m.Msg)
             {
+                case PInvoke.WM_MDIACTIVATE:
+                    WmMdiActivate(ref m);
+                    break;
                 case PInvoke.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
