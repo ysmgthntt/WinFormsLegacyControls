@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     [ProvideProperty("ContextMenu", typeof(Control))]
     partial class ContextMenu : IExtenderProvider

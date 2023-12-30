@@ -10,7 +10,11 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Represents an individual item that is displayed within a <see cref='Menu'/>

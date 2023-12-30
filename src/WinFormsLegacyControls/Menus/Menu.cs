@@ -8,7 +8,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).

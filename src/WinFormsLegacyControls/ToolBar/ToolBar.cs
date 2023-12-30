@@ -7,10 +7,13 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using Windows.Win32.Foundation;
 using static Interop;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Represents a Windows toolbar.
@@ -94,7 +97,7 @@ namespace System.Windows.Forms
         private const int TOOLBARSTATE_autoSize = 0x00000010;
 
         // PERF: take all the bools and put them into a state variable
-        private Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above
+        private System.Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above
 
         // event handlers
         //
@@ -112,7 +115,7 @@ namespace System.Windows.Forms
         : base()
         {
             // Set this BEFORE calling any other methods so that these defaults will be propagated
-            toolBarState = new Collections.Specialized.BitVector32(TOOLBARSTATE_autoSize |
+            toolBarState = new System.Collections.Specialized.BitVector32(TOOLBARSTATE_autoSize |
                                                                           TOOLBARSTATE_showToolTips |
                                                                           TOOLBARSTATE_divider |
                                                                           TOOLBARSTATE_dropDownArrows |

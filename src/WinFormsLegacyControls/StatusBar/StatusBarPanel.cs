@@ -10,7 +10,11 @@ using System.Runtime.InteropServices;
 using static Interop;
 //using static Interop.ComCtl32;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Stores the <see cref='StatusBar'/>
@@ -34,7 +38,7 @@ namespace System.Windows.Forms
         private Icon icon = null;
 
         private HorizontalAlignment alignment = HorizontalAlignment.Left;
-        private StatusBarPanelBorderStyle borderStyle = System.Windows.Forms.StatusBarPanelBorderStyle.Sunken;
+        private StatusBarPanelBorderStyle borderStyle = /*System.Windows.Forms.*/StatusBarPanelBorderStyle.Sunken;
         private StatusBarPanelStyle style = StatusBarPanelStyle.Text;
 
         // these are package scope so the parent can get at them.
@@ -125,7 +129,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the <see cref='BorderStyle'/> property.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DefaultValue(System.Windows.Forms.StatusBarPanelBorderStyle.Sunken)]
+        [DefaultValue(/*System.Windows.Forms.*/StatusBarPanelBorderStyle.Sunken)]
         //[DispId((int)Ole32.DispatchID.BORDERSTYLE)]
         [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))]

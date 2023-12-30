@@ -9,13 +9,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
 //using static Interop.ComCtl32;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Represents a Windows status bar control.

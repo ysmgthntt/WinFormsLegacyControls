@@ -6,7 +6,11 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  This class is used to put context menus on your form and show them for

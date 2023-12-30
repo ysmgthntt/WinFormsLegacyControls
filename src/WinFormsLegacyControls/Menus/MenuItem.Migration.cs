@@ -1,6 +1,10 @@
 ﻿using System.Drawing;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     partial class MenuItem
     {

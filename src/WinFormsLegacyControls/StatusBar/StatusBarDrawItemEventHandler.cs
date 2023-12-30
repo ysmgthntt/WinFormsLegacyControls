@@ -4,7 +4,11 @@
 
 #nullable disable
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Represents a method that will handle the <see cref='StatusBar.OnDrawItem'/>

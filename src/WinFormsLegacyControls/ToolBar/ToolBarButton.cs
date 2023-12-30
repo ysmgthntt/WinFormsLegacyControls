@@ -11,7 +11,11 @@ using System.Text;
 using Marshal = System.Runtime.InteropServices.Marshal;
 using static Interop;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Represents a Windows toolbar button.

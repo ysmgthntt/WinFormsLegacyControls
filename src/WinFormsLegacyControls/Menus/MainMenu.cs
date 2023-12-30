@@ -4,7 +4,11 @@
 
 using System.ComponentModel;
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Represents a menu structure for a form.

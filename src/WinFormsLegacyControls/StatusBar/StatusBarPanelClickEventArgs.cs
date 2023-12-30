@@ -4,7 +4,11 @@
 
 #nullable disable
 
+#if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
+#else
+namespace WinFormsLegacyControls
+#endif
 {
     /// <summary>
     ///  Provides data for the <see cref='StatusBar.OnPanelClick'/>
