@@ -17,11 +17,13 @@ namespace System.Windows.Forms
     [ListBindable(false)]
     public abstract class Menu : Component
     {
+        /*
         internal const int CHANGE_ITEMS = 0; // item(s) added or removed
         internal const int CHANGE_VISIBLE = 1; // item(s) hidden or shown
         internal const int CHANGE_MDI = 2; // mdi item changed
         internal const int CHANGE_MERGE = 3; // mergeType or mergeOrder changed
         internal const int CHANGE_ITEMADDED = 4; // mergeType or mergeOrder changed
+        */
 
         /// <summary>
         ///  Used by findMenuItem
@@ -475,12 +477,12 @@ namespace System.Windows.Forms
             return (MainMenu)menuT;
         }
 
-        internal virtual void ItemsChanged(int change)
+        internal virtual void ItemsChanged(MenuChangeKind change)
         {
             switch (change)
             {
-                case CHANGE_ITEMS:
-                case CHANGE_VISIBLE:
+                case MenuChangeKind.CHANGE_ITEMS:
+                case MenuChangeKind.CHANGE_VISIBLE:
                     DestroyMenuItems();
                     break;
             }
@@ -939,10 +941,10 @@ namespace System.Windows.Forms
                 owner.items[index] = item;
                 owner._itemCount++;
                 item.Parent = owner;
-                owner.ItemsChanged(CHANGE_ITEMS);
+                owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
                 if (owner is MenuItem)
                 {
-                    ((MenuItem)owner).ItemsChanged(CHANGE_ITEMADDED, item);
+                    ((MenuItem)owner).ItemsChanged(MenuChangeKind.CHANGE_ITEMADDED, item);
                 }
 
                 return index;
@@ -1160,7 +1162,7 @@ namespace System.Windows.Forms
                     owner._itemCount = 0;
                     owner.items = null;
 
-                    owner.ItemsChanged(CHANGE_ITEMS);
+                    owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
                     if (owner is MenuItem)
                     {
@@ -1198,7 +1200,7 @@ namespace System.Windows.Forms
                 owner._itemCount--;
                 System.Array.Copy(owner.items, index + 1, owner.items, index, owner.ItemCount - index);
                 owner.items[owner.ItemCount] = null;
-                owner.ItemsChanged(CHANGE_ITEMS);
+                owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
                 //if the last item was removed, clear the collection
                 //

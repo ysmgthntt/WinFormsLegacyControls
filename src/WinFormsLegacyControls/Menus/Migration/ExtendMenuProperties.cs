@@ -81,7 +81,7 @@ namespace WinFormsLegacyControls
         internal static bool TryGetMainMenuSupportFormNativeWindow(this Form form, [NotNullWhen(true)] out MainMenuSupportFormNativeWindow? window)
             => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetValue(form, out window);
 
-        internal static void MenuChanged(this Form form, int change, Menu? menu)
+        internal static void MenuChanged(this Form form, MenuChangeKind change, Menu? menu)
         {
             if (Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetValue(form, out var window))
                 window.MenuChanged(change, menu);

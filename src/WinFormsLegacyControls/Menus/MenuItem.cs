@@ -1130,11 +1130,11 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override void ItemsChanged(int change)
+        internal override void ItemsChanged(MenuChangeKind change)
         {
             base.ItemsChanged(change);
 
-            if (change == CHANGE_ITEMS)
+            if (change == MenuChangeKind.CHANGE_ITEMS)
             {
                 // when the menu collection changes deal with it locally
                 Debug.Assert(!created, "base.ItemsChanged should have wiped out our handles");
@@ -1159,9 +1159,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void ItemsChanged(int change, MenuItem item)
+        internal void ItemsChanged(MenuChangeKind change, MenuItem item)
         {
-            if (change == CHANGE_ITEMADDED &&
+            if (change == MenuChangeKind.CHANGE_ITEMADDED &&
                 _data != null &&
                 _data.baseItem != null &&
                 _data.baseItem.MenuItems.Contains(item))
@@ -1719,7 +1719,7 @@ namespace System.Windows.Forms
                         SetState(StateMdiList, value);
                         for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                         {
-                            item.ItemsChanged(Menu.CHANGE_MDI);
+                            item.ItemsChanged(MenuChangeKind.CHANGE_MDI);
                         }
                     }
                 }
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms
                     if (_mergeType != value)
                     {
                         _mergeType = value;
-                        ItemsChanged(Menu.CHANGE_MERGE);
+                        ItemsChanged(MenuChangeKind.CHANGE_MERGE);
                     }
                 }
             }
@@ -1746,7 +1746,7 @@ namespace System.Windows.Forms
                     if (_mergeOrder != value)
                     {
                         _mergeOrder = value;
-                        ItemsChanged(Menu.CHANGE_MERGE);
+                        ItemsChanged(MenuChangeKind.CHANGE_MERGE);
                     }
                 }
             }
@@ -1774,7 +1774,7 @@ namespace System.Windows.Forms
                     if (((_state & MenuItem.StateHidden) == 0) != value)
                     {
                         _state = value ? _state & ~MenuItem.StateHidden : _state | MenuItem.StateHidden;
-                        ItemsChanged(Menu.CHANGE_VISIBLE);
+                        ItemsChanged(MenuChangeKind.CHANGE_VISIBLE);
                     }
                 }
             }
@@ -1815,7 +1815,7 @@ namespace System.Windows.Forms
                 return _cmd.ID;
             }
 
-            internal void ItemsChanged(int change)
+            internal void ItemsChanged(MenuChangeKind change)
             {
                 for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                 {

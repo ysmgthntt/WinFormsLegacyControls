@@ -163,7 +163,7 @@ namespace System.Windows.Forms
             return form;
         }
 
-        internal override void ItemsChanged(int change)
+        internal override void ItemsChanged(MenuChangeKind change)
         {
             base.ItemsChanged(change);
             if (form != null)
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual void ItemsChanged(int change, Menu menu)
+        internal virtual void ItemsChanged(MenuChangeKind change, Menu menu)
         {
             if (form != null)
             {

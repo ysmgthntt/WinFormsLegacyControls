@@ -114,7 +114,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                         _form.ClientSize = _form.ClientSize;
                     }
 
-                    MenuChanged(global::System.Windows.Forms.Menu.CHANGE_ITEMS, value);
+                    MenuChanged(MenuChangeKind.CHANGE_ITEMS, value);
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 _curMenu = null;
             }
 
-            MenuChanged(global::System.Windows.Forms.Menu.CHANGE_ITEMS, null);
+            MenuChanged(MenuChangeKind.CHANGE_ITEMS, null);
 
             //MainMenu dummyMenu = (MainMenu)Properties.GetObject(PropDummyMenu);
             MainMenu dummyMenu = _dummyMenu;
@@ -324,7 +324,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         // Package scope for menu interop
-        internal void MenuChanged(int change, Menu menu)
+        internal void MenuChanged(MenuChangeKind change, Menu menu)
         {
             Form parForm = _form.ParentForm;
             if (parForm != null && _form == /*parForm.ActiveMdiChildInternal*/GetActiveMdiChildInternal(parForm))
@@ -337,12 +337,12 @@ namespace WinFormsLegacyControls.Menus.Migration
 
             switch (change)
             {
-                case global::System.Windows.Forms.Menu.CHANGE_ITEMS:
-                case global::System.Windows.Forms.Menu.CHANGE_MERGE:
+                case MenuChangeKind.CHANGE_ITEMS:
+                case MenuChangeKind.CHANGE_MERGE:
                     ctlClient = GetMdiClient(_form);
                     if (ctlClient == null || !ctlClient.IsHandleCreated)
                     {
-                        if (menu == Menu && change == global::System.Windows.Forms.Menu.CHANGE_ITEMS)
+                        if (menu == Menu && change == MenuChangeKind.CHANGE_ITEMS)
                         {
                             UpdateMenuHandles();
                         }
@@ -376,14 +376,14 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                     UpdateMenuHandles();
                     break;
-                case global::System.Windows.Forms.Menu.CHANGE_VISIBLE:
+                case MenuChangeKind.CHANGE_VISIBLE:
                     //if (menu == Menu || (ActiveMdiChildInternal != null && menu == ActiveMdiChildInternal.Menu))
                     if (menu == Menu || (GetActiveMdiChildInternal(_form) is Form activeMdiChild && menu == activeMdiChild.GetMenu()))
                     {
                         UpdateMenuHandles();
                     }
                     break;
-                case global::System.Windows.Forms.Menu.CHANGE_MDI:
+                case MenuChangeKind.CHANGE_MDI:
                     ctlClient = GetMdiClient(_form);
                     if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
