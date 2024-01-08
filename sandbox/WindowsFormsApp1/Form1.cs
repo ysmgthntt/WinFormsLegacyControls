@@ -20,6 +20,7 @@ namespace WindowsFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // bug?
             statusBarPanel2.ToolTipText = textBox1.Text;
         }
 

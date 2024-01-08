@@ -114,6 +114,14 @@
             menuItem9.Index = 2;
             menuItem9.Text = "menuItem9";
             // 
+            // toolTip1
+            // 
+            toolTip1.BackColor = Color.Blue;
+            toolTip1.ForeColor = Color.Yellow;
+            toolTip1.IsBalloon = true;
+            toolTip1.ToolTipIcon = ToolTipIcon.Info;
+            toolTip1.ToolTipTitle = "ToolTip";
+            // 
             // toolBar1
             // 
             toolBar1.Buttons.AddRange(new WinFormsLegacyControls.ToolBarButton[] { toolBarButton1, toolBarButton2, toolBarButton3 });

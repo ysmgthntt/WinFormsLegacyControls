@@ -127,6 +127,14 @@ namespace WindowsFormsApp1
             this.menuItem9.Index = 2;
             this.menuItem9.Text = "contextMenu3";
             // 
+            // toolTip1
+            // 
+            this.toolTip1.BackColor = System.Drawing.Color.Blue;
+            this.toolTip1.ForeColor = System.Drawing.Color.Yellow;
+            this.toolTip1.IsBalloon = true;
+            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip1.ToolTipTitle = "ToolTip";
+            // 
             // toolBar1
             // 
             this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
