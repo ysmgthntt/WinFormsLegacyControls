@@ -200,7 +200,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft)
+            //if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft)
+            if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
             {
                 return false;
             }
