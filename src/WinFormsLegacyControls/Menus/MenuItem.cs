@@ -1237,7 +1237,8 @@ namespace WinFormsLegacyControls
 
                     if (senderMenu.MenuItems.Count > 0)
                     {
-                        MenuItem sep = (MenuItem)Activator.CreateInstance(GetType());
+                        //MenuItem sep = (MenuItem)Activator.CreateInstance(GetType());
+                        MenuItem sep = CreateSameTypeInstance();
                         sep._data.UserData = new MdiListUserData();
                         sep.Text = "-";
                         senderMenu.MenuItems.Add(sep);
@@ -1266,7 +1267,8 @@ namespace WinFormsLegacyControls
                                 (forms[i].Equals(activeMdiChild))))
                             {
                                 // there's always room for activeMdiChild
-                                MenuItem windowItem = (MenuItem)Activator.CreateInstance(GetType());
+                                //MenuItem windowItem = (MenuItem)Activator.CreateInstance(GetType());
+                                MenuItem windowItem = CreateSameTypeInstance();
                                 windowItem._data.UserData = new MdiListFormData(this, i);
 
                                 if (forms[i].Equals(activeMdiChild))
@@ -1288,7 +1290,8 @@ namespace WinFormsLegacyControls
                     // MDI lists, rather than letting Windows do this for us.
                     if (visibleChildren > MaxMenuForms)
                     {
-                        MenuItem moreWindows = (MenuItem)Activator.CreateInstance(GetType());
+                        //MenuItem moreWindows = (MenuItem)Activator.CreateInstance(GetType());
+                        MenuItem moreWindows = CreateSameTypeInstance();
                         moreWindows._data.UserData = new MdiListMoreWindowsData(this);
                         moreWindows.Text = SR.MDIMenuMoreWindows;
                         senderMenu.MenuItems.Add(moreWindows);
@@ -1301,6 +1304,15 @@ namespace WinFormsLegacyControls
             }
         }
 
+        private MenuItem CreateSameTypeInstance()
+        {
+            Type thisType = GetType();
+            if (thisType == typeof(MenuItem))
+                return new MenuItem();
+            else
+                return (MenuItem)Activator.CreateInstance(thisType)!;
+        }
+
         /// <summary>
         ///  Merges this menu item with another menu item and returns the resulting merged
         /// <see cref='MenuItem'/>.
@@ -1309,7 +1321,8 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            MenuItem newItem = (MenuItem)Activator.CreateInstance(GetType());
+            //MenuItem newItem = (MenuItem)Activator.CreateInstance(GetType());
+            MenuItem newItem = CreateSameTypeInstance();
             _data.AddItem(newItem);
             newItem.MergeMenu(this);
             return newItem;
