@@ -1,16 +1,12 @@
 ﻿ACTCTX_FLAG_*
-ActivateActCtx
 CCS_*
 ClientToScreen
-CreateActCtx
 CreateMenu
 CreatePopupMenu
-DeactivateActCtx
 DestroyMenu
 DISPID_BORDERSTYLE
 DRAWITEMSTRUCT
 DrawMenuBar
-GetCurrentActCtx
 GetDC
 GetMenuItemCount
 GetMenuItemID

@@ -611,7 +611,7 @@ namespace WinFormsLegacyControls
             if (!RecreatingHandle)
             {
                 //IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
-                using ThemingScope scope = new(Application.UseVisualStyles);
+                //using ThemingScope scope = new(Application.UseVisualStyles);
 
                 try
                 {

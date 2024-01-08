@@ -1094,7 +1094,7 @@ namespace WinFormsLegacyControls
             if (!RecreatingHandle)
             {
                 //IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
-                using ThemingScope scope = new(Application.UseVisualStyles);
+                //using ThemingScope scope = new(Application.UseVisualStyles);
                 try
                 {
                     /*
