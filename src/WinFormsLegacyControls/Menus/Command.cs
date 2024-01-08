@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    internal class Command : WeakReference
+    internal sealed class Command : WeakReference
     {
         private static Command[] cmds;
         private static int icmdTry;
@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             AssignID(this);
         }
 
-        public virtual int ID
+        public /*virtual*/ int ID
         {
             get
             {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public virtual void Dispose()
+        public /*virtual*/ void Dispose()
         {
             if (id >= idMin)
             {
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public virtual bool Invoke()
+        public /*virtual*/ bool Invoke()
         {
             object target = Target;
             if (!(target is ICommandExecutor))

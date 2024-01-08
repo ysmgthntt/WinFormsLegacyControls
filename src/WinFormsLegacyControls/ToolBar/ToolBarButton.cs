@@ -21,9 +21,7 @@ namespace WinFormsLegacyControls
     ///  Represents a Windows toolbar button.
     /// </summary>
     [
-    /* TODO: Designer
-    Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign),
-    */
+    //Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign),
     DefaultProperty(nameof(Text)),
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -78,7 +76,7 @@ namespace WinFormsLegacyControls
 
         // We need a special way to defer to the ToolBar's image
         // list for indexing purposes.
-        internal class ToolBarButtonImageIndexer : /*ImageList.Indexer*/ImageListIndexer
+        internal sealed class ToolBarButtonImageIndexer : /*ImageList.Indexer*/ImageListIndexer
         {
             private readonly ToolBarButton owner;
 

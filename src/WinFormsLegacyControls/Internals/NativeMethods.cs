@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-internal class NativeMethods
+internal static class NativeMethods
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct NMTOOLBAR

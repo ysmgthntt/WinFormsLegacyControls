@@ -22,9 +22,7 @@ namespace WinFormsLegacyControls
     ComVisible(true),
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent(nameof(ButtonClick)),
-    /* TODO: Designer
-    Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign),
-    */
+    //Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign),
     DefaultProperty(nameof(Buttons))
     ]
     public partial class ToolBar : Control

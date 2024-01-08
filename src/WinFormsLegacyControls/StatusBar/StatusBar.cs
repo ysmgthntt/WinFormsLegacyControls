@@ -28,9 +28,7 @@ namespace WinFormsLegacyControls
     ClassInterface(ClassInterfaceType.AutoDispatch),
     DefaultEvent(nameof(PanelClick)),
     DefaultProperty(nameof(Text)),
-    /* TODO: Designer
-    Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign),
-    */
+    //Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign),
     ]
     public class StatusBar : Control
     {
@@ -2001,7 +1999,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            private class ToolTipNativeWindow : NativeWindow
+            private sealed class ToolTipNativeWindow : NativeWindow
             {
                 readonly ControlToolTip control;
 

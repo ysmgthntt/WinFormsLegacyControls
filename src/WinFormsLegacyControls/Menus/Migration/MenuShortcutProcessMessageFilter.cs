@@ -2,7 +2,7 @@
 
 namespace WinFormsLegacyControls.Menus.Migration
 {
-    internal class MenuShortcutProcessMessageFilter : IMessageFilter
+    internal sealed class MenuShortcutProcessMessageFilter : IMessageFilter
     {
         public bool PreFilterMessage(ref Message m)
         {

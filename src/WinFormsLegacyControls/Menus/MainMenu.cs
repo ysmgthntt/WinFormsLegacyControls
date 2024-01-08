@@ -162,10 +162,12 @@ namespace WinFormsLegacyControls
             return form;
         }
 
+        /*
         internal Form GetFormUnsafe()
         {
             return form;
         }
+        */
 
         internal override void ItemsChanged(MenuChangeKind change)
         {

@@ -4,7 +4,7 @@ namespace Windows.Win32
 {
     partial class PInvoke
     {
-        internal static unsafe BOOL GetMenuItemInfo(Menu menu, uint item, BOOL fByPosition, ref MENUITEMINFOW mii)
+        public static unsafe BOOL GetMenuItemInfo(Menu menu, uint item, BOOL fByPosition, ref MENUITEMINFOW mii)
         {
             BOOL result;
             fixed (MENUITEMINFOW* lpmii = &mii)

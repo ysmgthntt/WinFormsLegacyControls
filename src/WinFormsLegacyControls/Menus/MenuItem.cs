@@ -26,7 +26,6 @@ namespace WinFormsLegacyControls
     [DefaultProperty(nameof(Text))]
     public partial class MenuItem : Menu
     {
-        // TODO: Delete
         private const int StateBarBreak = 0x00000020;
         private const int StateBreak = 0x00000040;
         private const int StateChecked = 0x00000008;
@@ -870,8 +869,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            //info.fState = _data.State & (StateChecked | StateDefault | StateDisabled);
-            info.fState = (MENU_ITEM_STATE)_data.State & (MENU_ITEM_STATE.MFS_CHECKED | MENU_ITEM_STATE.MFS_DEFAULT | MENU_ITEM_STATE.MFS_DISABLED);
+            info.fState = (MENU_ITEM_STATE)(_data.State & (StateChecked | StateDefault | StateDisabled));
 
             //info.wID = MenuID;
             info.wID = (uint)MenuID;
@@ -942,6 +940,7 @@ namespace WinFormsLegacyControls
             if (_data._showShortcut && _data._shortcut != 0 && !IsParent && !isTopLevel)
             {
                 //info.dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
+                // TODO: TypeConverter
                 dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
             }
             else
@@ -1200,7 +1199,7 @@ namespace WinFormsLegacyControls
             Form menuForm = null;
             if (main != null)
             {
-                menuForm = main.GetFormUnsafe();
+                menuForm = main./*GetFormUnsafe()*/form;
             }
             if (menuForm != null)
             {
@@ -1234,7 +1233,7 @@ namespace WinFormsLegacyControls
                 if (forms != null && forms.Length > 0)
                 {
 
-                    Form activeMdiChild = GetMainMenu().GetFormUnsafe().ActiveMdiChild;
+                    Form activeMdiChild = GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
 
                     if (senderMenu.MenuItems.Count > 0)
                     {
@@ -1584,7 +1583,7 @@ namespace WinFormsLegacyControls
                 _dataVersion = _data._version;
                 if (Parent is MainMenu mainMenu)
                 {
-                    Form f = mainMenu.GetFormUnsafe();
+                    Form f = mainMenu./*GetFormUnsafe()*/form;
                     if (f != null)
                     {
                         //SafeNativeMethods.DrawMenuBar(new HandleRef(f, f.Handle));
@@ -1667,7 +1666,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal class MenuItemData : ICommandExecutor
+        internal sealed class MenuItemData : ICommandExecutor
         {
             internal MenuItem baseItem;
             internal MenuItem firstItem;
@@ -1919,7 +1918,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private class MdiListFormData : MdiListUserData
+        private sealed class MdiListFormData : MdiListUserData
         {
             private readonly MenuItem _parent;
             private readonly int _boundIndex;
@@ -1950,7 +1949,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private class MdiListMoreWindowsData : MdiListUserData
+        private sealed class MdiListMoreWindowsData : MdiListUserData
         {
             private readonly MenuItem _parent;
 
@@ -1963,7 +1962,7 @@ namespace WinFormsLegacyControls
             {
                 Form[] forms = _parent.FindMdiForms();
                 Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
-                Form active = _parent.GetMainMenu().GetFormUnsafe().ActiveMdiChild;
+                Form active = _parent.GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
                 Debug.Assert(active != null, "Didn't get the active MDI child");
                 if (forms != null && forms.Length > 0 && active != null)
                 {

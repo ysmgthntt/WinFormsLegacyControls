@@ -12,12 +12,12 @@ internal static class SR
     }
 
     //
-    internal static string CatAppearance => GetResourceString(CatAppearance);
-    internal static string CatBehavior => GetResourceString(CatBehavior);
-    internal static string CatData => GetResourceString(CatData);
-    internal static string CatMouse => GetResourceString(CatMouse);
-    internal static string CatPropertyChanged => GetResourceString(CatPropertyChanged);
-    internal static string CatWindowStyle => GetResourceString(CatWindowStyle);
+    internal static string CatAppearance => GetResourceString(nameof(CatAppearance));
+    internal static string CatBehavior => GetResourceString(nameof(CatBehavior));
+    internal static string CatData => GetResourceString(nameof(CatData));
+    internal static string CatMouse => GetResourceString(nameof(CatMouse));
+    internal static string CatPropertyChanged => GetResourceString(nameof(CatPropertyChanged));
+    internal static string CatWindowStyle => GetResourceString(nameof(CatWindowStyle));
     //
     internal static string ControlTagDescr => nameof(ControlTagDescr);
     internal static string InvalidArgument => nameof(InvalidArgument);
