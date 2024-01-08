@@ -38,7 +38,9 @@ internal unsafe struct ToolInfoWrapper<T>
 
     public LRESULT SendMessage(/*IHandle<HWND>*/global::System.Runtime.InteropServices.HandleRef sender, /*MessageId*/uint message, bool state = false)
     {
-        Info.cbSize = (uint)sizeof(TTTOOLINFOW);
+        //Info.cbSize = (uint)sizeof(TTTOOLINFOW);
+        // VisualStyle が無効な場合、 sizeof(TTTOOLINFOW) だと TTM_ADDTOOLW が失敗する。
+        Info.cbSize = (uint)(sizeof(TTTOOLINFOW) - IntPtr.Size);
         fixed (char* c = Text)
         fixed (void* i = &Info)
         {
