@@ -16,6 +16,18 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
+
+            // OwnerDraw
+            menuItem6.OwnerDraw = true;
+            menuItem6.MeasureItem += MenuItem_MeasureItem;
+            menuItem6.DrawItem += MenuItem_DrawItem;
+
+            menuItem9.OwnerDraw = true;
+            menuItem9.MeasureItem += MenuItem_MeasureItem;
+            menuItem9.DrawItem += MenuItem_DrawItem;
+
+            statusBarPanel3.Style = StatusBarPanelStyle.OwnerDraw;
+            statusBar1.DrawItem += StatusBar1_DrawItem;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -32,6 +44,29 @@ namespace WindowsFormsApp1
         private void menuItem8_Click(object sender, EventArgs e)
         {
             MessageBox.Show(this, "menuItem8");
+        }
+
+        private void MenuItem_MeasureItem(object? sender, MeasureItemEventArgs e)
+        {
+            var menuItem = (MenuItem)sender!;
+            var size = TextRenderer.MeasureText(menuItem.Text, SystemInformation.MenuFont);
+            e.ItemWidth = (int)size.Width + SystemInformation.MenuCheckSize.Width;
+            e.ItemHeight = (int)size.Height;
+        }
+
+        private void MenuItem_DrawItem(object? sender, DrawItemEventArgs e)
+        {
+            var menuItem = (MenuItem)sender!;
+            e.DrawBackground();
+            var pt = new Point(e.Bounds.X + SystemInformation.MenuCheckSize.Width, e.Bounds.Y);
+            TextRenderer.DrawText(e.Graphics, menuItem.Text, e.Font, pt, e.ForeColor);
+            e.DrawFocusRectangle();
+        }
+
+        private void StatusBar1_DrawItem(object sender, StatusBarDrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            TextRenderer.DrawText(e.Graphics, e.Panel.Text, e.Font, e.Bounds, e.ForeColor);
         }
     }
 }

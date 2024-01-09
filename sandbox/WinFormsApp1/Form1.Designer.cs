@@ -100,6 +100,7 @@
             // 
             // menuItem7
             // 
+            menuItem7.DefaultItem = true;
             menuItem7.Index = 0;
             menuItem7.Text = "menuItem7";
             // 
@@ -184,6 +185,7 @@
             // 
             // panel1
             // 
+            contextMenu1.SetContextMenu(panel1, true);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(textBox1);
             panel1.Dock = DockStyle.Fill;
@@ -194,6 +196,7 @@
             // 
             // button1
             // 
+            button1.FlatStyle = FlatStyle.System;
             button1.Location = new Point(168, 4);
             button1.Name = "button1";
             button1.Size = new Size(112, 34);
@@ -214,7 +217,6 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            contextMenu1.SetContextMenu(this, true);
             Controls.Add(panel1);
             Controls.Add(statusBar1);
             Controls.Add(toolBar1);

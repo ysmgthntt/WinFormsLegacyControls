@@ -112,6 +112,7 @@ namespace WindowsFormsApp1
             // 
             // menuItem7
             // 
+            this.menuItem7.DefaultItem = true;
             this.menuItem7.Index = 0;
             this.menuItem7.Text = "contextMenu1";
             // 
@@ -204,6 +205,7 @@ namespace WindowsFormsApp1
             // 
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.textBox1);
+            this.panel1.ContextMenu = this.contextMenu1;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 55);
             this.panel1.Name = "panel1";
@@ -212,6 +214,7 @@ namespace WindowsFormsApp1
             // 
             // button1
             // 
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button1.Location = new System.Drawing.Point(118, 7);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -232,7 +235,6 @@ namespace WindowsFormsApp1
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.ContextMenu = this.contextMenu1;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusBar1);
             this.Controls.Add(this.toolBar1);
