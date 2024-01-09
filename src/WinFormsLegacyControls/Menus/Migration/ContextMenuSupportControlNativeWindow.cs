@@ -284,7 +284,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             nint itemData;
             unsafe
             {
-                MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
+                DRAWITEMSTRUCT* mis = (DRAWITEMSTRUCT*)m.LParam;
                 itemData = (nint)mis->itemData;
             }
 
