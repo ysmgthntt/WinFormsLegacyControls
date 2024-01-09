@@ -744,29 +744,29 @@ namespace WinFormsLegacyControls.Menus.Migration
                 case PInvoke.WM_NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
+
+                // Control WndProc for MainMenu
                 case PInvoke.WM_COMMAND:
-                    WmCommand(ref m);
+                    if (!CommonMessageHandlers.WmCommand(ref m))
+                        base.WndProc(ref m);
                     break;
+                case PInvoke.WM_DRAWITEM:
+                    if (!CommonMessageHandlers.WmDrawItem(ref m))
+                        base.WndProc(ref m);
+                    break;
+                case PInvoke.WM_MEASUREITEM:
+                    if (!CommonMessageHandlers.WmMeasureItem(ref m))
+                        base.WndProc(ref m);
+                    break;
+                case PInvoke.WM_MENUSELECT:
+                    CommonMessageHandlers.WmMenuSelect(ref m);
+                    base.WndProc(ref m);
+                    break;
+
                 default:
                     base.WndProc(ref m);
                     break;
             }
-        }
-
-        /// <summary>
-        ///  Handles the WM_COMMAND message
-        /// </summary>
-        private void WmCommand(ref Message m)
-        {
-            if (IntPtr.Zero == m.LParam)
-            {
-                //if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam)))
-                if (Command.DispatchID(PARAM.LOWORD(m.WParam)))
-                {
-                    return;
-                }
-            }
-            base.WndProc(ref m);
         }
     }
 }

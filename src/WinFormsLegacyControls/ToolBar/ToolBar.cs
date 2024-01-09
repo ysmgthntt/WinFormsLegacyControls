@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using WinFormsLegacyControls.Menus.Migration;
 using static Interop;
 
 #if WINFORMS_NAMESPACE
@@ -2040,10 +2041,36 @@ namespace WinFormsLegacyControls
                             WmNotifyDropDown(ref m);
                             break;
                     }
+                    base.WndProc(ref m);    // add
                     break;
 
+                // Control WndProc for ToolBarButton.DropDownMenu
+                case PInvoke.WM_COMMAND:
+                    if (!CommonMessageHandlers.WmCommand(ref m))
+                        base.WndProc(ref m);
+                    break;
+
+                case PInvoke.WM_DRAWITEM:
+                    if (!CommonMessageHandlers.WmDrawItem(ref m))
+                        base.WndProc(ref m);
+                    break;
+
+                case PInvoke.WM_MEASUREITEM:
+                    if (!CommonMessageHandlers.WmMeasureItem(ref m))
+                        base.WndProc(ref m);
+                    break;
+
+                case PInvoke.WM_MENUSELECT:
+                    CommonMessageHandlers.WmMenuSelect(ref m);
+                    base.WndProc(ref m);
+                    break;
+
+                default:
+                    base.WndProc(ref m);
+                    break;
             }
-            base.WndProc(ref m);
+            // ? WmReflectCommand だと 2 回呼ばれる。
+            //base.WndProc(ref m);
         }
 
         /// <summary>
