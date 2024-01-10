@@ -6,20 +6,32 @@ namespace System.Windows.Forms
 namespace WinFormsLegacyControls
 #endif
 {
-    [ProvideProperty("ContextMenu", typeof(Control))]
+    [ProvideProperty("ContextMenu", typeof(Component))]
     partial class ContextMenu : IExtenderProvider
     {
         bool IExtenderProvider.CanExtend(object extendee)
-            => extendee is Control;
+            => extendee is Control or NotifyIcon;
 
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatBehavior))]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public bool GetContextMenu(Control control)
-            => control.GetContextMenu() == this;
+        public bool GetContextMenu(Component component)
+        {
+            if (component is Control control)
+                return control.GetContextMenu() == this;
+            else if (component is NotifyIcon notifyIcon)
+                return notifyIcon.GetContextMenu() == this;
+            else
+                return false;
+        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void SetContextMenu(Control control, bool set)
-            => control.SetContextMenu(set ? this : null);
+        public void SetContextMenu(Component component, bool set)
+        {
+            if (component is Control control)
+                control.SetContextMenu(set ? this : null);
+            else if (component is NotifyIcon notifyIcon)
+                notifyIcon.SetContextMenu(set ? this : null);
+        }
     }
 }

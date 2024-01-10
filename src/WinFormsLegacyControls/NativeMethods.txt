@@ -7,6 +7,7 @@ DestroyMenu
 DISPID_BORDERSTYLE
 DRAWITEMSTRUCT
 DrawMenuBar
+GetCursorPos
 GetDC
 GetMenuItemCount
 GetMenuItemID
@@ -38,6 +39,7 @@ SBT_*
 SC_KEYMENU
 SelectPalette
 SendMessage
+SetForegroundWindow
 SetMenu
 SetMenuDefaultItem
 SetMenuItemInfo
@@ -104,6 +106,7 @@ WM_MENUSELECT
 WM_NCDESTROY
 WM_NCHITTEST
 WM_NOTIFY
+WM_NULL
 WM_SETFOCUS
 WM_SETREDRAW
 WM_SYSCOMMAND

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             mainMenu1 = new WinFormsLegacyControls.MainMenu(components);
             menuItem1 = new WinFormsLegacyControls.MenuItem();
             menuItem4 = new WinFormsLegacyControls.MenuItem();
@@ -40,6 +41,9 @@
             menuItem7 = new WinFormsLegacyControls.MenuItem();
             menuItem8 = new WinFormsLegacyControls.MenuItem();
             menuItem9 = new WinFormsLegacyControls.MenuItem();
+            panel1 = new Panel();
+            button1 = new Button();
+            textBox1 = new TextBox();
             toolTip1 = new ToolTip(components);
             toolBar1 = new WinFormsLegacyControls.ToolBar();
             toolBarButton1 = new WinFormsLegacyControls.ToolBarButton();
@@ -49,13 +53,11 @@
             statusBarPanel1 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel2 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel3 = new WinFormsLegacyControls.StatusBarPanel();
-            panel1 = new Panel();
-            button1 = new Button();
-            textBox1 = new TextBox();
+            notifyIcon1 = new NotifyIcon(components);
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel3).BeginInit();
-            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // mainMenu1
@@ -114,6 +116,35 @@
             // 
             menuItem9.Index = 2;
             menuItem9.Text = "menuItem9";
+            // 
+            // panel1
+            // 
+            contextMenu1.SetContextMenu(panel1, true);
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(textBox1);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(0, 62);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 355);
+            panel1.TabIndex = 2;
+            // 
+            // button1
+            // 
+            button1.FlatStyle = FlatStyle.System;
+            button1.Location = new Point(168, 4);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 1;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(12, 6);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(150, 31);
+            textBox1.TabIndex = 0;
             // 
             // toolTip1
             // 
@@ -183,34 +214,15 @@
             statusBarPanel3.Text = "statusBarPanel3";
             statusBarPanel3.ToolTipText = "sc";
             // 
-            // panel1
+            // notifyIcon1
             // 
-            contextMenu1.SetContextMenu(panel1, true);
-            panel1.Controls.Add(button1);
-            panel1.Controls.Add(textBox1);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(0, 62);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 355);
-            panel1.TabIndex = 2;
-            // 
-            // button1
-            // 
-            button1.FlatStyle = FlatStyle.System;
-            button1.Location = new Point(168, 4);
-            button1.Name = "button1";
-            button1.Size = new Size(112, 34);
-            button1.TabIndex = 1;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(12, 6);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
-            textBox1.TabIndex = 0;
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon1.BalloonTipText = "BalloonTipText";
+            notifyIcon1.BalloonTipTitle = "BalloonTipTitle";
+            contextMenu1.SetContextMenu(notifyIcon1, true);
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.Visible = true;
             // 
             // Form1
             // 
@@ -223,11 +235,11 @@
             mainMenu1.SetMenu(this, true);
             Name = "Form1";
             Text = "Form1";
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel2).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel3).EndInit();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -257,5 +269,6 @@
         private Panel panel1;
         private Button button1;
         private TextBox textBox1;
+        private NotifyIcon notifyIcon1;
     }
 }

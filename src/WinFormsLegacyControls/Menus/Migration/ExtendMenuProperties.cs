@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using WinFormsLegacyControls.Menus.Migration;
 
@@ -16,7 +17,7 @@ namespace WinFormsLegacyControls
         }
 
         private static class Holder<K, V, P>
-            where K : notnull, Control
+            where K : notnull, Component
             where V : ISupportNativeWindow<K, P, V>
         {
             private static readonly Dictionary<K, V> _property = new();
@@ -33,7 +34,7 @@ namespace WinFormsLegacyControls
             public static void SetValue(K key, P? value)
             {
                 ArgumentNullException.ThrowIfNull(key);
-                ObjectDisposedException.ThrowIf(key.IsDisposed, key);
+                ObjectDisposedException.ThrowIf(key is Control { IsDisposed: true }, key);
 
                 if (_property.TryGetValue(key, out var window))
                 {
@@ -94,5 +95,13 @@ namespace WinFormsLegacyControls
 
         public static void SetContextMenu(this Control control, ContextMenu? contextMenu)
             => Holder<Control, ContextMenuSupportControlNativeWindow, ContextMenu>.SetValue(control, contextMenu);
+
+        // NotifyIcon.ContextMenu Property
+
+        public static ContextMenu? GetContextMenu(this NotifyIcon notifyIcon)
+            => Holder<NotifyIcon, ContextMenuSupportNotifyIconNativeWindow, ContextMenu>.GetValue(notifyIcon);
+
+        public static void SetContextMenu(this NotifyIcon notifyIcon, ContextMenu? contextMenu)
+            => Holder<NotifyIcon, ContextMenuSupportNotifyIconNativeWindow, ContextMenu>.SetValue(notifyIcon, contextMenu);
     }
 }
