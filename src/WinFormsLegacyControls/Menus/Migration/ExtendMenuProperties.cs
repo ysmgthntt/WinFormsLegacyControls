@@ -96,6 +96,7 @@ namespace WinFormsLegacyControls
             => control switch
             {
                 TreeView treeView => Holder<TreeView, ContextMenuSupportTreeViewNativeWindow, TreeNodeContextMenuProperty>.GetValue(treeView)?.ContextMenu,
+                ComboBox comboBox => Holder<ComboBox, ContextMenuSupportComboBoxNativeWindow, ContextMenu>.GetValue(comboBox),
                 _ => Holder<Control, ContextMenuSupportControlNativeWindow, ContextMenu>.GetValue(control),
             };
 
@@ -117,6 +118,10 @@ namespace WinFormsLegacyControls
                 {
                     Holder<TreeView, ContextMenuSupportTreeViewNativeWindow, TreeNodeContextMenuProperty>.SetValue(treeView, new(contextMenu, false));
                 }
+            }
+            else if (control is ComboBox comboBox)
+            {
+                Holder<ComboBox, ContextMenuSupportComboBoxNativeWindow, ContextMenu>.SetValue(comboBox, contextMenu);
             }
             else
             {

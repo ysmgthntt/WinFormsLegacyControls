@@ -1,23 +1,20 @@
 ﻿namespace WinFormsLegacyControls.Menus.Migration
 {
-    internal class ContextMenuSupportTreeViewNativeWindow : ContextMenuSupportControlNativeWindow
+    internal sealed class ContextMenuSupportTreeViewNativeWindow : ContextMenuSupportNativeWindowBase<TreeView>
         , ISupportNativeWindow<TreeView, TreeNodeContextMenuProperty, ContextMenuSupportTreeViewNativeWindow>
     {
-        private readonly TreeView _treeView;
-
         private ContextMenuSupportTreeViewNativeWindow(TreeView treeView)
             : base(treeView)
         {
-            _treeView = treeView;
-            _treeView.NodeMouseClick += TreeView_NodeMouseClick;
+            Target.NodeMouseClick += TreeView_NodeMouseClick;
         }
 
         public static ContextMenuSupportTreeViewNativeWindow Create(TreeView treeView)
             => new(treeView);
 
-        protected override void DetachCore()
+        protected override void OnDetach()
         {
-            _treeView.NodeMouseClick -= TreeView_NodeMouseClick;
+            Target.NodeMouseClick -= TreeView_NodeMouseClick;
         }
 
         private TreeNodeContextMenuProperty? _property;
@@ -63,24 +60,25 @@
                     break;
 
                 case PInvoke.WM_CONTEXTMENU:
+                    TreeView treeView = Target;
                     if (_showTreeViewContextMenu)
                     {
                         if (_lastClickNode?.GetContextMenu() is { } contextMenu)
-                            contextMenu.ShowAtCursorPos(_treeView, _treeView, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL);
+                            contextMenu.ShowAtCursorPos(treeView, treeView, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL);
                         else
                             base.WndProc(ref m);
                     }
                     else
                     {
                         // this is the Shift + F10 Case....
-                        TreeNode treeNode = _treeView.SelectedNode;
+                        TreeNode treeNode = treeView.SelectedNode;
                         if (treeNode is not null && treeNode.GetContextMenu() is { } contextMenu)
                         {
                             Point client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                            if (_treeView.ClientRectangle.Contains(client))
+                            if (treeView.ClientRectangle.Contains(client))
                             {
-                                contextMenu.Show(_treeView, client);
+                                contextMenu.Show(treeView, client);
                             }
                         }
                         else
