@@ -44,39 +44,30 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
 
                 //private void ShowContextMenu()
-
-                //UnsafeNativeMethods.GetCursorPos(out Point pt);
-                PInvoke.GetCursorPos(out Point pt);
+                /*
+                UnsafeNativeMethods.GetCursorPos(out Point pt);
 
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
-                //UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
-                PInvoke.SetForegroundWindow(this);
+                UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
 
-                //if (contextMenu != null)
+                if (contextMenu != null)
                 {
-                    // [spec]
-                    contextMenu.sourceControl = null;
-
                     contextMenu.OnPopup(EventArgs.Empty);
 
-                    /*
                     SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
                                              NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTALIGN,
                                              pt.X,
                                              pt.Y,
                                              new HandleRef(window, window.Handle),
                                              null);
-                    */
-                    IntPtr createHandle = contextMenu.Handle;
-                    BOOL result = PInvoke.TrackPopupMenuEx(contextMenu, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN, pt.X, pt.Y, this, 0);
-                    Debug.Assert(result);
 
                     // Force task switch (see above)
-                    //UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
-                    PInvoke.PostMessage(this, PInvoke.WM_NULL);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
                 }
+                */
+                contextMenu.ShowAtCursorPos(this, null, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN);
             }
         }
 
