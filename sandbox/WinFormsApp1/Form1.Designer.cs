@@ -42,6 +42,7 @@
             menuItem8 = new WinFormsLegacyControls.MenuItem();
             menuItem9 = new WinFormsLegacyControls.MenuItem();
             panel1 = new Panel();
+            treeView1 = new TreeView();
             numericUpDown1 = new NumericUpDown();
             comboBox1 = new ComboBox();
             button1 = new Button();
@@ -122,7 +123,7 @@
             // 
             // panel1
             // 
-            contextMenu1.SetContextMenu(panel1, true);
+            panel1.Controls.Add(treeView1);
             panel1.Controls.Add(numericUpDown1);
             panel1.Controls.Add(comboBox1);
             panel1.Controls.Add(button1);
@@ -132,6 +133,13 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 355);
             panel1.TabIndex = 2;
+            // 
+            // treeView1
+            // 
+            treeView1.Location = new Point(12, 119);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(182, 146);
+            treeView1.TabIndex = 4;
             // 
             // numericUpDown1
             // 
@@ -298,5 +306,6 @@
         private NotifyIcon notifyIcon1;
         private NumericUpDown numericUpDown1;
         private ComboBox comboBox1;
+        private TreeView treeView1;
     }
 }

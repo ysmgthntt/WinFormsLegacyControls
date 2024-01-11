@@ -18,11 +18,21 @@ namespace WinFormsApp1
             InitializeComponent();
 
             // No designer support
+            //  Event
             menuItem5.Click += (_, _) => MessageBox.Show(this, "menuItem5");
-            menuItem8.Click += (_, _) => MessageBox.Show(this, "menuItem8");
+            menuItem8.Click += (_, _) => MessageBox.Show(this, "menuItem8: " + contextMenu1.SourceControl?.Name);
 
+            //  ToolTip association
             toolBar1.SetToolTip(toolTip1);
             statusBar1.SetToolTip(toolTip1);
+
+            //  TreeNode
+            TreeNode treeNode1 = new TreeNode("treeNode1");
+            TreeNode treeNode2 = new TreeNode("treeNode2");
+            treeNode2.SetContextMenu(contextMenu1);
+            TreeNode treeNode3 = new TreeNode("treeNode3");
+            treeView1.Nodes.AddRange([treeNode1, treeNode2, treeNode3]);
+            treeView1.SetContextMenuForTreeNodesEnabled(true);
 
             // OwnerDraw
             menuItem6.OwnerDraw = true;

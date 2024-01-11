@@ -8,14 +8,14 @@ using static Interop;
 
 namespace WinFormsLegacyControls.Menus.Migration
 {
-    internal sealed partial class ContextMenuSupportControlNativeWindow : NativeWindow
+    internal partial class ContextMenuSupportControlNativeWindow : NativeWindow
         , ISupportNativeWindow<Control, ContextMenu, ContextMenuSupportControlNativeWindow>
     {
         private readonly Control _control;
         private readonly ComboBoxSupport? _comboBoxSupport;
         private ContextMenu _contextMenu;
 
-        private ContextMenuSupportControlNativeWindow(Control control)
+        protected ContextMenuSupportControlNativeWindow(Control control)
         {
             _control = control;
             _control.Disposed += Control_Disposed;
@@ -45,7 +45,10 @@ namespace WinFormsLegacyControls.Menus.Migration
                 _comboBoxSupport.ReleaseChildWindow();
                 _control.HandleDestroyed -= _comboBoxSupport.OnHandleDestroyed;
             }
+            DetachCore();
         }
+
+        protected virtual void DetachCore() { }
 
         ContextMenu ISupportNativeWindow<Control, ContextMenu, ContextMenuSupportControlNativeWindow>.Property
         {
@@ -178,22 +181,27 @@ namespace WinFormsLegacyControls.Menus.Migration
             if (contextMenu is not null)
             {
                 //int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                int x = PARAM.SignedLOWORD(m.LParam);
                 //int y = NativeMethods.Util.SignedHIWORD(m.LParam);
-                int y = PARAM.SignedHIWORD(m.LParam);
                 Point client;
-                bool keyboardActivated = false;
+                //bool keyboardActivated = false;
                 // lparam will be exactly -1 when the user invokes the context menu
                 // with the keyboard.
                 //
                 if (unchecked((int)(long)m.LParam) == -1)
                 {
-                    keyboardActivated = true;
+                    //keyboardActivated = true;
                     client = new Point(_control.Width / 2, _control.Height / 2);
                 }
                 else
                 {
-                    client = _control.PointToClient(new Point(x, y));
+                    Point pt = new Point((int)m.LParam);
+#if DEBUG
+                    int x = PARAM.SignedLOWORD(m.LParam);
+                    int y = PARAM.SignedHIWORD(m.LParam);
+                    Debug.Assert(pt.X == x && pt.Y == y);
+#endif
+                    //client = _control.PointToClient(new Point(x, y));
+                    client = _control.PointToClient(pt);
                 }
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area

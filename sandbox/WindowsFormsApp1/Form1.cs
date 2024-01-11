@@ -43,7 +43,7 @@ namespace WindowsFormsApp1
 
         private void menuItem8_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "menuItem8");
+            MessageBox.Show(this, "menuItem8: " + contextMenu1.SourceControl?.Name);
         }
 
         private void MenuItem_MeasureItem(object? sender, MeasureItemEventArgs e)

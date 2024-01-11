@@ -31,6 +31,9 @@ namespace WindowsFormsApp1
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("treeNode1");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("treeNode2");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("treeNode3");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.menuItem1 = new System.Windows.Forms.MenuItem();
@@ -53,6 +56,7 @@ namespace WindowsFormsApp1
             this.statusBarPanel2 = new System.Windows.Forms.StatusBarPanel();
             this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -208,7 +212,7 @@ namespace WindowsFormsApp1
             // 
             // panel1
             // 
-            this.panel1.ContextMenu = this.contextMenu1;
+            this.panel1.Controls.Add(this.treeView1);
             this.panel1.Controls.Add(this.numericUpDown1);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.button1);
@@ -219,12 +223,30 @@ namespace WindowsFormsApp1
             this.panel1.Size = new System.Drawing.Size(800, 373);
             this.panel1.TabIndex = 2;
             // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(12, 106);
+            this.treeView1.Name = "treeView1";
+            treeNode1.Name = "treeNode1";
+            treeNode1.Text = "treeNode1";
+            treeNode2.ContextMenu = this.contextMenu1;
+            treeNode2.Name = "treeNode2";
+            treeNode2.Text = "treeNode2";
+            treeNode3.Name = "treeNode3";
+            treeNode3.Text = "treeNode3";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2,
+            treeNode3});
+            this.treeView1.Size = new System.Drawing.Size(160, 97);
+            this.treeView1.TabIndex = 4;
+            // 
             // numericUpDown1
             // 
             this.numericUpDown1.ContextMenu = this.contextMenu1;
             this.numericUpDown1.Location = new System.Drawing.Point(12, 75);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 25);
+            this.numericUpDown1.Size = new System.Drawing.Size(160, 25);
             this.numericUpDown1.TabIndex = 3;
             // 
             // comboBox1
@@ -238,13 +260,13 @@ namespace WindowsFormsApp1
             "c"});
             this.comboBox1.Location = new System.Drawing.Point(12, 43);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 26);
+            this.comboBox1.Size = new System.Drawing.Size(160, 26);
             this.comboBox1.TabIndex = 2;
             // 
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(118, 10);
+            this.button1.Location = new System.Drawing.Point(178, 10);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(112, 28);
             this.button1.TabIndex = 1;
@@ -257,7 +279,7 @@ namespace WindowsFormsApp1
             this.textBox1.ContextMenu = this.contextMenu1;
             this.textBox1.Location = new System.Drawing.Point(12, 12);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 25);
+            this.textBox1.Size = new System.Drawing.Size(160, 25);
             this.textBox1.TabIndex = 0;
             // 
             // notifyIcon1
@@ -320,6 +342,7 @@ namespace WindowsFormsApp1
         private NotifyIcon notifyIcon1;
         private ComboBox comboBox1;
         private NumericUpDown numericUpDown1;
+        private TreeView treeView1;
     }
 }
 

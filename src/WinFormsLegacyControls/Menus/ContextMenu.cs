@@ -246,5 +246,27 @@ namespace WinFormsLegacyControls
             Debug.Assert(result);
         }
 
+        //
+
+        internal void ShowAtCursorPos(IWin32Window hWnd, Control? control, TRACK_POPUP_MENU_FLAGS flags)
+        {
+            sourceControl = control;
+
+            PInvoke.GetCursorPos(out Point pt);
+
+            // Summary: the current window must be made the foreground window
+            // before calling TrackPopupMenuEx, and a task switch must be
+            // forced after the call.
+            PInvoke.SetForegroundWindow(hWnd);
+
+            OnPopup(EventArgs.Empty);
+
+            IntPtr createHandle = this.Handle;
+            BOOL result = PInvoke.TrackPopupMenuEx(this, flags, pt.X, pt.Y, hWnd, 0);
+            Debug.Assert(result);
+
+            // Force task switch (see above)
+            PInvoke.PostMessage(hWnd, PInvoke.WM_NULL);
+        }
     }
 }
