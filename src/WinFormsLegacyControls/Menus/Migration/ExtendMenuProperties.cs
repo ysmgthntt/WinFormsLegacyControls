@@ -31,7 +31,7 @@ namespace WinFormsLegacyControls
                 return default;
             }
 
-            public static void SetValue(K key, P? value)
+            public static V? SetValue(K key, P? value)
             {
                 ArgumentNullException.ThrowIfNull(key);
                 ObjectDisposedException.ThrowIf(key is Control { IsDisposed: true }, key);
@@ -44,6 +44,7 @@ namespace WinFormsLegacyControls
                         window.Detach();
                         key.Disposed -= _property.Key_Disposed;
                         _property.Remove(key);
+                        return default;
                     }
                 }
                 else if (value is not null)
@@ -58,6 +59,7 @@ namespace WinFormsLegacyControls
                     key.Disposed += _property.Key_Disposed;
                     window.Property = value;
                 }
+                return window;
             }
 
             public static bool TryGetValue(K key, [NotNullWhen(true)] out V? window)
@@ -96,10 +98,16 @@ namespace WinFormsLegacyControls
         public static void SetContextMenu(this Control control, ContextMenu? contextMenu)
             => Holder<Control, ContextMenuSupportControlNativeWindow, ContextMenu>.SetValue(control, contextMenu);
 
+        internal static void SetContextMenu(this Control control, ContextMenu? contextMenu, Control sourceControl)
+        {
+            if (Holder<Control, ContextMenuSupportControlNativeWindow, ContextMenu>.SetValue(control, contextMenu) is { } window)
+                window.SourceControl = sourceControl;
+        }
+
         // NotifyIcon.ContextMenu Property
 
         public static ContextMenu? GetContextMenu(this NotifyIcon notifyIcon)
-            => Holder<NotifyIcon, ContextMenuSupportNotifyIconNativeWindow, ContextMenu>.GetValue(notifyIcon);
+        => Holder<NotifyIcon, ContextMenuSupportNotifyIconNativeWindow, ContextMenu>.GetValue(notifyIcon);
 
         public static void SetContextMenu(this NotifyIcon notifyIcon, ContextMenu? contextMenu)
             => Holder<NotifyIcon, ContextMenuSupportNotifyIconNativeWindow, ContextMenu>.SetValue(notifyIcon, contextMenu);

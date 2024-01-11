@@ -56,6 +56,9 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                 //if (contextMenu != null)
                 {
+                    // [spec]
+                    contextMenu.sourceControl = null;
+
                     contextMenu.OnPopup(EventArgs.Empty);
 
                     /*

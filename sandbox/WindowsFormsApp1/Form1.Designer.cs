@@ -53,6 +53,8 @@ namespace WindowsFormsApp1
             this.statusBarPanel2 = new System.Windows.Forms.StatusBarPanel();
             this.statusBarPanel3 = new System.Windows.Forms.StatusBarPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -60,6 +62,7 @@ namespace WindowsFormsApp1
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -206,6 +209,8 @@ namespace WindowsFormsApp1
             // panel1
             // 
             this.panel1.ContextMenu = this.contextMenu1;
+            this.panel1.Controls.Add(this.numericUpDown1);
+            this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -214,12 +219,34 @@ namespace WindowsFormsApp1
             this.panel1.Size = new System.Drawing.Size(800, 373);
             this.panel1.TabIndex = 2;
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.ContextMenu = this.contextMenu1;
+            this.numericUpDown1.Location = new System.Drawing.Point(12, 75);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 25);
+            this.numericUpDown1.TabIndex = 3;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.ContextMenu = this.contextMenu1;
+            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "a",
+            "b",
+            "c"});
+            this.comboBox1.Location = new System.Drawing.Point(12, 43);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 26);
+            this.comboBox1.TabIndex = 2;
+            // 
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(118, 7);
+            this.button1.Location = new System.Drawing.Point(118, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(112, 28);
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -227,7 +254,8 @@ namespace WindowsFormsApp1
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 6);
+            this.textBox1.ContextMenu = this.contextMenu1;
+            this.textBox1.Location = new System.Drawing.Point(12, 12);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 25);
             this.textBox1.TabIndex = 0;
@@ -258,6 +286,7 @@ namespace WindowsFormsApp1
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,6 +318,8 @@ namespace WindowsFormsApp1
         private Button button1;
         private TextBox textBox1;
         private NotifyIcon notifyIcon1;
+        private ComboBox comboBox1;
+        private NumericUpDown numericUpDown1;
     }
 }
 

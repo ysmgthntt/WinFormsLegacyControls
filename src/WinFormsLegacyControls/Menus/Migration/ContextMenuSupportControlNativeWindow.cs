@@ -8,10 +8,11 @@ using static Interop;
 
 namespace WinFormsLegacyControls.Menus.Migration
 {
-    internal sealed class ContextMenuSupportControlNativeWindow : NativeWindow
+    internal sealed partial class ContextMenuSupportControlNativeWindow : NativeWindow
         , ISupportNativeWindow<Control, ContextMenu, ContextMenuSupportControlNativeWindow>
     {
         private readonly Control _control;
+        private readonly ComboBoxSupport? _comboBoxSupport;
         private ContextMenu _contextMenu;
 
         private ContextMenuSupportControlNativeWindow(Control control)
@@ -19,8 +20,16 @@ namespace WinFormsLegacyControls.Menus.Migration
             _control = control;
             _control.Disposed += Control_Disposed;
             _control.HandleCreated += Control_HandleCreated;
+            if (control is ComboBox comboBox)
+            {
+                _comboBoxSupport = new ComboBoxSupport(this, comboBox);
+                _control.HandleDestroyed += _comboBoxSupport.OnHandleDestroyed;
+            }
             if (_control.IsHandleCreated)
+            {
                 AssignHandle(_control.Handle);
+                _comboBoxSupport?.OnHandleCreated();
+            }
         }
 
         public static ContextMenuSupportControlNativeWindow Create(Control control)
@@ -31,6 +40,11 @@ namespace WinFormsLegacyControls.Menus.Migration
             _control.Disposed -= Control_Disposed;
             _control.HandleCreated -= Control_HandleCreated;
             ReleaseHandle();
+            if (_comboBoxSupport is not null)
+            {
+                _comboBoxSupport.ReleaseChildWindow();
+                _control.HandleDestroyed -= _comboBoxSupport.OnHandleDestroyed;
+            }
         }
 
         ContextMenu ISupportNativeWindow<Control, ContextMenu, ContextMenuSupportControlNativeWindow>.Property
@@ -47,7 +61,10 @@ namespace WinFormsLegacyControls.Menus.Migration
         private void Control_HandleCreated(object sender, EventArgs e)
         {
             AssignHandle(_control.Handle);
+            _comboBoxSupport?.OnHandleCreated();
         }
+
+        public Control? SourceControl { get; set; }
 
         /// <summary>
         ///  The contextMenu associated with this control. The contextMenu
@@ -83,6 +100,18 @@ namespace WinFormsLegacyControls.Menus.Migration
                     }
 
                     //OnContextMenuChanged(EventArgs.Empty);
+
+                    if (_control is UpDownBase)
+                    {
+                        foreach (Control child in _control.Controls)
+                        {
+                            if (child is TextBoxBase)
+                            {
+                                child.SetContextMenu(value, _control);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -131,7 +160,8 @@ namespace WinFormsLegacyControls.Menus.Migration
         // overridable so nested controls can provide a different source control.
         internal /*virtual*/ void WmContextMenu(ref Message m)
         {
-            WmContextMenu(ref m, _control);
+            //WmContextMenu(ref m, _control);
+            WmContextMenu(ref m, SourceControl ?? _control);
         }
 
         /// <summary>
@@ -305,6 +335,17 @@ namespace WinFormsLegacyControls.Menus.Migration
                     CommonMessageHandlers.WmMenuSelect(ref m);
                     base.WndProc(ref m);
                     break;
+
+                /*
+                case PInvoke.WM_PARENTNOTIFY:
+                    base.WndProc(ref m);
+                    if (_comboBoxSupport is not null)
+                    {
+                        if ((int)m.WParam == ((int)PInvoke.WM_CREATE | 1000 << 16))
+                            _comboBoxSupport.OnParentNotify(m.LParam);
+                    }
+                    break;
+                */
 
                 default:
                     base.WndProc(ref m);

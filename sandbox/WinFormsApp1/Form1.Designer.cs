@@ -42,8 +42,11 @@
             menuItem8 = new WinFormsLegacyControls.MenuItem();
             menuItem9 = new WinFormsLegacyControls.MenuItem();
             panel1 = new Panel();
+            numericUpDown1 = new NumericUpDown();
+            comboBox1 = new ComboBox();
             button1 = new Button();
             textBox1 = new TextBox();
+            notifyIcon1 = new NotifyIcon(components);
             toolTip1 = new ToolTip(components);
             toolBar1 = new WinFormsLegacyControls.ToolBar();
             toolBarButton1 = new WinFormsLegacyControls.ToolBarButton();
@@ -53,8 +56,8 @@
             statusBarPanel1 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel2 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel3 = new WinFormsLegacyControls.StatusBarPanel();
-            notifyIcon1 = new NotifyIcon(components);
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel3).BeginInit();
@@ -120,6 +123,8 @@
             // panel1
             // 
             contextMenu1.SetContextMenu(panel1, true);
+            panel1.Controls.Add(numericUpDown1);
+            panel1.Controls.Add(comboBox1);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(textBox1);
             panel1.Dock = DockStyle.Fill;
@@ -127,6 +132,25 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 355);
             panel1.TabIndex = 2;
+            // 
+            // numericUpDown1
+            // 
+            contextMenu1.SetContextMenu(numericUpDown1, true);
+            numericUpDown1.Location = new Point(12, 82);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(180, 31);
+            numericUpDown1.TabIndex = 3;
+            // 
+            // comboBox1
+            // 
+            contextMenu1.SetContextMenu(comboBox1, true);
+            comboBox1.FlatStyle = FlatStyle.System;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "a", "b", "c" });
+            comboBox1.Location = new Point(12, 43);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(182, 33);
+            comboBox1.TabIndex = 2;
             // 
             // button1
             // 
@@ -141,10 +165,21 @@
             // 
             // textBox1
             // 
+            contextMenu1.SetContextMenu(textBox1, true);
             textBox1.Location = new Point(12, 6);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(150, 31);
             textBox1.TabIndex = 0;
+            // 
+            // notifyIcon1
+            // 
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon1.BalloonTipText = "BalloonTipText";
+            notifyIcon1.BalloonTipTitle = "BalloonTipTitle";
+            contextMenu1.SetContextMenu(notifyIcon1, true);
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.Visible = true;
             // 
             // toolTip1
             // 
@@ -214,16 +249,6 @@
             statusBarPanel3.Text = "statusBarPanel3";
             statusBarPanel3.ToolTipText = "sc";
             // 
-            // notifyIcon1
-            // 
-            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-            notifyIcon1.BalloonTipText = "BalloonTipText";
-            notifyIcon1.BalloonTipTitle = "BalloonTipTitle";
-            contextMenu1.SetContextMenu(notifyIcon1, true);
-            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
-            notifyIcon1.Text = "notifyIcon1";
-            notifyIcon1.Visible = true;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -237,6 +262,7 @@
             Text = "Form1";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel2).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel3).EndInit();
@@ -270,5 +296,7 @@
         private Button button1;
         private TextBox textBox1;
         private NotifyIcon notifyIcon1;
+        private NumericUpDown numericUpDown1;
+        private ComboBox comboBox1;
     }
 }

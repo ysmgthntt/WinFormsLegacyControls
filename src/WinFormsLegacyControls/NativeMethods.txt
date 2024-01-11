@@ -13,6 +13,7 @@ GetMenuItemCount
 GetMenuItemID
 GetMenuItemInfo
 GetSubMenu
+GetWindow
 GetWindowPlacement
 HTCLIENT
 HWND_*
