@@ -4,6 +4,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using WinFormsLegacyControls.Migration;
 using static Interop;
 
 namespace WinFormsLegacyControls.Menus.Migration
@@ -760,7 +761,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                     break;
                 case PInvoke.WM_MENUSELECT:
                     CommonMessageHandlers.WmMenuSelect(ref m);
-                    base.WndProc(ref m);
+                    ControlAccessors.DefWndProc(_form, ref m);
                     break;
 
                 default:

@@ -2,6 +2,7 @@
 
 #nullable disable
 
+using WinFormsLegacyControls.Migration;
 using static Interop;
 
 namespace WinFormsLegacyControls.Menus.Migration
@@ -230,7 +231,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
             }
 
-            DefWndProc(ref m);
+            //DefWndProc(ref m);
+            ControlAccessors.DefWndProc(_control, ref m);
         }
 
         /// <summary>
@@ -248,7 +250,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                     return;
                 }
             }
-            DefWndProc(ref m);
+            //DefWndProc(ref m);
+            ControlAccessors.DefWndProc(_control, ref m);
         }
 
         /// <summary>
@@ -317,7 +320,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 case PInvoke.WM_MENUSELECT:
                     //WmMenuSelect(ref m);
                     CommonMessageHandlers.WmMenuSelect(ref m);
-                    base.WndProc(ref m);
+                    ControlAccessors.DefWndProc(_control, ref m);
                     break;
 
                 default:

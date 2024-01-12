@@ -92,7 +92,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                 case PInvoke.WM_MENUSELECT:
                     CommonMessageHandlers.WmMenuSelect(ref m);
-                    base.WndProc(ref m);
+                    DefWndProc(ref m);
                     break;
 
                 case PInvoke.WM_INITMENUPOPUP:

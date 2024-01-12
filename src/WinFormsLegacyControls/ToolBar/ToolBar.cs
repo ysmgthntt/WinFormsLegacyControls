@@ -1401,7 +1401,7 @@ namespace WinFormsLegacyControls
 
             if (_toolTip is not null)
             {
-                nint handle = WinFormsLegacyControls.Migration.ToolTipSupport.GetToolTipHandle(_toolTip);
+                nint handle = WinFormsLegacyControls.Migration.ToolTipAccessors.GetHandle(_toolTip);
                 PInvoke.SendMessage(this, PInvoke.TB_SETTOOLTIPS, (WPARAM)handle, 0);
                 GC.KeepAlive(_toolTip);
             }
@@ -2062,7 +2062,7 @@ namespace WinFormsLegacyControls
 
                 case PInvoke.WM_MENUSELECT:
                     CommonMessageHandlers.WmMenuSelect(ref m);
-                    base.WndProc(ref m);
+                    DefWndProc(ref m);
                     break;
 
                 default:

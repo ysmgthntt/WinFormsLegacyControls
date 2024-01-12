@@ -1844,7 +1844,7 @@ namespace WinFormsLegacyControls
                 ToolTip t = parent.mainToolTip;
                 HandleRef handle;
                 if (t is not null)
-                    handle = new HandleRef(t, WinFormsLegacyControls.Migration.ToolTipSupport.GetToolTipHandle(t));
+                    handle = new HandleRef(t, WinFormsLegacyControls.Migration.ToolTipAccessors.GetHandle(t));
                 else
                     handle = new HandleRef(this, Handle);
                 return info.SendMessage(handle, message);
