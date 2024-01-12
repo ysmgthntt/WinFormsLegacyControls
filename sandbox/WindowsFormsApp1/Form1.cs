@@ -17,6 +17,22 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
 
+            MenuItem[] menus = [menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7, menuItem8, menuItem9];
+
+            for (int i = 0; i < menus.Length; i++)
+            {
+                MenuItem menuItem = menus[i];
+                menuItem.Name = "menuItem" + (i + 1);
+                menuItem.Click += MenuItem_Click;
+                menuItem.Select += MenuItem_Select;
+                menuItem.Popup += MenuItem_Popup;
+            }
+
+            mainMenu1.Collapse += (_, _) => Debug.WriteLine("mainMenu_Collapse");
+            contextMenu1.Popup += (_, _) => Debug.WriteLine("contextMenu_Popup");
+            contextMenu1.Collapse += (_, _) => Debug.WriteLine("contextMenu_Collapse");
+
+
             // OwnerDraw
             menuItem6.OwnerDraw = true;
             menuItem6.MeasureItem += MenuItem_MeasureItem;
@@ -36,14 +52,22 @@ namespace WindowsFormsApp1
             statusBarPanel2.ToolTipText = textBox1.Text;
         }
 
-        private void menuItem5_Click(object sender, EventArgs e)
+        private void MenuItem_Click(object? sender, EventArgs e)
         {
-            MessageBox.Show(this, "menuItem5");
+            var menuItem = (MenuItem)sender!;
+            MessageBox.Show(this, menuItem.Name + ": " + menuItem.GetContextMenu()?.SourceControl?.Name);
         }
 
-        private void menuItem8_Click(object sender, EventArgs e)
+        private void MenuItem_Select(object? sender, EventArgs e)
         {
-            MessageBox.Show(this, "menuItem8: " + contextMenu1.SourceControl?.Name);
+            var menuItem = (MenuItem)sender!;
+            Debug.WriteLine("Select: " + menuItem.Name);
+        }
+
+        private void MenuItem_Popup(object? sender, EventArgs e)
+        {
+            var menuItem = (MenuItem)sender!;
+            Debug.WriteLine("Popup: " + menuItem.Name);
         }
 
         private void MenuItem_MeasureItem(object? sender, MeasureItemEventArgs e)

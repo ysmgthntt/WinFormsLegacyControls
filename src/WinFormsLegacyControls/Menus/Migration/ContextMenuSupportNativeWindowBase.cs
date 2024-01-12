@@ -251,7 +251,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
             }
             //DefWndProc(ref m);
-            ControlAccessors.DefWndProc(_control, ref m);
+            // for MainMenu
+            base.WndProc(ref m);
         }
 
         /// <summary>
@@ -269,6 +270,10 @@ namespace WinFormsLegacyControls.Menus.Migration
                     return;
                 }
             }
+
+            // add
+            // for MainMenu
+            base.WndProc(ref m);
         }
 
         protected override void WndProc(ref Message m)

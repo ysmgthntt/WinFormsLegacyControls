@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,22 @@ namespace WinFormsApp1
 
             // No designer support
             //  Event
-            menuItem5.Click += (_, _) => MessageBox.Show(this, "menuItem5");
-            menuItem8.Click += (_, _) => MessageBox.Show(this, "menuItem8: " + contextMenu1.SourceControl?.Name);
+            MenuItem[] menus = [menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7, menuItem8, menuItem9];
+
+            for (int i = 0; i < menus.Length; i++)
+            {
+                MenuItem menuItem = menus[i];
+                menuItem.Name = "menuItem" + (i + 1);
+                menuItem.Click += MenuItem_Click;
+                menuItem.Select += MenuItem_Select;
+                menuItem.Popup += MenuItem_Popup;
+            }
+
+            mainMenu1.Collapse += (_, _) => Debug.WriteLine("mainMenu_Collapse");
+            contextMenu1.Popup += (_, _) => Debug.WriteLine("contextMenu_Popup");
+            contextMenu1.Collapse += (_, _) => Debug.WriteLine("contextMenu_Collapse");
+
+            //this.SetContextMenu(contextMenu1);
 
             //  ToolTip association
             toolBar1.SetToolTip(toolTip1);
@@ -33,6 +48,7 @@ namespace WinFormsApp1
             TreeNode treeNode3 = new TreeNode("treeNode3");
             treeView1.Nodes.AddRange([treeNode1, treeNode2, treeNode3]);
             treeView1.SetContextMenuForTreeNodesEnabled(true);
+
 
             // OwnerDraw
             menuItem6.OwnerDraw = true;
@@ -50,6 +66,24 @@ namespace WinFormsApp1
         private void button1_Click(object sender, EventArgs e)
         {
             statusBarPanel2.ToolTipText = textBox1.Text;
+        }
+
+        private void MenuItem_Click(object? sender, EventArgs e)
+        {
+            var menuItem = (MenuItem)sender!;
+            MessageBox.Show(this, menuItem.Name + ": " + menuItem.GetContextMenu()?.SourceControl?.Name);
+        }
+
+        private void MenuItem_Select(object? sender, EventArgs e)
+        {
+            var menuItem = (MenuItem)sender!;
+            Debug.WriteLine("Select: " + menuItem.Name);
+        }
+
+        private void MenuItem_Popup(object? sender, EventArgs e)
+        {
+            var menuItem = (MenuItem)sender!;
+            Debug.WriteLine("Popup: " + menuItem.Name);
         }
 
         private void MenuItem_MeasureItem(object? sender, MeasureItemEventArgs e)

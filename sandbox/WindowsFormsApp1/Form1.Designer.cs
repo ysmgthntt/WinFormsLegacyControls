@@ -95,7 +95,6 @@ namespace WindowsFormsApp1
             this.menuItem5.Index = 1;
             this.menuItem5.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
             this.menuItem5.Text = "mainMenu5";
-            this.menuItem5.Click += new System.EventHandler(this.menuItem5_Click);
             // 
             // menuItem6
             // 
@@ -130,7 +129,6 @@ namespace WindowsFormsApp1
             this.menuItem8.Index = 1;
             this.menuItem8.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftC;
             this.menuItem8.Text = "contextMenu2";
-            this.menuItem8.Click += new System.EventHandler(this.menuItem8_Click);
             // 
             // menuItem9
             // 
