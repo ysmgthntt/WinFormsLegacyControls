@@ -219,6 +219,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmExitMenuLoop(ref Message m)
         {
+            // call Form.OnMenuComplete
+            DefWndProc(ref m);
+
             bool isContextMenu = (unchecked((int)(long)m.WParam) == 0) ? false : true;
 
             if (isContextMenu)
@@ -232,7 +235,6 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
 
             //DefWndProc(ref m);
-            ControlAccessors.DefWndProc(_control, ref m);
         }
 
         /// <summary>

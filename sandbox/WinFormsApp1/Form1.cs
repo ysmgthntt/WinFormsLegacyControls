@@ -35,6 +35,9 @@ namespace WinFormsApp1
             contextMenu1.Popup += (_, _) => Debug.WriteLine("contextMenu_Popup");
             contextMenu1.Collapse += (_, _) => Debug.WriteLine("contextMenu_Collapse");
 
+            this.MenuStart += (_, _) => Debug.WriteLine("Form_MenuStart");
+            this.MenuComplete += (_, _) => Debug.WriteLine("Form_MenuComplete");
+
             //this.SetContextMenu(contextMenu1);
 
             //  ToolTip association
