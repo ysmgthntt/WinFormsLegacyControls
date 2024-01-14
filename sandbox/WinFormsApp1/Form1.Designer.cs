@@ -41,13 +41,13 @@
             menuItem7 = new WinFormsLegacyControls.MenuItem();
             menuItem8 = new WinFormsLegacyControls.MenuItem();
             menuItem9 = new WinFormsLegacyControls.MenuItem();
-            panel1 = new Panel();
-            treeView1 = new TreeView();
             numericUpDown1 = new NumericUpDown();
             comboBox1 = new ComboBox();
-            button1 = new Button();
             textBox1 = new TextBox();
             notifyIcon1 = new NotifyIcon(components);
+            panel1 = new Panel();
+            treeView1 = new TreeView();
+            button1 = new Button();
             toolTip1 = new ToolTip(components);
             toolBar1 = new WinFormsLegacyControls.ToolBar();
             toolBarButton1 = new WinFormsLegacyControls.ToolBarButton();
@@ -57,8 +57,13 @@
             statusBarPanel1 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel2 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel3 = new WinFormsLegacyControls.StatusBarPanel();
-            panel1.SuspendLayout();
+            menuItem10 = new WinFormsLegacyControls.MenuItem();
+            menuItem11 = new WinFormsLegacyControls.MenuItem();
+            contextMenu2 = new WinFormsLegacyControls.ContextMenu();
+            menuItem12 = new WinFormsLegacyControls.MenuItem();
+            menuItem13 = new WinFormsLegacyControls.MenuItem();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel3).BeginInit();
@@ -72,7 +77,7 @@
             // 
             menuItem1.Index = 0;
             menuItem1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem4, menuItem5, menuItem6 });
-            menuItem1.Text = "menuItem1";
+            menuItem1.Text = "menuItem1(&A)";
             // 
             // menuItem4
             // 
@@ -83,12 +88,12 @@
             // 
             menuItem5.Index = 1;
             menuItem5.Shortcut = Shortcut.CtrlM;
-            menuItem5.Text = "menuItem5";
+            menuItem5.Text = "menuItem5(&B)";
             // 
             // menuItem6
             // 
             menuItem6.Index = 2;
-            menuItem6.Text = "menuItem6";
+            menuItem6.Text = "menuItem6(&C)";
             // 
             // menuItem2
             // 
@@ -106,40 +111,20 @@
             // 
             // menuItem7
             // 
-            menuItem7.DefaultItem = true;
             menuItem7.Index = 0;
+            menuItem7.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem10, menuItem11 });
             menuItem7.Text = "menuItem7";
             // 
             // menuItem8
             // 
             menuItem8.Index = 1;
             menuItem8.Shortcut = Shortcut.CtrlShiftC;
-            menuItem8.Text = "menuItem8";
+            menuItem8.Text = "menuItem8(&A)";
             // 
             // menuItem9
             // 
             menuItem9.Index = 2;
-            menuItem9.Text = "menuItem9";
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(treeView1);
-            panel1.Controls.Add(numericUpDown1);
-            panel1.Controls.Add(comboBox1);
-            panel1.Controls.Add(button1);
-            panel1.Controls.Add(textBox1);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(0, 62);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 355);
-            panel1.TabIndex = 2;
-            // 
-            // treeView1
-            // 
-            treeView1.Location = new Point(12, 119);
-            treeView1.Name = "treeView1";
-            treeView1.Size = new Size(182, 146);
-            treeView1.TabIndex = 4;
+            menuItem9.Text = "menuItem9(&B)";
             // 
             // numericUpDown1
             // 
@@ -160,17 +145,6 @@
             comboBox1.Size = new Size(182, 33);
             comboBox1.TabIndex = 2;
             // 
-            // button1
-            // 
-            button1.FlatStyle = FlatStyle.System;
-            button1.Location = new Point(168, 4);
-            button1.Name = "button1";
-            button1.Size = new Size(112, 34);
-            button1.TabIndex = 1;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // textBox1
             // 
             contextMenu1.SetContextMenu(textBox1, true);
@@ -189,6 +163,38 @@
             notifyIcon1.Text = "notifyIcon1";
             notifyIcon1.Visible = true;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(treeView1);
+            panel1.Controls.Add(numericUpDown1);
+            panel1.Controls.Add(comboBox1);
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(textBox1);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(0, 62);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(800, 355);
+            panel1.TabIndex = 2;
+            // 
+            // treeView1
+            // 
+            contextMenu2.SetContextMenu(treeView1, true);
+            treeView1.Location = new Point(12, 119);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(182, 146);
+            treeView1.TabIndex = 4;
+            // 
+            // button1
+            // 
+            button1.FlatStyle = FlatStyle.System;
+            button1.Location = new Point(168, 4);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 1;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // toolTip1
             // 
             toolTip1.BackColor = Color.Blue;
@@ -200,6 +206,7 @@
             // toolBar1
             // 
             toolBar1.Buttons.AddRange(new WinFormsLegacyControls.ToolBarButton[] { toolBarButton1, toolBarButton2, toolBarButton3 });
+            contextMenu2.SetContextMenu(toolBar1, true);
             toolBar1.DropDownArrows = true;
             toolBar1.Location = new Point(0, 0);
             toolBar1.Name = "toolBar1";
@@ -257,6 +264,30 @@
             statusBarPanel3.Text = "statusBarPanel3";
             statusBarPanel3.ToolTipText = "sc";
             // 
+            // menuItem10
+            // 
+            menuItem10.Index = 0;
+            menuItem10.Text = "menuItem10";
+            // 
+            // menuItem11
+            // 
+            menuItem11.Index = 1;
+            menuItem11.Text = "menuItem11";
+            // 
+            // contextMenu2
+            // 
+            contextMenu2.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem12, menuItem13 });
+            // 
+            // menuItem12
+            // 
+            menuItem12.Index = 0;
+            menuItem12.Text = "menuItem12";
+            // 
+            // menuItem13
+            // 
+            menuItem13.Index = 1;
+            menuItem13.Text = "menuItem13";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -268,9 +299,9 @@
             mainMenu1.SetMenu(this, true);
             Name = "Form1";
             Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel2).EndInit();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel3).EndInit();
@@ -307,5 +338,10 @@
         private NumericUpDown numericUpDown1;
         private ComboBox comboBox1;
         private TreeView treeView1;
+        private WinFormsLegacyControls.MenuItem menuItem10;
+        private WinFormsLegacyControls.MenuItem menuItem11;
+        private WinFormsLegacyControls.ContextMenu contextMenu2;
+        private WinFormsLegacyControls.MenuItem menuItem12;
+        private WinFormsLegacyControls.MenuItem menuItem13;
     }
 }

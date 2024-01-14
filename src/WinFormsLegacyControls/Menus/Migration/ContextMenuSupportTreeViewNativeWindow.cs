@@ -1,4 +1,6 @@
-﻿namespace WinFormsLegacyControls.Menus.Migration
+﻿using WinFormsLegacyControls.Migration;
+
+namespace WinFormsLegacyControls.Menus.Migration
 {
     internal sealed class ContextMenuSupportTreeViewNativeWindow : ContextMenuSupportNativeWindowBase<TreeView>
         , ISupportNativeWindow<TreeView, TreeNodeContextMenuProperty, ContextMenuSupportTreeViewNativeWindow>
@@ -30,14 +32,15 @@
         }
 
         private bool _showTreeViewContextMenu;
-        private TreeNode? _lastClickNode;
+        private TreeNode? _lastClickedNode;
+        private ContextMenu? _treeNodeContextMenu;
 
         private void TreeView_NodeMouseClick(object? sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right && e.Node.ContextMenuStrip is null)
-                _lastClickNode = e.Node;
+                _lastClickedNode = e.Node;
             else
-                _lastClickNode = null;
+                _lastClickedNode = null;
         }
 
         protected override void WndProc(ref Message m)
@@ -46,7 +49,7 @@
             {
                 case MessageId.WM_REFLECT + PInvoke.WM_NOTIFY:
                     // NodeMouseClick -> WM_CONTEXTMENU が呼ばれる。
-                    _lastClickNode = null;
+                    _lastClickedNode = null;
                     _showTreeViewContextMenu = true;
                     try
                     {
@@ -56,15 +59,15 @@
                     {
                         _showTreeViewContextMenu = false;
                     }
-                    _lastClickNode = null;
+                    _lastClickedNode = null;
                     break;
 
                 case PInvoke.WM_CONTEXTMENU:
                     TreeView treeView = Target;
                     if (_showTreeViewContextMenu)
                     {
-                        if (_lastClickNode?.GetContextMenu() is { } contextMenu)
-                            contextMenu.ShowAtCursorPos(treeView, treeView, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL);
+                        if (_lastClickedNode is not null && (_treeNodeContextMenu = _lastClickedNode.GetContextMenu()) is not null)
+                            _treeNodeContextMenu.ShowAtCursorPos(treeView, treeView, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL);
                         else
                             base.WndProc(ref m);
                     }
@@ -72,13 +75,14 @@
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = treeView.SelectedNode;
-                        if (treeNode is not null && treeNode.GetContextMenu() is { } contextMenu)
+                        //if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
+                        if (treeNode is not null && (_treeNodeContextMenu = treeNode.GetContextMenu()) is not null)
                         {
                             Point client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
                             if (treeView.ClientRectangle.Contains(client))
                             {
-                                contextMenu.Show(treeView, client);
+                                _treeNodeContextMenu.Show(treeView, client);
                             }
                         }
                         else
@@ -87,6 +91,29 @@
                             // will ensure we're constrained to the client area.
                             base.WndProc(ref m);
                         }
+                    }
+                    break;
+
+                // [spec]
+                case PInvoke.WM_MENUCHAR:
+                    if (_treeNodeContextMenu is not null)
+                        _treeNodeContextMenu.WmMenuChar(ref m);
+                    else
+                        base.WndProc(ref m);
+                    break;
+
+                // [spec]
+                case PInvoke.WM_EXITMENULOOP:
+                    if (_treeNodeContextMenu is { } contextMenu)
+                    {
+                        _treeNodeContextMenu = null;
+                        if (m.WParam != 0)
+                            contextMenu.RaiseCollapse();
+                        ControlAccessors.DefWndProc(Target, ref m);
+                    }
+                    else
+                    {
+                        base.WndProc(ref m);
                     }
                     break;
 

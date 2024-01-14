@@ -147,7 +147,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Fires the popup event
         /// </summary>
-        protected internal virtual void OnPopup(EventArgs e)
+        protected /*internal*/ virtual void OnPopup(EventArgs e)
         {
             //onPopup?.Invoke(this, e);
             ((EventHandler?)Events[_popupEvent])?.Invoke(this, e);
@@ -156,7 +156,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
-        protected internal virtual void OnCollapse(EventArgs e)
+        protected /*internal*/ virtual void OnCollapse(EventArgs e)
         {
             //onCollapse?.Invoke(this, e);
             ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
@@ -231,7 +231,8 @@ namespace WinFormsLegacyControls
 
             sourceControl = control;
 
-            OnPopup(EventArgs.Empty);
+            //OnPopup(EventArgs.Empty);
+            RaisePopup();
             pos = control.PointToScreen(pos);
             /*
             SafeNativeMethods.TrackPopupMenuEx(new HandleRef(this, Handle),
@@ -241,15 +242,33 @@ namespace WinFormsLegacyControls
                 new HandleRef(control, control.Handle),
                 null);
             */
-            IntPtr createHandle = this.Handle;
+            //IntPtr createHandle = this.Handle;
             BOOL result = PInvoke.TrackPopupMenuEx(this, flags, pos.X, pos.Y, control, 0);
             Debug.Assert(result);
         }
 
         //
 
+        private static nint _lastPopupHandle = -1;
+
+        internal void RaisePopup()
+        {
+            _lastPopupHandle = this.Handle;
+            OnPopup(EventArgs.Empty);
+        }
+
+        internal void RaiseCollapse()
+        {
+            if (_lastPopupHandle == handle)
+            {
+                _lastPopupHandle = -1;
+                OnCollapse(EventArgs.Empty);
+            }
+        }
+
         internal void ShowAtCursorPos(IWin32Window hWnd, Control? control, TRACK_POPUP_MENU_FLAGS flags)
         {
+            // [spec]
             sourceControl = control;
 
             PInvoke.GetCursorPos(out Point pt);
@@ -259,9 +278,10 @@ namespace WinFormsLegacyControls
             // forced after the call.
             PInvoke.SetForegroundWindow(hWnd);
 
-            OnPopup(EventArgs.Empty);
+            //OnPopup(EventArgs.Empty);
+            //IntPtr createHandle = this.Handle;
+            RaisePopup();
 
-            IntPtr createHandle = this.Handle;
             BOOL result = PInvoke.TrackPopupMenuEx(this, flags, pt.X, pt.Y, hWnd, 0);
             Debug.Assert(result);
 

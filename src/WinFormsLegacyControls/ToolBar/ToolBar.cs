@@ -1702,6 +1702,8 @@ namespace WinFormsLegacyControls
             }
         }
 
+        private ContextMenu? _toolBarButtonContextMenu;
+
         /// <summary>
         ///  The button clicked was a dropdown button.  If it has a menu specified,
         ///  show it now.  Otherwise, fire an onButtonDropDown event.
@@ -1739,9 +1741,11 @@ namespace WinFormsLegacyControls
                 //SendMessage(NativeMethods.TB_GETRECT, nmTB.iItem, ref rc);
                 PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)iItem, ref rc);
 
-                if ((menu.GetType()).IsAssignableFrom(typeof(ContextMenu)))
+                //if ((menu.GetType()).IsAssignableFrom(typeof(ContextMenu)))
+                if (menu is ContextMenu contextMenu)
                 {
-                    ((ContextMenu)menu).Show(this, new Point(rc.left, rc.bottom));
+                    _toolBarButtonContextMenu = contextMenu;
+                    /*((ContextMenu)menu)*/contextMenu.Show(this, new Point(rc.left, rc.bottom));
                 }
                 else
                 {
@@ -2063,6 +2067,29 @@ namespace WinFormsLegacyControls
                 case PInvoke.WM_MENUSELECT:
                     CommonMessageHandlers.WmMenuSelect(ref m);
                     DefWndProc(ref m);
+                    break;
+
+                // [spec]
+                case PInvoke.WM_MENUCHAR:
+                    if (_toolBarButtonContextMenu is not null)
+                        _toolBarButtonContextMenu.WmMenuChar(ref m);
+                    else
+                        base.WndProc(ref m);
+                    break;
+
+                // [spec]
+                case PInvoke.WM_EXITMENULOOP:
+                    if (_toolBarButtonContextMenu is { } contextMenu)
+                    {
+                        _toolBarButtonContextMenu = null;
+                        if (m.WParam != 0)
+                            contextMenu.RaiseCollapse();
+                        DefWndProc(ref m);
+                    }
+                    else
+                    {
+                        base.WndProc(ref m);
+                    }
                     break;
 
                 default:

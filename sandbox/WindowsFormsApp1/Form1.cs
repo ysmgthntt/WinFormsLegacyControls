@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
 
-            MenuItem[] menus = [menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7, menuItem8, menuItem9];
+            MenuItem[] menus = [menuItem1, menuItem2, menuItem3, menuItem4, menuItem5, menuItem6, menuItem7, menuItem8, menuItem9, menuItem10, menuItem11, menuItem12, menuItem13];
 
             for (int i = 0; i < menus.Length; i++)
             {
@@ -28,15 +28,23 @@ namespace WindowsFormsApp1
                 menuItem.Popup += MenuItem_Popup;
             }
 
-            mainMenu1.Collapse += (_, _) => Debug.WriteLine("mainMenu_Collapse");
-            contextMenu1.Popup += (_, _) => Debug.WriteLine("contextMenu_Popup");
-            contextMenu1.Collapse += (_, _) => Debug.WriteLine("contextMenu_Collapse");
+            mainMenu1.Collapse += (_, _) => Trace.WriteLine("mainMenu_Collapse");
+            contextMenu1.Popup += (_, _) => Trace.WriteLine("contextMenu_Popup");
+            contextMenu1.Collapse += (_, _) =>
+            {
+                Trace.WriteLine("contextMenu_Collapse");
+            };
 
-            this.MenuStart += (_, _) => Debug.WriteLine("Form_MenuStart");
-            this.MenuComplete += (_, _) => Debug.WriteLine("Form_MenuComplete");
+            this.MenuStart += (_, _) => Trace.WriteLine("Form_MenuStart");
+            this.MenuComplete += (_, _) => Trace.WriteLine("Form_MenuComplete");
+
+            contextMenu2.Popup += (_, _) => Trace.WriteLine("contextMenu2_Popup");
+            contextMenu2.Collapse += (_, _) =>
+            {
+                Trace.WriteLine("contextMenu2_Collapse");
+            };
 
             //this.ContextMenu = contextMenu1;
-
 
             // OwnerDraw
             menuItem6.OwnerDraw = true;

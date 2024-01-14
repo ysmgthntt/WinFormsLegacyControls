@@ -35,6 +35,12 @@ namespace WindowsFormsApp1
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("treeNode2");
             System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("treeNode3");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
+            this.menuItem10 = new System.Windows.Forms.MenuItem();
+            this.menuItem11 = new System.Windows.Forms.MenuItem();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
+            this.menuItem9 = new System.Windows.Forms.MenuItem();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
@@ -42,10 +48,6 @@ namespace WindowsFormsApp1
             this.menuItem6 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
-            this.menuItem7 = new System.Windows.Forms.MenuItem();
-            this.menuItem8 = new System.Windows.Forms.MenuItem();
-            this.menuItem9 = new System.Windows.Forms.MenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolBar1 = new System.Windows.Forms.ToolBar();
             this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
@@ -62,12 +64,51 @@ namespace WindowsFormsApp1
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenu2 = new System.Windows.Forms.ContextMenu();
+            this.menuItem12 = new System.Windows.Forms.MenuItem();
+            this.menuItem13 = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // contextMenu1
+            // 
+            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem7,
+            this.menuItem8,
+            this.menuItem9});
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 0;
+            this.menuItem7.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem10,
+            this.menuItem11});
+            this.menuItem7.Text = "contextMenu1";
+            // 
+            // menuItem10
+            // 
+            this.menuItem10.Index = 0;
+            this.menuItem10.Text = "contextMenu1-1";
+            // 
+            // menuItem11
+            // 
+            this.menuItem11.Index = 1;
+            this.menuItem11.Text = "contextMenu1-2";
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Index = 1;
+            this.menuItem8.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftC;
+            this.menuItem8.Text = "contextMenu2(&A)";
+            // 
+            // menuItem9
+            // 
+            this.menuItem9.Index = 2;
+            this.menuItem9.Text = "contextMenu3(&B)";
             // 
             // mainMenu1
             // 
@@ -83,7 +124,7 @@ namespace WindowsFormsApp1
             this.menuItem4,
             this.menuItem5,
             this.menuItem6});
-            this.menuItem1.Text = "mainMenu1";
+            this.menuItem1.Text = "mainMenu1(&A)";
             // 
             // menuItem4
             // 
@@ -94,12 +135,12 @@ namespace WindowsFormsApp1
             // 
             this.menuItem5.Index = 1;
             this.menuItem5.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
-            this.menuItem5.Text = "mainMenu5";
+            this.menuItem5.Text = "mainMenu5(&B)";
             // 
             // menuItem6
             // 
             this.menuItem6.Index = 2;
-            this.menuItem6.Text = "mainMenu6";
+            this.menuItem6.Text = "mainMenu6(&C)";
             // 
             // menuItem2
             // 
@@ -110,30 +151,6 @@ namespace WindowsFormsApp1
             // 
             this.menuItem3.Index = 2;
             this.menuItem3.Text = "mainMenu3";
-            // 
-            // contextMenu1
-            // 
-            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem7,
-            this.menuItem8,
-            this.menuItem9});
-            // 
-            // menuItem7
-            // 
-            this.menuItem7.DefaultItem = true;
-            this.menuItem7.Index = 0;
-            this.menuItem7.Text = "contextMenu1";
-            // 
-            // menuItem8
-            // 
-            this.menuItem8.Index = 1;
-            this.menuItem8.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftC;
-            this.menuItem8.Text = "contextMenu2";
-            // 
-            // menuItem9
-            // 
-            this.menuItem9.Index = 2;
-            this.menuItem9.Text = "contextMenu3";
             // 
             // toolTip1
             // 
@@ -149,6 +166,7 @@ namespace WindowsFormsApp1
             this.toolBarButton1,
             this.toolBarButton2,
             this.toolBarButton3});
+            this.toolBar1.ContextMenu = contextMenu2;
             this.toolBar1.DropDownArrows = true;
             this.toolBar1.Location = new System.Drawing.Point(0, 0);
             this.toolBar1.Name = "toolBar1";
@@ -223,6 +241,7 @@ namespace WindowsFormsApp1
             // 
             // treeView1
             // 
+            this.treeView1.ContextMenu = contextMenu2;
             this.treeView1.Location = new System.Drawing.Point(12, 106);
             this.treeView1.Name = "treeView1";
             treeNode1.Name = "treeNode1";
@@ -290,6 +309,22 @@ namespace WindowsFormsApp1
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // contextMenu2
+            // 
+            this.contextMenu2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem12,
+            this.menuItem13});
+            // 
+            // menuItem12
+            // 
+            this.menuItem12.Index = 0;
+            this.menuItem12.Text = "contextMenu2-1";
+            // 
+            // menuItem13
+            // 
+            this.menuItem13.Index = 1;
+            this.menuItem13.Text = "contextMenu2-2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
@@ -341,6 +376,11 @@ namespace WindowsFormsApp1
         private ComboBox comboBox1;
         private NumericUpDown numericUpDown1;
         private TreeView treeView1;
+        private MenuItem menuItem10;
+        private MenuItem menuItem11;
+        private ContextMenu contextMenu2;
+        private MenuItem menuItem12;
+        private MenuItem menuItem13;
     }
 }
 

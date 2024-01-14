@@ -90,6 +90,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                         base.WndProc(ref m);
                     break;
 
+                // [spec]
                 case PInvoke.WM_MENUSELECT:
                     CommonMessageHandlers.WmMenuSelect(ref m);
                     DefWndProc(ref m);
@@ -97,6 +98,19 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                 case PInvoke.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
+                    break;
+
+                // [spec]
+                case PInvoke.WM_MENUCHAR:
+                    if (contextMenu is not null)
+                        contextMenu.WmMenuChar(ref m);
+                    break;
+
+                // [spec]
+                case PInvoke.WM_EXITMENULOOP:
+                    if (contextMenu is not null && m.WParam != 0)
+                        contextMenu.RaiseCollapse();
+                    DefWndProc(ref m);
                     break;
 
                 default:
