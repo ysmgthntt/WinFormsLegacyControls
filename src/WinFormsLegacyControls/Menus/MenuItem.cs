@@ -1615,8 +1615,8 @@ namespace WinFormsLegacyControls
             */
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
             //IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
-            IntPtr oldPal = SetUpPalette(dis->hDC, false, false);
-            try
+            using var paletteScope = SelectPaletteScope.HalftonePalette(dis->hDC, false, false);
+            //try
             {
                 //Graphics g = Graphics.FromHdcInternal(dis.hDC);
                 Graphics g = Graphics.FromHdcInternal(dis->hDC);
@@ -1630,6 +1630,7 @@ namespace WinFormsLegacyControls
                     g.Dispose();
                 }
             }
+            /*
             finally
             {
                 if (oldPal != IntPtr.Zero)
@@ -1638,6 +1639,7 @@ namespace WinFormsLegacyControls
                     PInvoke.SelectPalette(dis->hDC, (HPALETTE)oldPal, BOOL.FALSE);
                 }
             }
+            */
 
             m.Result = (IntPtr)1;
         }

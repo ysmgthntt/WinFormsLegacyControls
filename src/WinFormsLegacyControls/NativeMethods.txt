@@ -9,6 +9,7 @@ DRAWITEMSTRUCT
 DrawMenuBar
 GetCursorPos
 GetDC
+GetDeviceCaps
 GetMenuItemCount
 GetMenuItemID
 GetMenuItemInfo
