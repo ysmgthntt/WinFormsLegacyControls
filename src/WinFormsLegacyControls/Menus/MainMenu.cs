@@ -106,6 +106,9 @@ namespace WinFormsLegacyControls
                 {
                     rightToLeft = value;
                     UpdateRtl((value == System.Windows.Forms.RightToLeft.Yes));
+                    // add
+                    if (form is not null)
+                        PInvoke.DrawMenuBar(form);
                 }
 
             }

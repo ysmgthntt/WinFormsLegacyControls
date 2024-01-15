@@ -63,6 +63,10 @@ namespace WindowsFormsApp1
         {
             // bug?
             statusBarPanel2.ToolTipText = textBox1.Text;
+
+            mainMenu1.RightToLeft = mainMenu1.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+            contextMenu1.RightToLeft = contextMenu1.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+            contextMenu2.RightToLeft = contextMenu2.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
         }
 
         private void MenuItem_Click(object? sender, EventArgs e)
