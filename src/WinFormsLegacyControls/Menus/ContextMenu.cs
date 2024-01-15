@@ -26,7 +26,7 @@ namespace WinFormsLegacyControls
         */
         private static readonly object _popupEvent = new();
         private static readonly object _collapseEvent = new();
-        internal Control sourceControl;
+        private Control sourceControl;
 
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
 
