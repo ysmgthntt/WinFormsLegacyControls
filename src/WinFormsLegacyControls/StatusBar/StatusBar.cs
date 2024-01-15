@@ -1041,7 +1041,7 @@ namespace WinFormsLegacyControls
 
             // The itemState is not defined for a statusbar control
             StatusBarPanel panel = (StatusBarPanel)panels[(int)dis->itemID];
-            Graphics g = Graphics.FromHdcInternal(dis->hDC);
+            using Graphics g = Graphics.FromHdcInternal(dis->hDC);
             OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
         }
 
@@ -1684,7 +1684,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private sealed class ControlToolTip : /*IHandle*/IWin32Window
         {
-            public class Tool
+            public sealed class Tool
             {
                 public Rectangle rect = Rectangle.Empty;
                 public string text;
@@ -1701,6 +1701,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public ControlToolTip(/*Control*/StatusBar parent)
             {
+                // TODO: Lazy Initialize
                 window = new ToolTipNativeWindow(this);
                 this.parent = parent;
             }
