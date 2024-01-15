@@ -47,7 +47,8 @@ namespace WinFormsLegacyControls
         // We need to store a table of all created menuitems, so that other objects
         // such as ContainerControl can get a reference to a particular menuitem,
         // given a unique ID.
-        private static readonly Hashtable s_allCreatedMenuItems = new Hashtable();
+        //private static readonly Hashtable s_allCreatedMenuItems = new Hashtable();
+        private static readonly Dictionary<uint, WeakReference<MenuItem>> s_allCreatedMenuItems = new();
         private const uint FirstUniqueID = 0xC0000000;
         private static long s_nextUniqueID = FirstUniqueID;
         private uint _uniqueID = 0;
@@ -893,7 +894,7 @@ namespace WinFormsLegacyControls
             // menu item objects.
             if (_uniqueID == 0)
             {
-                lock (s_allCreatedMenuItems)
+                //lock (s_allCreatedMenuItems)
                 {
                     _uniqueID = (uint)Interlocked.Increment(ref s_nextUniqueID);
                     Debug.Assert(_uniqueID >= FirstUniqueID); // ...check for ID range exhaustion (unlikely!)
@@ -901,7 +902,9 @@ namespace WinFormsLegacyControls
                     // supposed to adding the item ref itself, to allow the item to be finalized
                     // in case it is not disposed and no longer referenced anywhere else, hence
                     // preventing leaks.
-                    s_allCreatedMenuItems.Add(_uniqueID, new WeakReference(this));
+                    //s_allCreatedMenuItems.Add(_uniqueID, new WeakReference(this));
+                    lock (s_allCreatedMenuItems)
+                        s_allCreatedMenuItems.Add(_uniqueID, new WeakReference<MenuItem>(this));
                 }
             }
 
@@ -983,11 +986,15 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal static MenuItem GetMenuItemFromUniqueID(uint uniqueID)
         {
+            /*
             WeakReference weakRef = (WeakReference)s_allCreatedMenuItems[uniqueID];
             if (weakRef != null && weakRef.IsAlive)
             {
                 return (MenuItem)weakRef.Target;
             }
+            */
+            if (s_allCreatedMenuItems.TryGetValue(uniqueID, out var weakRef) && weakRef.TryGetTarget(out var menuItem))
+                return menuItem;
             Debug.Fail("Weakref for menu item has expired or has been removed!  Who is trying to access this ID?");
             return null;
         }
