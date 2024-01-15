@@ -501,25 +501,34 @@ namespace WinFormsLegacyControls
         ///  index of matching item, and action for OS to take (execute or select). Zero is
         ///  used to indicate that no match was found (OS should ignore key and beep).
         /// </summary>
-        private IntPtr MatchKeyToMenuItem(int startItem, char key, MenuItemKeyComparer comparer)
+        //private IntPtr MatchKeyToMenuItem(int startItem, char key, MenuItemKeyComparer comparer)
+        private IntPtr MatchKeyToMenuItem(int startItem, char key, bool noMnemonic, out bool containsOwnerDraw)
         {
             int firstMatch = -1;
             bool multipleMatches = false;
+
+            containsOwnerDraw = false;
 
             for (int i = 0; i < items.Length && !multipleMatches; ++i)
             {
                 int itemIndex = (startItem + i) % items.Length;
                 MenuItem mi = items[itemIndex];
-                if (mi != null && comparer(mi, key))
+                //if (mi != null && comparer(mi, key))
+                if (mi is not null && mi.OwnerDraw)
                 {
-                    if (firstMatch < 0)
+                    containsOwnerDraw = true;
+                    if ((!noMnemonic && mi.Mnemonic == key) ||
+                        (noMnemonic && mi.Mnemonic == 0 && mi.Text.Length > 0 && char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key))
                     {
-                        // Using Index doesnt respect hidden items.
-                        firstMatch = mi.MenuIndex;
-                    }
-                    else
-                    {
-                        multipleMatches = true;
+                        if (firstMatch < 0)
+                        {
+                            // Using Index doesnt respect hidden items.
+                            firstMatch = mi.MenuIndex;
+                        }
+                        else
+                        {
+                            multipleMatches = true;
+                        }
                     }
                 }
             }
@@ -538,7 +547,7 @@ namespace WinFormsLegacyControls
         }
 
         ///  Delegate type used by MatchKeyToMenuItem
-        private delegate bool MenuItemKeyComparer(MenuItem mi, char key);
+        //private delegate bool MenuItemKeyComparer(MenuItem mi, char key);
 
         /// <summary>
         ///  Merges another menu's items with this one's.  Menu items are merged according to their
@@ -699,17 +708,23 @@ namespace WinFormsLegacyControls
             int startItem = (SelectedMenuItemIndex + 1) % items.Length;
 
             // First, search for match among owner-draw items with explicitly defined access keys (eg. "S&ave")
-            IntPtr result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemWithMnemonic));
+            //IntPtr result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemWithMnemonic));
+            IntPtr result = MatchKeyToMenuItem(startItem, key, false, out bool containsOwnerDraw);
+
+            if (!containsOwnerDraw)
+                return IntPtr.Zero;
 
             // Next, search for match among owner-draw items with no access keys (looking at first char of item text)
             if (result == IntPtr.Zero)
             {
-                result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemNoMnemonic));
+                //result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemNoMnemonic));
+                result = MatchKeyToMenuItem(startItem, key, true, out _);
             }
 
             return result;
         }
 
+        /*
         ///  MenuItemKeyComparer delegate used by WmMenuCharInternal
         private bool CheckOwnerDrawItemWithMnemonic(MenuItem mi, char key)
         {
@@ -725,6 +740,7 @@ namespace WinFormsLegacyControls
                    mi.Text.Length > 0 &&
                    char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
         }
+        */
 
         [ListBindable(false)]
         public class MenuItemCollection : IList
