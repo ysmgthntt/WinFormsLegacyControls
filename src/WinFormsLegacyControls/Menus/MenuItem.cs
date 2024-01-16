@@ -799,6 +799,7 @@ namespace WinFormsLegacyControls
                 _dataVersion = _data._version;
 
                 _menuItemIsCreated = true;
+                // TODO: Pref
                 if (RenderIsRightToLeft)
                 {
                     Parent.UpdateRtl(true);
@@ -943,8 +944,7 @@ namespace WinFormsLegacyControls
             if (_data._showShortcut && _data._shortcut != 0 && !IsParent && !isTopLevel)
             {
                 //info.dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
-                // TODO: TypeConverter
-                dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
+                dwTypeData = _data._caption + "\t" + ShortcutToText((Keys)(int)_data._shortcut);
             }
             else
             {
@@ -957,6 +957,11 @@ namespace WinFormsLegacyControls
 
             return info;
         }
+
+        private static KeysConverter? _keysConverter;
+
+        private static string? ShortcutToText(Keys key)
+            => (_keysConverter ??= new KeysConverter()).ConvertToString(null, CultureInfo.CurrentUICulture, key);
 
         /// <summary>
         ///  Disposes the <see cref='MenuItem'/>.
