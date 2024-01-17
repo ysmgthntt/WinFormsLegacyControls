@@ -1136,7 +1136,9 @@ namespace WinFormsLegacyControls
             if (disposing)
             {
                 //
+#if LOCK
                 lock (this)
+#endif
                 {
                     // We need to mark the Disposing state here so buttonsCollection won't attempt to update
                     // the buttons.
