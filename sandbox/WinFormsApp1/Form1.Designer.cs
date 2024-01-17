@@ -214,11 +214,12 @@
             toolBar1.Size = new Size(800, 62);
             toolBar1.TabIndex = 0;
             toolTip1.SetToolTip(toolBar1, "toolbar");
+            toolBar1.ButtonClick += toolBar1_ButtonClick;
             // 
             // toolBarButton1
             // 
             toolBarButton1.Name = "toolBarButton1";
-            toolBarButton1.Text = "toolBarButton1";
+            toolBarButton1.Text = "Show MDI Form";
             toolBarButton1.ToolTipText = "ta";
             // 
             // toolBarButton2

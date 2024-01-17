@@ -174,11 +174,12 @@ namespace WindowsFormsApp1
             this.toolBar1.Size = new System.Drawing.Size(800, 55);
             this.toolBar1.TabIndex = 0;
             this.toolTip1.SetToolTip(this.toolBar1, "toolbar");
+            this.toolBar1.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.toolBar1_ButtonClick);
             // 
             // toolBarButton1
             // 
             this.toolBarButton1.Name = "toolBarButton1";
-            this.toolBarButton1.Text = "toolBarButton1";
+            this.toolBarButton1.Text = "Show MDI Form";
             this.toolBarButton1.ToolTipText = "ta";
             // 
             // toolBarButton2

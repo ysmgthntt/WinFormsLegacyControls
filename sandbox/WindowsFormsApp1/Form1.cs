@@ -109,5 +109,11 @@ namespace WindowsFormsApp1
             e.DrawBackground();
             TextRenderer.DrawText(e.Graphics, e.Panel.Text, e.Font, e.Bounds, e.ForeColor);
         }
+
+        private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
+        {
+            if (e.Button == toolBarButton1)
+                new Form2().Show();
+        }
     }
 }
