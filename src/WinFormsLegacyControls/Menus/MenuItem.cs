@@ -1656,7 +1656,7 @@ namespace WinFormsLegacyControls
             m.Result = (IntPtr)1;
         }
 
-        internal unsafe void WmMeasureItem(ref Message m)
+        internal void WmMeasureItem(ref Message m)
         {
             // Handles the OnMeasureItem message sent from ContainerControl
 
@@ -1678,9 +1678,12 @@ namespace WinFormsLegacyControls
             mis.itemWidth = mie.ItemWidth;
             Marshal.StructureToPtr(mis, m.LParam, false);
             */
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
-            mis->itemHeight = (uint)mie.ItemHeight;
-            mis->itemWidth = (uint)mie.ItemWidth;
+            unsafe
+            {
+                MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
+                mis->itemHeight = (uint)mie.ItemHeight;
+                mis->itemWidth = (uint)mie.ItemWidth;
+            }
 
             m.Result = (IntPtr)1;
         }
