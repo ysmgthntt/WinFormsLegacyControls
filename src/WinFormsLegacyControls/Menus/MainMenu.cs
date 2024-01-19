@@ -73,6 +73,9 @@ namespace WinFormsLegacyControls
         {
             get
             {
+                if (DesignMode) // add
+                    return rightToLeft;
+
                 if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
                 {
                     if (form != null)

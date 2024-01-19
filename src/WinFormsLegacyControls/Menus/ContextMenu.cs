@@ -154,6 +154,7 @@ namespace WinFormsLegacyControls
             return ProcessCmdKey(ref msg, keyData);
         }
 
+        /* DefaultValueAttribute が設定されているため、これらは使用されない。
         private void ResetRightToLeft()
         {
             RightToLeft = RightToLeft.No;
@@ -170,6 +171,7 @@ namespace WinFormsLegacyControls
             }
             return true;
         }
+        */
 
         /// <summary>
         ///  Displays the context menu at the specified position.  This method
