@@ -20,10 +20,6 @@ namespace WinFormsLegacyControls
     [DefaultEvent(nameof(Popup))]
     public partial class ContextMenu : Menu
     {
-        /*
-        private EventHandler onPopup;
-        private EventHandler onCollapse;
-        */
         private static readonly object _popupEvent = new();
         private static readonly object _collapseEvent = new();
         private Control sourceControl;
@@ -66,10 +62,6 @@ namespace WinFormsLegacyControls
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup
         {
-            /*
-            add => onPopup += value;
-            remove => onPopup -= value;
-            */
             add => Events.AddHandler(_popupEvent, value);
             remove => Events.RemoveHandler(_popupEvent, value);
         }
@@ -80,10 +72,6 @@ namespace WinFormsLegacyControls
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse
         {
-            /*
-            add => onCollapse += value;
-            remove => onCollapse -= value;
-            */
             add => Events.AddHandler(_collapseEvent, value);
             remove => Events.RemoveHandler(_collapseEvent, value);
         }
@@ -147,18 +135,16 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Fires the popup event
         /// </summary>
-        protected /*internal*/ virtual void OnPopup(EventArgs e)
+        protected virtual void OnPopup(EventArgs e)
         {
-            //onPopup?.Invoke(this, e);
             ((EventHandler?)Events[_popupEvent])?.Invoke(this, e);
         }
 
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
-        protected /*internal*/ virtual void OnCollapse(EventArgs e)
+        protected virtual void OnCollapse(EventArgs e)
         {
-            //onCollapse?.Invoke(this, e);
             ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
         }
 
@@ -191,7 +177,6 @@ namespace WinFormsLegacyControls
         /// </summary>
         public void Show(Control control, Point pos)
         {
-            //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON);
             Show(control, pos, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON);
         }
 
@@ -207,12 +192,10 @@ namespace WinFormsLegacyControls
             // menu with the point (which aligns it Left visually)
             if (alignment == LeftRightAlignment.Left)
             {
-                //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_RIGHTALIGN);
                 Show(control, pos, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN);
             }
             else
             {
-                //Show(control, pos, NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTBUTTON | NativeMethods.TPM_LEFTALIGN);
                 Show(control, pos, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTBUTTON | TRACK_POPUP_MENU_FLAGS.TPM_LEFTALIGN);
             }
         }
@@ -234,14 +217,6 @@ namespace WinFormsLegacyControls
             //OnPopup(EventArgs.Empty);
             RaisePopup();
             pos = control.PointToScreen(pos);
-            /*
-            SafeNativeMethods.TrackPopupMenuEx(new HandleRef(this, Handle),
-                flags,
-                pos.X,
-                pos.Y,
-                new HandleRef(control, control.Handle),
-                null);
-            */
             //IntPtr createHandle = this.Handle;
             BOOL result = PInvoke.TrackPopupMenuEx(this, flags, pos.X, pos.Y, control, 0);
             Debug.Assert(result);

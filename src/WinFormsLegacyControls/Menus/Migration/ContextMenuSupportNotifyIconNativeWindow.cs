@@ -43,30 +43,6 @@ namespace WinFormsLegacyControls.Menus.Migration
                     AssignHandle(window.Handle);
                 }
 
-                //private void ShowContextMenu()
-                /*
-                UnsafeNativeMethods.GetCursorPos(out Point pt);
-
-                // Summary: the current window must be made the foreground window
-                // before calling TrackPopupMenuEx, and a task switch must be
-                // forced after the call.
-                UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
-
-                if (contextMenu != null)
-                {
-                    contextMenu.OnPopup(EventArgs.Empty);
-
-                    SafeNativeMethods.TrackPopupMenuEx(new HandleRef(contextMenu, contextMenu.Handle),
-                                             NativeMethods.TPM_VERTICAL | NativeMethods.TPM_RIGHTALIGN,
-                                             pt.X,
-                                             pt.Y,
-                                             new HandleRef(window, window.Handle),
-                                             null);
-
-                    // Force task switch (see above)
-                    UnsafeNativeMethods.PostMessage(new HandleRef(window, window.Handle), WindowMessages.WM_NULL, IntPtr.Zero, IntPtr.Zero);
-                }
-                */
                 contextMenu.ShowAtCursorPos(this, null, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN);
             }
         }
@@ -129,7 +105,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
             }
 
-            /*window.*/DefWndProc(ref m);
+            DefWndProc(ref m);
         }
     }
 }

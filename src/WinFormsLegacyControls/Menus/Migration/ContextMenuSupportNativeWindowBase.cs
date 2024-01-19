@@ -55,11 +55,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         public /*virtual*/ ContextMenu ContextMenu
         {
-            //get => (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             get => _contextMenu;
             set
             {
-                //ContextMenu oldValue = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
                 ContextMenu oldValue = _contextMenu;
 
                 if (oldValue != value)
@@ -71,7 +69,6 @@ namespace WinFormsLegacyControls.Menus.Migration
                         oldValue.Disposed -= disposedHandler;
                     }
 
-                    //Properties.SetObject(s_contextMenuProperty, value);
                     _contextMenu = value;
 
                     if (value != null)
@@ -101,7 +98,6 @@ namespace WinFormsLegacyControls.Menus.Migration
         //protected override void Dispose(bool disposing)
         private void ControlDispose()
         {
-            //ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             ContextMenu contextMenu = _contextMenu;
             if (contextMenu != null)
             {
@@ -149,24 +145,16 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         internal void WmContextMenu(ref Message m, Control sourceControl)
         {
-            //ContextMenu contextMenu = Properties.GetObject(s_contextMenuProperty) as ContextMenu;
             ContextMenu contextMenu = _contextMenu;
-            //ContextMenuStrip contextMenuStrip = (contextMenu != null) ? null /*save ourselves a property fetch*/
-            //                                                            : Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
 
-            //if (contextMenu != null || contextMenuStrip != null)
             if (contextMenu is not null)
             {
-                //int x = NativeMethods.Util.SignedLOWORD(m.LParam);
-                //int y = NativeMethods.Util.SignedHIWORD(m.LParam);
                 Point client;
-                //bool keyboardActivated = false;
                 // lparam will be exactly -1 when the user invokes the context menu
                 // with the keyboard.
                 //
                 if (unchecked((int)(long)m.LParam) == -1)
                 {
-                    //keyboardActivated = true;
                     client = new Point(_control.Width / 2, _control.Height / 2);
                 }
                 else
@@ -177,28 +165,13 @@ namespace WinFormsLegacyControls.Menus.Migration
                     int y = PARAM.SignedHIWORD(m.LParam);
                     Debug.Assert(pt.X == x && pt.Y == y);
 #endif
-                    //client = _control.PointToClient(new Point(x, y));
                     client = _control.PointToClient(pt);
                 }
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (_control.ClientRectangle.Contains(client))
                 {
-                    //if (contextMenu != null)
-                    {
-                        contextMenu.Show(sourceControl, client);
-                    }
-                    /*
-                    else if (contextMenuStrip != null)
-                    {
-                        contextMenuStrip.ShowInternal(sourceControl, client, keyboardActivated);
-                    }
-                    else
-                    {
-                        Debug.Fail("contextmenu and contextmenustrip are both null... hmm how did we get here?");
-                        DefWndProc(ref m);
-                    }
-                    */
+                    contextMenu.Show(sourceControl, client);
                 }
                 else
                 {
@@ -226,7 +199,6 @@ namespace WinFormsLegacyControls.Menus.Migration
 
             if (isContextMenu)
             {
-                //ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
                 ContextMenu contextMenu = _contextMenu;
                 if (contextMenu != null)
                 {
@@ -243,7 +215,6 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmInitMenuPopup(ref Message m)
         {
-            //ContextMenu contextMenu = (ContextMenu)Properties.GetObject(s_contextMenuProperty);
             ContextMenu contextMenu = _contextMenu;
             if (contextMenu != null)
             {
@@ -283,50 +254,38 @@ namespace WinFormsLegacyControls.Menus.Migration
         {
             switch ((uint)m.Msg)
             {
-                //case WindowMessages.WM_COMMAND:
                 case PInvoke.WM_COMMAND:
-                    //WmCommand(ref m);
                     if (!CommonMessageHandlers.WmCommand(ref m))
                         base.WndProc(ref m);
                     break;
 
-                //case WindowMessages.WM_CONTEXTMENU:
                 case PInvoke.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
 
-                //case WindowMessages.WM_DRAWITEM:
                 case PInvoke.WM_DRAWITEM:
-                    //WmDrawItem(ref m);
                     if (!CommonMessageHandlers.WmDrawItem(ref m))
                         base.WndProc(ref m);
                     break;
 
-                //case WindowMessages.WM_EXITMENULOOP:
                 case PInvoke.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
 
-                //case WindowMessages.WM_INITMENUPOPUP:
                 case PInvoke.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
 
-                //case WindowMessages.WM_MEASUREITEM:
                 case PInvoke.WM_MEASUREITEM:
-                    //WmMeasureItem(ref m);
                     if (!CommonMessageHandlers.WmMeasureItem(ref m))
                         base.WndProc(ref m);
                     break;
 
-                //case WindowMessages.WM_MENUCHAR:
                 case PInvoke.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
 
-                //case WindowMessages.WM_MENUSELECT:
                 case PInvoke.WM_MENUSELECT:
-                    //WmMenuSelect(ref m);
                     CommonMessageHandlers.WmMenuSelect(ref m);
                     ControlAccessors.DefWndProc(_control, ref m);
                     break;

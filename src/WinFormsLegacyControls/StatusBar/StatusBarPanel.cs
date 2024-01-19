@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
-//using static Interop.ComCtl32;
 
 #if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
@@ -38,7 +37,7 @@ namespace WinFormsLegacyControls
         private Icon icon = null;
 
         private HorizontalAlignment alignment = HorizontalAlignment.Left;
-        private StatusBarPanelBorderStyle borderStyle = /*System.Windows.Forms.*/StatusBarPanelBorderStyle.Sunken;
+        private StatusBarPanelBorderStyle borderStyle = StatusBarPanelBorderStyle.Sunken;
         private StatusBarPanelStyle style = StatusBarPanelStyle.Text;
 
         // these are package scope so the parent can get at them.
@@ -129,8 +128,7 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the <see cref='BorderStyle'/> property.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
-        [DefaultValue(/*System.Windows.Forms.*/StatusBarPanelBorderStyle.Sunken)]
-        //[DispId((int)Ole32.DispatchID.BORDERSTYLE)]
+        [DefaultValue(StatusBarPanelBorderStyle.Sunken)]
         [DispId(PInvoke.DISPID_BORDERSTYLE)]
         [SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))]
         public StatusBarPanelBorderStyle BorderStyle
@@ -195,7 +193,6 @@ namespace WinFormsLegacyControls
                 if (Created)
                 {
                     IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
-                    //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), handle);
                     PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
                 }
                 UpdateSize();
@@ -581,7 +578,6 @@ namespace WinFormsLegacyControls
             if (Created)
             {
                 string sendText;
-                //SBT border = 0;
                 uint border = 0;
 
                 string text = this.text ?? string.Empty;
@@ -617,13 +613,11 @@ namespace WinFormsLegacyControls
                 switch (borderStyle)
                 {
                     case StatusBarPanelBorderStyle.None:
-                        //border |= SBT.NOBORDERS;
                         border |= PInvoke.SBT_NOBORDERS;
                         break;
                     case StatusBarPanelBorderStyle.Sunken:
                         break;
                     case StatusBarPanelBorderStyle.Raised:
-                        //border |= SBT.POPOUT;
                         border |= PInvoke.SBT_POPOUT;
                         break;
                 }
@@ -632,7 +626,6 @@ namespace WinFormsLegacyControls
                     case StatusBarPanelStyle.Text:
                         break;
                     case StatusBarPanelStyle.OwnerDraw:
-                        //border |= SBT.OWNERDRAW;
                         border |= PInvoke.SBT_OWNERDRAW;
                         break;
                 }
@@ -640,11 +633,9 @@ namespace WinFormsLegacyControls
                 int wparam = GetIndex() | (int)border;
                 if (parent.RightToLeft == RightToLeft.Yes)
                 {
-                    //wparam |= (int)SBT.RTLREADING;
                     wparam |= (int)PInvoke.SBT_RTLREADING;
                 }
 
-                //int result = (int)User32.SendMessageW(parent, (User32.WM)SB.SETTEXT, (IntPtr)wparam, sendText);
                 int result = (int)PInvoke.SendMessage(parent, PInvoke.SB_SETTEXT, (WPARAM)wparam, sendText);
 
                 if (result == 0)
@@ -654,19 +645,16 @@ namespace WinFormsLegacyControls
 
                 if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
                 {
-                    //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), icon.Handle);
                     PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), icon.Handle);
                 }
                 else
                 {
-                    //User32.SendMessageW(parent, (User32.WM)SB.SETICON, (IntPtr)GetIndex(), IntPtr.Zero);
                     PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), 0);
                 }
 
                 if (style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
-                    //result = (int)User32.SendMessageW(parent, (User32.WM)SB.GETRECT, (IntPtr)GetIndex(), ref rect);
                     result = (int)PInvoke.SendMessage(parent, PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
 
                     if (result != 0)

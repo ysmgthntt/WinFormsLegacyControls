@@ -11,7 +11,6 @@ namespace WinFormsLegacyControls.Menus.Migration
         {
             if (IntPtr.Zero == m.LParam)
             {
-                //if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam)))
                 if (Command.DispatchID(PARAM.LOWORD(m.WParam)))
                 {
                     return true;
@@ -43,7 +42,6 @@ namespace WinFormsLegacyControls.Menus.Migration
         private static bool WmDrawItemMenuItem(ref Message m)
         {
             // Obtain the menu item object
-            //NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
             nint itemData;
             unsafe
             {
@@ -54,7 +52,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             // A pointer to the correct MenuItem is stored in the draw item
             // information sent with the message.
             // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(/*dis.*/itemData);
+            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(itemData);
 
             // Delegate this message to the menu item
             if (menuItem != null)
@@ -80,7 +78,6 @@ namespace WinFormsLegacyControls.Menus.Migration
             {
 
                 // Obtain the menu item object
-                //NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
                 nint itemData;
                 unsafe
                 {
@@ -93,7 +90,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 // A pointer to the correct MenuItem is stored in the measure item
                 // information sent with the message.
                 // (See MenuItem.CreateMenuItemInfo)
-                MenuItem menuItem = MenuItem.GetMenuItemFromItemData(/*mis.*/itemData);
+                MenuItem menuItem = MenuItem.GetMenuItemFromItemData(itemData);
                 Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
 
                 // Delegate this message to the menu item
@@ -121,19 +118,15 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         public static void WmMenuSelect(ref Message m)
         {
-            //int item = NativeMethods.Util.LOWORD(m.WParam);
             int item = PARAM.LOWORD(m.WParam);
-            //int flags = NativeMethods.Util.HIWORD(m.WParam);
             MENU_ITEM_FLAGS flags = (MENU_ITEM_FLAGS)PARAM.HIWORD(m.WParam);
             IntPtr hmenu = m.LParam;
             MenuItem mi = null;
 
-            //if ((flags & NativeMethods.MF_SYSMENU) != 0)
             if ((flags & MENU_ITEM_FLAGS.MF_SYSMENU) != 0)
             {
                 // nothing
             }
-            //else if ((flags & NativeMethods.MF_POPUP) == 0)
             else if ((flags & MENU_ITEM_FLAGS.MF_POPUP) == 0)
             {
                 Command cmd = Command.GetCommandFromID(item);
@@ -162,14 +155,11 @@ namespace WinFormsLegacyControls.Menus.Migration
         private static MenuItem GetMenuItemFromHandleId(IntPtr hmenu, int item)
         {
             MenuItem mi = null;
-            //int id = UnsafeNativeMethods.GetMenuItemID(new HandleRef(null, hmenu), item);
             int id = (int)PInvoke.GetMenuItemID((HMENU)hmenu, item);
             if (id == unchecked((int)0xFFFFFFFF))
             {
                 IntPtr childMenu = IntPtr.Zero;
-                //childMenu = UnsafeNativeMethods.GetSubMenu(new HandleRef(null, hmenu), item);
                 childMenu = PInvoke.GetSubMenu((HMENU)hmenu, item);
-                //int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(null, childMenu));
                 int count = PInvoke.GetMenuItemCount((HMENU)childMenu);
                 MenuItem found = null;
                 for (int i = 0; i < count; i++)

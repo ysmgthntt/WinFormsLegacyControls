@@ -21,14 +21,6 @@ namespace WinFormsLegacyControls
     [ListBindable(false)]
     public abstract class Menu : Component
     {
-        /*
-        internal const int CHANGE_ITEMS = 0; // item(s) added or removed
-        internal const int CHANGE_VISIBLE = 1; // item(s) hidden or shown
-        internal const int CHANGE_MDI = 2; // mdi item changed
-        internal const int CHANGE_MERGE = 3; // mergeType or mergeOrder changed
-        internal const int CHANGE_ITEMADDED = 4; // mergeType or mergeOrder changed
-        */
-
         /// <summary>
         ///  Used by findMenuItem
         /// </summary>
@@ -224,7 +216,6 @@ namespace WinFormsLegacyControls
         {
             if (handle != IntPtr.Zero)
             {
-                //UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
                 PInvoke.DestroyMenu(this);
             }
             handle = IntPtr.Zero;
@@ -267,7 +258,6 @@ namespace WinFormsLegacyControls
 
         protected virtual IntPtr CreateMenuHandle()
         {
-            //return UnsafeNativeMethods.CreatePopupMenu();
             return (IntPtr)PInvoke.CreatePopupMenu();
         }
 
@@ -291,10 +281,8 @@ namespace WinFormsLegacyControls
                 {
                     items[i].ClearHandles();
                 }
-                //while (UnsafeNativeMethods.GetMenuItemCount(new HandleRef(this, handle)) > 0)
                 while (PInvoke.GetMenuItemCount(this) > 0)
                 {
-                    //UnsafeNativeMethods.RemoveMenu(new HandleRef(this, handle), 0, NativeMethods.MF_BYPOSITION);
                     PInvoke.RemoveMenu(this, 0, MENU_ITEM_FLAGS.MF_BYPOSITION);
                 }
                 created = false;
@@ -329,7 +317,6 @@ namespace WinFormsLegacyControls
             }
             if (handle != IntPtr.Zero)
             {
-                //UnsafeNativeMethods.DestroyMenu(new HandleRef(this, handle));
                 PInvoke.DestroyMenu(this);
                 handle = IntPtr.Zero;
                 if (disposing)
@@ -501,7 +488,6 @@ namespace WinFormsLegacyControls
         ///  index of matching item, and action for OS to take (execute or select). Zero is
         ///  used to indicate that no match was found (OS should ignore key and beep).
         /// </summary>
-        //private IntPtr MatchKeyToMenuItem(int startItem, char key, MenuItemKeyComparer comparer)
         private IntPtr MatchKeyToMenuItem(int startItem, char key, bool noMnemonic, out bool containsOwnerDraw)
         {
             int firstMatch = -1;
@@ -513,7 +499,6 @@ namespace WinFormsLegacyControls
             {
                 int itemIndex = (startItem + i) % items.Length;
                 MenuItem mi = items[itemIndex];
-                //if (mi != null && comparer(mi, key))
                 if (mi is not null && mi.OwnerDraw)
                 {
                     containsOwnerDraw = true;
@@ -538,16 +523,9 @@ namespace WinFormsLegacyControls
                 return IntPtr.Zero;
             }
 
-            /*
-            int action = multipleMatches ? NativeMethods.MNC_SELECT : NativeMethods.MNC_EXECUTE;
-            return (IntPtr)NativeMethods.Util.MAKELONG(firstMatch, action);
-            */
             uint action = multipleMatches ? PInvoke.MNC_SELECT : PInvoke.MNC_EXECUTE;
             return (IntPtr)LRESULT.MAKELONG(firstMatch, (int)action);
         }
-
-        ///  Delegate type used by MatchKeyToMenuItem
-        //private delegate bool MenuItemKeyComparer(MenuItem mi, char key);
 
         /// <summary>
         ///  Merges another menu's items with this one's.  Menu items are merged according to their
@@ -691,7 +669,6 @@ namespace WinFormsLegacyControls
                 return;
             }
 
-            //char menuKey = char.ToUpper((char)NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
             char menuKey = char.ToUpper((char)Interop.PARAM.LOWORD(m.WParam), CultureInfo.CurrentCulture);
 
             m.Result = menu.WmMenuCharInternal(menuKey);
@@ -708,7 +685,6 @@ namespace WinFormsLegacyControls
             int startItem = (SelectedMenuItemIndex + 1) % items.Length;
 
             // First, search for match among owner-draw items with explicitly defined access keys (eg. "S&ave")
-            //IntPtr result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemWithMnemonic));
             IntPtr result = MatchKeyToMenuItem(startItem, key, false, out bool containsOwnerDraw);
 
             if (!containsOwnerDraw)
@@ -717,30 +693,11 @@ namespace WinFormsLegacyControls
             // Next, search for match among owner-draw items with no access keys (looking at first char of item text)
             if (result == IntPtr.Zero)
             {
-                //result = MatchKeyToMenuItem(startItem, key, new MenuItemKeyComparer(CheckOwnerDrawItemNoMnemonic));
                 result = MatchKeyToMenuItem(startItem, key, true, out _);
             }
 
             return result;
         }
-
-        /*
-        ///  MenuItemKeyComparer delegate used by WmMenuCharInternal
-        private bool CheckOwnerDrawItemWithMnemonic(MenuItem mi, char key)
-        {
-            return mi.OwnerDraw &&
-                   mi.Mnemonic == key;
-        }
-
-        ///  MenuItemKeyComparer delegate used by WmMenuCharInternal
-        private bool CheckOwnerDrawItemNoMnemonic(MenuItem mi, char key)
-        {
-            return mi.OwnerDraw &&
-                   mi.Mnemonic == 0 &&
-                   mi.Text.Length > 0 &&
-                   char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
-        }
-        */
 
         [ListBindable(false)]
         public class MenuItemCollection : IList

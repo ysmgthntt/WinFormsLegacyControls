@@ -47,7 +47,6 @@ namespace WinFormsLegacyControls
         // We need to store a table of all created menuitems, so that other objects
         // such as ContainerControl can get a reference to a particular menuitem,
         // given a unique ID.
-        //private static readonly Hashtable s_allCreatedMenuItems = new Hashtable();
         private static readonly Dictionary<uint, WeakReference<MenuItem>> s_allCreatedMenuItems = new();
         private const uint FirstUniqueID = 0xC0000000;
         private static long s_nextUniqueID = FirstUniqueID;
@@ -214,12 +213,10 @@ namespace WinFormsLegacyControls
                 {
                     if (value)
                     {
-                        //UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), MenuID, false);
                         PInvoke.SetMenuDefaultItem(Parent, (uint)MenuID, 0);
                     }
                     else if (DefaultItem)
                     {
-                        //UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), -1, false);
                         PInvoke.SetMenuDefaultItem(Parent, unchecked((uint)-1), 0);
                     }
                 }
@@ -392,13 +389,6 @@ namespace WinFormsLegacyControls
                     return false;
                 }
 
-                /*
-                var info = new NativeMethods.MENUITEMINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
-                    fMask = NativeMethods.MIIM_STATE
-                };
-                */
                 MENUITEMINFOW info;
                 unsafe
                 {
@@ -408,10 +398,8 @@ namespace WinFormsLegacyControls
                         fMask = MENU_ITEM_MASK.MIIM_STATE
                     };
                 }
-                //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
                 PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
 
-                //return (info.fState & StateHiLite) != 0;
                 return (info.fState & MENU_ITEM_STATE.MFS_HILITE) != 0;
             }
         }
@@ -429,16 +417,8 @@ namespace WinFormsLegacyControls
                     return -1;
                 }
 
-                //int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
                 int count = PInvoke.GetMenuItemCount(Parent);
                 int id = MenuID;
-                /*
-                NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
-                    fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_SUBMENU
-                };
-                */
                 MENUITEMINFOW info;
                 unsafe
                 {
@@ -451,7 +431,6 @@ namespace WinFormsLegacyControls
 
                 for (int i = 0; i < count; i++)
                 {
-                    //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), i, true, info);
                     PInvoke.GetMenuItemInfo(Parent, (uint)i, true, ref info);
 
                     // For sub menus, the handle is always valid.
@@ -781,10 +760,6 @@ namespace WinFormsLegacyControls
         {
             if ((_data.State & StateHidden) == 0)
             {
-                /*
-                NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
-                UnsafeNativeMethods.InsertMenuItem(new HandleRef(Parent, Parent.handle), -1, true, info);
-                */
                 MENUITEMINFOW info = CreateMenuItemInfo(out string dwTypeData);
                 unsafe
                 {
@@ -806,14 +781,6 @@ namespace WinFormsLegacyControls
                 }
 
 #if DEBUG
-                /*
-                NativeMethods.MENUITEMINFO_T infoVerify = new NativeMethods.MENUITEMINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
-                    fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                                   NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE
-                };
-                */
                 MENUITEMINFOW infoVerify;
                 unsafe
                 {
@@ -824,23 +791,13 @@ namespace WinFormsLegacyControls
                                 MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
                     };
                 }
-                //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
                 PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
 #endif
             }
         }
 
-        //private NativeMethods.MENUITEMINFO_T CreateMenuItemInfo()
         private MENUITEMINFOW CreateMenuItemInfo(out string dwTypeData)
         {
-            /*
-            var info = new NativeMethods.MENUITEMINFO_T
-            {
-                fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                         NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA,
-                fType = _data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw)
-            };
-            */
             MENUITEMINFOW info;
             unsafe
             {
@@ -861,30 +818,22 @@ namespace WinFormsLegacyControls
                 if (isTopLevel)
                 {
                     _data._caption = " ";
-                    //info.fType |= NativeMethods.MFT_MENUBREAK;
                     info.fType |= MENU_ITEM_TYPE.MFT_MENUBREAK;
                 }
                 else
                 {
-                    //info.fType |= NativeMethods.MFT_SEPARATOR;
                     info.fType |= MENU_ITEM_TYPE.MFT_SEPARATOR;
                 }
             }
 
             info.fState = (MENU_ITEM_STATE)(_data.State & (StateChecked | StateDefault | StateDisabled));
 
-            //info.wID = MenuID;
             info.wID = (uint)MenuID;
             if (IsParent)
             {
-                //info.hSubMenu = Handle;
                 info.hSubMenu = (HMENU)Handle;
             }
 
-            /*
-            info.hbmpChecked = IntPtr.Zero;
-            info.hbmpUnchecked = IntPtr.Zero;
-            */
             info.hbmpChecked = HBITMAP.Null;
             info.hbmpUnchecked = HBITMAP.Null;
 
@@ -903,7 +852,6 @@ namespace WinFormsLegacyControls
                     // supposed to adding the item ref itself, to allow the item to be finalized
                     // in case it is not disposed and no longer referenced anywhere else, hence
                     // preventing leaks.
-                    //s_allCreatedMenuItems.Add(_uniqueID, new WeakReference(this));
                     lock (s_allCreatedMenuItems)
                         s_allCreatedMenuItems.Add(_uniqueID, new WeakReference<MenuItem>(this));
                 }
@@ -923,12 +871,10 @@ namespace WinFormsLegacyControls
                 // structure.
                 if (_data.OwnerDraw)
                 {
-                    //info.dwItemData = AllocMsaaMenuInfo();
                     info.dwItemData = (nuint)AllocMsaaMenuInfo();
                 }
                 else
                 {
-                    //info.dwItemData = (IntPtr)unchecked((int)_uniqueID);
                     info.dwItemData = (nuint)unchecked((int)_uniqueID);
                 }
             }
@@ -936,21 +882,18 @@ namespace WinFormsLegacyControls
             {
                 // On Win64, there are no reserved address ranges we can use for menu item IDs. So instead we will
                 // have to allocate an MSAMENUINFO heap structure for all menu items, not just owner-drawn ones.
-                //info.dwItemData = AllocMsaaMenuInfo();
                 info.dwItemData = (nuint)AllocMsaaMenuInfo();
             }
 
             // We won't render the shortcut if: 1) it's not set, 2) we're a parent, 3) we're toplevel
             if (_data._showShortcut && _data._shortcut != 0 && !IsParent && !isTopLevel)
             {
-                //info.dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
                 dwTypeData = _data._caption + "\t" + ShortcutToText((Keys)(int)_data._shortcut);
             }
             else
             {
                 // Windows issue: Items with empty captions sometimes block keyboard
                 // access to other items in same menu.
-                //info.dwTypeData = (_data._caption.Length == 0 ? " " : _data._caption);
                 dwTypeData = (_data._caption.Length == 0 ? " " : _data._caption);
             }
             info.cch = 0;
@@ -991,13 +934,6 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal static MenuItem GetMenuItemFromUniqueID(uint uniqueID)
         {
-            /*
-            WeakReference weakRef = (WeakReference)s_allCreatedMenuItems[uniqueID];
-            if (weakRef != null && weakRef.IsAlive)
-            {
-                return (MenuItem)weakRef.Target;
-            }
-            */
             if (s_allCreatedMenuItems.TryGetValue(uniqueID, out var weakRef) && weakRef.TryGetTarget(out var menuItem))
                 return menuItem;
             Debug.Fail("Weakref for menu item has expired or has been removed!  Who is trying to access this ID?");
@@ -1023,10 +959,6 @@ namespace WinFormsLegacyControls
             {
                 if (uniqueID < FirstUniqueID)
                 {
-                    /*
-                    MsaaMenuInfoWithId msaaMenuInfo = Marshal.PtrToStructure<MsaaMenuInfoWithId>(itemData);
-                    uniqueID = msaaMenuInfo._uniqueID;
-                    */
                     unsafe
                     {
                         MsaaMenuInfoWithId* msaaMenuInfo = (MsaaMenuInfoWithId*)itemData;
@@ -1037,10 +969,6 @@ namespace WinFormsLegacyControls
             else
             {
                 // Its always a pointer on Win64 (see CreateMenuItemInfo)
-                /*
-                MsaaMenuInfoWithId msaaMenuInfo = Marshal.PtrToStructure<MsaaMenuInfoWithId>(itemData);
-                uniqueID = msaaMenuInfo._uniqueID;
-                */
                 unsafe
                 {
                     MsaaMenuInfoWithId* msaaMenuInfo = (MsaaMenuInfoWithId*)itemData;
@@ -1059,20 +987,8 @@ namespace WinFormsLegacyControls
         [StructLayout(LayoutKind.Sequential)]
         private struct MsaaMenuInfoWithId
         {
-            /*
-            public readonly NativeMethods.MSAAMENUINFO _msaaMenuInfo;
-            public readonly uint _uniqueID;
-            */
             public MSAAMENUINFO _msaaMenuInfo;
             public uint _uniqueID;
-
-            /*
-            public MsaaMenuInfoWithId(string text, uint uniqueID)
-            {
-                _msaaMenuInfo = new NativeMethods.MSAAMENUINFO(text);
-                _uniqueID = uniqueID;
-            }
-            */
         }
 
 #if DEBUG
@@ -1093,7 +1009,6 @@ namespace WinFormsLegacyControls
         private IntPtr AllocMsaaMenuInfo()
         {
             FreeMsaaMenuInfo();
-            //_msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf<MsaaMenuInfoWithId>());
             unsafe
             {
                 _msaaMenuInfoPtr = Marshal.AllocHGlobal(sizeof(MsaaMenuInfoWithId));
@@ -1106,10 +1021,6 @@ namespace WinFormsLegacyControls
                 Debug.Assert(((uint)(ulong)_msaaMenuInfoPtr) < FirstUniqueID);
             }
 
-            /*
-            MsaaMenuInfoWithId msaaMenuInfoStruct = new MsaaMenuInfoWithId(_data._caption, _uniqueID);
-            Marshal.StructureToPtr(msaaMenuInfoStruct, _msaaMenuInfoPtr, false);
-            */
             int length = _data._caption.Length;
             _buffer = GC.AllocateUninitializedArray<char>(length + 1, pinned: true);
             _data._caption.CopyTo(_buffer);
@@ -1249,7 +1160,6 @@ namespace WinFormsLegacyControls
 
                     if (senderMenu.MenuItems.Count > 0)
                     {
-                        //MenuItem sep = (MenuItem)Activator.CreateInstance(GetType());
                         MenuItem sep = CreateSameTypeInstance();
                         sep._data.UserData = new MdiListUserData();
                         sep.Text = "-";
@@ -1279,7 +1189,6 @@ namespace WinFormsLegacyControls
                                 (forms[i].Equals(activeMdiChild))))
                             {
                                 // there's always room for activeMdiChild
-                                //MenuItem windowItem = (MenuItem)Activator.CreateInstance(GetType());
                                 MenuItem windowItem = CreateSameTypeInstance();
                                 windowItem._data.UserData = new MdiListFormData(this, i);
 
@@ -1302,7 +1211,6 @@ namespace WinFormsLegacyControls
                     // MDI lists, rather than letting Windows do this for us.
                     if (visibleChildren > MaxMenuForms)
                     {
-                        //MenuItem moreWindows = (MenuItem)Activator.CreateInstance(GetType());
                         MenuItem moreWindows = CreateSameTypeInstance();
                         moreWindows._data.UserData = new MdiListMoreWindowsData(this);
                         moreWindows.Text = SR.MDIMenuMoreWindows;
@@ -1333,7 +1241,6 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            //MenuItem newItem = (MenuItem)Activator.CreateInstance(GetType());
             MenuItem newItem = CreateSameTypeInstance();
             _data.AddItem(newItem);
             newItem.MergeMenu(this);
@@ -1520,14 +1427,6 @@ namespace WinFormsLegacyControls
                 return;
             }
 
-            /*
-            var info = new NativeMethods.MENUITEMINFO_T
-            {
-                fMask = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU,
-                dwTypeData = new string('\0', Text.Length + 2),
-                cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>()
-            };
-            */
             MENUITEMINFOW info = new MENUITEMINFOW
             {
                 fMask = MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_STATE | MENU_ITEM_MASK.MIIM_SUBMENU,
@@ -1535,22 +1434,17 @@ namespace WinFormsLegacyControls
             };
             char* dwTypeData = stackalloc char[Text.Length + 2];
             info.dwTypeData = dwTypeData;
-            //info.cch = info.dwTypeData.Length - 1;
             info.cch = (uint)((Text.Length + 2) - 1);
-            //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
             if (setRightToLeftBit)
             {
-                //info.fType |= NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER;
                 info.fType |= MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER;
             }
             else
             {
-                //info.fType &= ~(NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER);
                 info.fType &= ~(MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER);
             }
 
-            //UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
         }
 
@@ -1563,10 +1457,6 @@ namespace WinFormsLegacyControls
 
             if (force || Parent is MainMenu || Parent is ContextMenu)
             {
-                /*
-                NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
-                UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
-                */
                 MENUITEMINFOW info = CreateMenuItemInfo(out string dwTypeData);
                 unsafe
                 {
@@ -1577,14 +1467,6 @@ namespace WinFormsLegacyControls
                     }
                 }
 #if DEBUG
-                /*
-                var infoVerify = new NativeMethods.MENUITEMINFO_T
-                {
-                    cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>(),
-                    fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                                   NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE
-                };
-                */
                 MENUITEMINFOW infoVerify;
                 unsafe
                 {
@@ -1595,7 +1477,6 @@ namespace WinFormsLegacyControls
                                 MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
                     };
                 }
-                //UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
                 PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
 #endif
 
@@ -1611,7 +1492,6 @@ namespace WinFormsLegacyControls
                     Form f = mainMenu./*GetFormUnsafe()*/form;
                     if (f != null)
                     {
-                        //SafeNativeMethods.DrawMenuBar(new HandleRef(f, f.Handle));
                         PInvoke.DrawMenuBar(f);
                     }
                 }
@@ -1621,37 +1501,11 @@ namespace WinFormsLegacyControls
         internal unsafe void WmDrawItem(ref Message m)
         {
             // Handles the OnDrawItem message sent from ContainerControl
-            /*
-            NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
-            Debug.WriteLineIf(Control.s_paletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
-            */
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
-            //IntPtr oldPal = Control.SetUpPalette(dis.hDC, false /*force*/, false);
+            //Debug.WriteLineIf(Control.s_paletteTracing.TraceVerbose, Handle + ": Force set palette in MenuItem drawitem");
             using var paletteScope = SelectPaletteScope.HalftonePalette(dis->hDC, false, false);
-            //try
-            {
-                //Graphics g = Graphics.FromHdcInternal(dis.hDC);
-                Graphics g = Graphics.FromHdcInternal(dis->hDC);
-                try
-                {
-                    //OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, Rectangle.FromLTRB(dis.rcItem.left, dis.rcItem.top, dis.rcItem.right, dis.rcItem.bottom), Index, (DrawItemState)dis.itemState));
-                    OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, dis->rcItem, Index, (DrawItemState)dis->itemState));
-                }
-                finally
-                {
-                    g.Dispose();
-                }
-            }
-            /*
-            finally
-            {
-                if (oldPal != IntPtr.Zero)
-                {
-                    //SafeNativeMethods.SelectPalette(new HandleRef(null, dis.hDC), new HandleRef(null, oldPal), 0);
-                    PInvoke.SelectPalette(dis->hDC, (HPALETTE)oldPal, BOOL.FALSE);
-                }
-            }
-            */
+            using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+            OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, dis->rcItem, Index, (DrawItemState)dis->itemState));
 
             m.Result = (IntPtr)1;
         }
@@ -1659,9 +1513,6 @@ namespace WinFormsLegacyControls
         internal void WmMeasureItem(ref Message m)
         {
             // Handles the OnMeasureItem message sent from ContainerControl
-
-            // Obtain the measure item struct
-            //NativeMethods.MEASUREITEMSTRUCT mis = (NativeMethods.MEASUREITEMSTRUCT)m.GetLParam(typeof(NativeMethods.MEASUREITEMSTRUCT));
 
             // The OnMeasureItem handler now determines the height and width of the item
             using ScreenDC screendc = ScreenDC.Create();
@@ -1672,15 +1523,12 @@ namespace WinFormsLegacyControls
                 OnMeasureItem(mie);
             }
 
-            // Update the measure item struct with the new width and height
-            /*
-            mis.itemHeight = mie.ItemHeight;
-            mis.itemWidth = mie.ItemWidth;
-            Marshal.StructureToPtr(mis, m.LParam, false);
-            */
             unsafe
             {
+                // Obtain the measure item struct
                 MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
+
+                // Update the measure item struct with the new width and height
                 mis->itemHeight = (uint)mie.ItemHeight;
                 mis->itemWidth = (uint)mie.ItemWidth;
             }

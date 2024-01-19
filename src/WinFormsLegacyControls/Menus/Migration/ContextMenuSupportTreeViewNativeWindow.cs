@@ -75,7 +75,6 @@ namespace WinFormsLegacyControls.Menus.Migration
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = treeView.SelectedNode;
-                        //if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null))
                         if (treeNode is not null && (_treeNodeContextMenu = treeNode.GetContextMenu()) is not null)
                         {
                             Point client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);

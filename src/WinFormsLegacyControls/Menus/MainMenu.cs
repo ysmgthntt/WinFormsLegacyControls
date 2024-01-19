@@ -19,7 +19,6 @@ namespace WinFormsLegacyControls
         internal Form form;
         internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
-        //private EventHandler onCollapse;
         private static readonly object _collapseEvent = new();
 
         /// <summary>
@@ -55,10 +54,6 @@ namespace WinFormsLegacyControls
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse
         {
-            /*
-            add => onCollapse += value;
-            remove => onCollapse -= value;
-            */
             add => Events.AddHandler(_collapseEvent, value);
             remove => Events.RemoveHandler(_collapseEvent, value);
         }
@@ -134,7 +129,6 @@ namespace WinFormsLegacyControls
 
         protected override IntPtr CreateMenuHandle()
         {
-            //return UnsafeNativeMethods.CreateMenu();
             return PInvoke.CreateMenu();
         }
 
@@ -149,7 +143,6 @@ namespace WinFormsLegacyControls
             {
                 if (form != null && (ownerForm == null || form == ownerForm))
                 {
-                    //form.Menu = null;
                     if (form.TryGetMainMenuSupportFormNativeWindow(out var window))
                         window.Menu = null;
                 }
@@ -194,7 +187,6 @@ namespace WinFormsLegacyControls
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
         {
-            //onCollapse?.Invoke(this, e);
             ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
         }
 
@@ -203,7 +195,6 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal virtual bool ShouldSerializeRightToLeft()
         {
-            //if (System.Windows.Forms.RightToLeft.Inherit == RightToLeft)
             if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
             {
                 return false;
