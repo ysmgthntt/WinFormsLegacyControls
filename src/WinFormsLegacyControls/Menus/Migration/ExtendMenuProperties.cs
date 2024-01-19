@@ -50,16 +50,22 @@ namespace WinFormsLegacyControls
                 }
                 else if (value is not null)
                 {
-                    if (!_messageFilterInstalled)
-                    {
-                        Application.AddMessageFilter(new MenuShortcutProcessMessageFilter());
-                        _messageFilterInstalled = true;
-                    }
-                    window = V.Create(key);
-                    _property[key] = window;
-                    key.Disposed += _property.Key_Disposed;
+                    window = CreateWindow(key);
                     window.Property = value;
                 }
+                return window;
+            }
+
+            public static V CreateWindow(K key)
+            {
+                if (!_messageFilterInstalled)
+                {
+                    Application.AddMessageFilter(new MenuShortcutProcessMessageFilter());
+                    _messageFilterInstalled = true;
+                }
+                V window = V.Create(key);
+                _property[key] = window;
+                key.Disposed += _property.Key_Disposed;
                 return window;
             }
 
@@ -73,7 +79,11 @@ namespace WinFormsLegacyControls
             => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.GetValue(form);
 
         public static void SetMenu(this Form form, MainMenu? menu)
-            => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.SetValue(form, menu);
+        {
+            if (menu is null && form.IsMdiContainer)
+                return;
+            Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.SetValue(form, menu);
+        }
 
         internal static MainMenuSupportFormNativeWindow? GetMainMenuSupportFormNativeWindow(this Form form)
         {
@@ -83,6 +93,9 @@ namespace WinFormsLegacyControls
 
         internal static bool TryGetMainMenuSupportFormNativeWindow(this Form form, [NotNullWhen(true)] out MainMenuSupportFormNativeWindow? window)
             => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetWindow(form, out window);
+
+        internal static MainMenuSupportFormNativeWindow? CreateMainMenuSupportFormNativeWindow(this Form form)
+            => Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.CreateWindow(form);
 
         internal static void MenuChanged(this Form form, MenuChangeKind change, Menu? menu)
         {

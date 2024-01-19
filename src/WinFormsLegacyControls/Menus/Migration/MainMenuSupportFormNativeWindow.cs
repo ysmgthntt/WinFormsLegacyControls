@@ -60,6 +60,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         {
             AssignHandle(_form.Handle);
 
+            if (_form.MdiParent is { } mdiParent && !mdiParent.TryGetMainMenuSupportFormNativeWindow(out _))
+                mdiParent.CreateMainMenuSupportFormNativeWindow();
+
             if (!_form.TopLevel || _form.IsMdiContainer)
             {
                 MdiClient? ctlClient = GetMdiClient(_form);
