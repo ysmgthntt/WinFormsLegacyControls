@@ -318,11 +318,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                 _mergedMenu = null;
             }
 
-            Form parForm = _form.ParentForm;
-            if (parForm != null)
-            {
-                parForm.MenuChanged(0, parForm.GetMenu());
-            }
+            if (_form.ParentForm is { } parForm && parForm.TryGetMainMenuSupportFormNativeWindow(out var window))
+                window.MenuChanged(MenuChangeKind.CHANGE_ITEMS, window.Menu);
         }
 
         // Package scope for menu interop
