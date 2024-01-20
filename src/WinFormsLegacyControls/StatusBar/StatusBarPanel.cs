@@ -153,7 +153,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal bool Created
+        private bool Created
         {
             get
             {

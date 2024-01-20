@@ -99,6 +99,7 @@ namespace WinFormsLegacyControls
         {
         }
 
+        /*
         internal MenuItem(MenuItemData data) : base(null)
         {
             data.AddItem(this);
@@ -107,6 +108,7 @@ namespace WinFormsLegacyControls
             _debugText = data._caption;
 #endif
         }
+        */
 
         /// <summary>
         ///  Initializes a new instance of the class with a specified caption, defined
@@ -756,7 +758,7 @@ namespace WinFormsLegacyControls
             _data.SetState(state & StateCloneMask, true);
         }
 
-        internal virtual void CreateMenuItem()
+        internal void CreateMenuItem()
         {
             if ((_data.State & StateHidden) == 0)
             {
@@ -932,7 +934,7 @@ namespace WinFormsLegacyControls
         ///  Given a unique menu item ID, find the corresponding MenuItem
         ///  object, using the master lookup table of all created MenuItems.
         /// </summary>
-        internal static MenuItem GetMenuItemFromUniqueID(uint uniqueID)
+        private static MenuItem GetMenuItemFromUniqueID(uint uniqueID)
         {
             if (s_allCreatedMenuItems.TryGetValue(uniqueID, out var weakRef) && weakRef.TryGetTarget(out var menuItem))
                 return menuItem;
@@ -1115,7 +1117,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal Form[] FindMdiForms()
+        private Form[] FindMdiForms()
         {
             Form[] forms = null;
             MainMenu main = GetMainMenu();
@@ -1387,7 +1389,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         public virtual void PerformSelect() => OnSelect(EventArgs.Empty);
 
-        internal virtual bool ShortcutClick()
+        internal bool ShortcutClick()
         {
             if (Parent is MenuItem parent)
             {
@@ -1554,7 +1556,7 @@ namespace WinFormsLegacyControls
             internal MenuMerge _mergeType;
             internal int _mergeOrder;
             internal string _caption;
-            internal short _mnemonic;
+            private short _mnemonic;
             internal Shortcut _shortcut;
             internal bool _showShortcut;
             internal EventHandler _onClick;
@@ -1696,7 +1698,7 @@ namespace WinFormsLegacyControls
                 return _cmd.ID;
             }
 
-            internal void ItemsChanged(MenuChangeKind change)
+            private void ItemsChanged(MenuChangeKind change)
             {
                 for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                 {
@@ -1778,7 +1780,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            internal void UpdateMenuItems()
+            private void UpdateMenuItems()
             {
                 _version++;
                 for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)

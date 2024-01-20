@@ -177,7 +177,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal virtual void ItemsChanged(MenuChangeKind change, Menu menu)
+        internal void ItemsChanged(MenuChangeKind change, Menu menu)
         {
             if (form != null)
             {
@@ -196,7 +196,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
-        internal virtual bool ShouldSerializeRightToLeft()
+        private bool ShouldSerializeRightToLeft()
         {
             if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
             {

@@ -134,7 +134,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         */
 
         // overridable so nested controls can provide a different source control.
-        internal /*virtual*/ void WmContextMenu(ref Message m)
+        private void WmContextMenu(ref Message m)
         {
             //WmContextMenu(ref m, _control);
             WmContextMenu(ref m, SourceControl ?? _control);
@@ -143,7 +143,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// <summary>
         ///  Handles the WM_CONTEXTMENU message
         /// </summary>
-        internal void WmContextMenu(ref Message m, Control sourceControl)
+        private void WmContextMenu(ref Message m, Control sourceControl)
         {
             ContextMenu contextMenu = _contextMenu;
 

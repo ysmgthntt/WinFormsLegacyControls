@@ -228,7 +228,7 @@ namespace WinFormsLegacyControls
 
         private static nint _lastPopupHandle = -1;
 
-        internal void RaisePopup()
+        private void RaisePopup()
         {
             _lastPopupHandle = this.Handle;
             OnPopup(EventArgs.Empty);

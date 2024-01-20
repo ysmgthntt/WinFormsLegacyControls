@@ -693,7 +693,7 @@ namespace WinFormsLegacyControls
         ///  The preferred height for this ToolBar control.  This is
         ///  used by the AutoSizing code.
         /// </summary>
-        internal int PreferredHeight
+        private int PreferredHeight
         {
             get
             {
@@ -768,7 +768,7 @@ namespace WinFormsLegacyControls
         ///  if the control is docked left or right [ie, it really
         ///  just returns a max width]
         /// </summary>
-        internal int PreferredWidth
+        private int PreferredWidth
         {
             get
             {
@@ -1046,7 +1046,7 @@ namespace WinFormsLegacyControls
         ///  having each operation wait for the paint to complete.  This must be
         ///  matched up with a call to endUpdate().
         /// </summary>
-        internal void BeginUpdate()
+        private void BeginUpdate()
         {
             BeginUpdateInternal();
         }
@@ -1117,7 +1117,7 @@ namespace WinFormsLegacyControls
         ///  having each operation wait for the paint to complete.  This must be
         ///  matched up with a call to beginUpdate().
         /// </summary>
-        internal void EndUpdate()
+        private void EndUpdate()
         {
             EndUpdateInternal();
         }
@@ -1582,7 +1582,7 @@ namespace WinFormsLegacyControls
         ///  control is pretty flakey, and the only real choice here is to recreate
         ///  the handle and re-realize all the buttons.
         /// </summary>
-        internal void UpdateButtons()
+        private void UpdateButtons()
         {
             if (IsHandleCreated)
             {

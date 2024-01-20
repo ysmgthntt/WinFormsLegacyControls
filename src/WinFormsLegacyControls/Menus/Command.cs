@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         private const int idMin = 0x00100;
         private const int idLim = 0x10000;
 
-        internal int id;
+        private int id;
 
         public Command(ICommandExecutor target)
             : base(target, false)
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected static void AssignID(Command cmd)
+        private static void AssignID(Command cmd)
         {
             lock (internalSyncObject)
             {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
             return cmd.Invoke();
         }
 
-        protected static void Dispose(Command cmd)
+        private static void Dispose(Command cmd)
         {
             lock (internalSyncObject)
             {

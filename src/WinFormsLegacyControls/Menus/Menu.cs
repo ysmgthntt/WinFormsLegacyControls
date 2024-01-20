@@ -232,7 +232,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Sets this menu to be an identical copy of another menu.
         /// </summary>
-        protected internal void CloneMenu(Menu menuSrc)
+        protected void CloneMenu(Menu menuSrc)
         {
             if (menuSrc == null)
             {
@@ -261,7 +261,7 @@ namespace WinFormsLegacyControls
             return (IntPtr)PInvoke.CreatePopupMenu();
         }
 
-        internal void CreateMenuItems()
+        private protected void CreateMenuItems()
         {
             if (!created)
             {
@@ -273,7 +273,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal void DestroyMenuItems()
+        private void DestroyMenuItems()
         {
             if (created)
             {
@@ -382,7 +382,7 @@ namespace WinFormsLegacyControls
         // as it's guaranteed to be in the MDI imlementation of merging container and child
         // menus. However, user code can call MergeMenu independently on a source and target
         // menu whose MergeOrder values are not necessarily pre-sorted.
-        internal int xFindMergePosition(int mergeOrder)
+        private int xFindMergePosition(int mergeOrder)
         {
             int nPosition = 0;
 
@@ -631,7 +631,7 @@ namespace WinFormsLegacyControls
         ///  Returns index of currently selected menu item in
         ///  this menu, or -1 if no item is currently selected.
         /// </summary>
-        internal int SelectedMenuItemIndex
+        private int SelectedMenuItemIndex
         {
             get
             {
@@ -679,7 +679,7 @@ namespace WinFormsLegacyControls
         ///  means *all* menu items on a menu when IsImageMarginPresent == true). Attempts to
         ///  simulate the exact behavior that the OS provides for non owner-draw menu items.
         /// </summary>
-        internal IntPtr WmMenuCharInternal(char key)
+        private IntPtr WmMenuCharInternal(char key)
         {
             // Start looking just beyond the current selected item (otherwise just start at the top)
             int startItem = (SelectedMenuItemIndex + 1) % items.Length;

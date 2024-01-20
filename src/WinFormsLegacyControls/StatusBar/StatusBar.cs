@@ -721,7 +721,7 @@ namespace WinFormsLegacyControls
         ///  This function sets up all the panel on the status bar according to
         ///  the internal this.panels List.
         /// </summary>
-        internal void RealizePanels()
+        private void RealizePanels()
         {
             StatusBarPanel panel = null;
             int length = panels.Count;
@@ -756,7 +756,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Remove the internal list of panels without updating the control.
         /// </summary>
-        internal void RemoveAllPanelsWithoutUpdate()
+        private void RemoveAllPanelsWithoutUpdate()
         {
             int size = panels.Count;
             // remove the parent reference
@@ -778,7 +778,7 @@ namespace WinFormsLegacyControls
         ///  Sets the widths of any panels that have the
         ///  StatusBarPanelAutoSize.CONTENTS property set.
         /// </summary>
-        internal void SetPanelContentsWidths(bool newPanels)
+        private void SetPanelContentsWidths(bool newPanels)
         {
             int size = panels.Count;
             bool changed = false;
@@ -1654,7 +1654,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Returns the createParams to create the window.
             /// </summary>
-            protected CreateParams CreateParams
+            private CreateParams CreateParams
             {
                 get
                 {
@@ -1820,7 +1820,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Creates the handle for the control.
             /// </summary>
-            protected void CreateHandle()
+            private void CreateHandle()
             {
                 if (IsHandleCreated)
                 {
@@ -1841,7 +1841,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Destroys the handle for this control.
             /// </summary>
-            protected void DestroyHandle()
+            private void DestroyHandle()
             {
                 if (IsHandleCreated)
                 {
@@ -1908,7 +1908,7 @@ namespace WinFormsLegacyControls
                 DestroyHandle();
             }
 
-            protected void WndProc(ref Message msg)
+            private void WndProc(ref Message msg)
             {
                 switch ((uint)msg.Msg)
                 {

@@ -60,7 +60,7 @@ namespace WinFormsLegacyControls
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
-        internal Menu dropDownMenu = null;
+        private Menu dropDownMenu = null;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
@@ -76,7 +76,7 @@ namespace WinFormsLegacyControls
 
         // We need a special way to defer to the ToolBar's image
         // list for indexing purposes.
-        internal sealed class ToolBarButtonImageIndexer : /*ImageList.Indexer*/ImageListIndexer
+        private sealed class ToolBarButtonImageIndexer : /*ImageList.Indexer*/ImageListIndexer
         {
             private readonly ToolBarButton owner;
 
@@ -99,7 +99,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal ToolBarButtonImageIndexer ImageIndexer
+        private ToolBarButtonImageIndexer ImageIndexer
         {
             get
             {
@@ -705,7 +705,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Returns a TBBUTTONINFO object that represents this ToolBarButton.
         /// </summary>
-        internal TBBUTTONINFOW GetTBBUTTONINFO(bool updateText, int newCommandId)
+        private TBBUTTONINFOW GetTBBUTTONINFO(bool updateText, int newCommandId)
         {
             TBBUTTONINFOW button;
             unsafe
@@ -846,7 +846,7 @@ namespace WinFormsLegacyControls
         ///  we need to make sure it gets the new button information.
         ///  If Text was changed, call the next overload.
         /// </summary>
-        internal void UpdateButton(bool recreate)
+        private void UpdateButton(bool recreate)
         {
             UpdateButton(recreate, false, true);
         }
