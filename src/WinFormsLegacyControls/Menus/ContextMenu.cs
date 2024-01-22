@@ -204,10 +204,7 @@ namespace WinFormsLegacyControls
 
         private void Show(Control control, Point pos, TRACK_POPUP_MENU_FLAGS flags)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (!control.IsHandleCreated || !control.Visible)
             {

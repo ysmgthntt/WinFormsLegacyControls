@@ -1199,10 +1199,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void InsertButton(int index, ToolBarButton value)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (index < 0 || ((buttons is not null) && (index > buttonCount)))
             {
@@ -1228,10 +1225,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private int InternalAddButton(ToolBarButton button)
         {
-            if (button is null)
-            {
-                throw new ArgumentNullException(nameof(button));
-            }
+            ArgumentNullException.ThrowIfNull(button);
 
             int index = buttonCount;
             Insert(index, button);
@@ -1933,10 +1927,7 @@ namespace WinFormsLegacyControls
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
-                    if (value is null)
-                    {
-                        throw new ArgumentNullException(nameof(value));
-                    }
+                    ArgumentNullException.ThrowIfNull(value);
 
                     owner.InternalSetButton(index, value, true, true);
                 }
@@ -2067,10 +2058,7 @@ namespace WinFormsLegacyControls
 
             public void AddRange(ToolBarButton[] buttons)
             {
-                if (buttons is null)
-                {
-                    throw new ArgumentNullException(nameof(buttons));
-                }
+                ArgumentNullException.ThrowIfNull(buttons);
                 try
                 {
                     suspendUpdate = true;

@@ -234,10 +234,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         protected void CloneMenu(Menu menuSrc)
         {
-            if (menuSrc is null)
-            {
-                throw new ArgumentNullException(nameof(menuSrc));
-            }
+            ArgumentNullException.ThrowIfNull(menuSrc);
 
             MenuItem[]? newItems = null;
             if (menuSrc.items is not null)
@@ -534,10 +531,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         public virtual void MergeMenu(Menu menuSrc)
         {
-            if (menuSrc is null)
-            {
-                throw new ArgumentNullException(nameof(menuSrc));
-            }
+            ArgumentNullException.ThrowIfNull(menuSrc);
             if (menuSrc == this)
             {
                 throw new ArgumentException(SR.MenuMergeWithSelf, nameof(menuSrc));
@@ -857,10 +851,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual int Add(int index, MenuItem item)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 // MenuItems can only belong to one menu at a time
                 if (item.Parent is not null)
@@ -929,10 +920,7 @@ namespace WinFormsLegacyControls
 
             public virtual void AddRange(MenuItem[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
                 foreach (MenuItem item in items)
                 {
                     Add(item);

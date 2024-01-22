@@ -1201,10 +1201,7 @@ namespace WinFormsLegacyControls
                 }
                 set
                 {
-                    if (value is null)
-                    {
-                        throw new ArgumentNullException(nameof(StatusBarPanel));
-                    }
+                    ArgumentNullException.ThrowIfNull(value);
 
                     owner.layoutDirty = true;
 
@@ -1365,10 +1362,7 @@ namespace WinFormsLegacyControls
 
             public virtual void AddRange(StatusBarPanel[] panels)
             {
-                if (panels is null)
-                {
-                    throw new ArgumentNullException(nameof(panels));
-                }
+                ArgumentNullException.ThrowIfNull(panels);
                 foreach (StatusBarPanel panel in panels)
                 {
                     Add(panel);
@@ -1465,10 +1459,7 @@ namespace WinFormsLegacyControls
             public virtual void Insert(int index, StatusBarPanel value)
             {
                 //check for the value not to be null
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 //end check
 
                 owner.layoutDirty = true;
@@ -1537,10 +1528,7 @@ namespace WinFormsLegacyControls
             public virtual void Remove(StatusBarPanel value)
             {
                 //check for the value not to be null
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(StatusBarPanel));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 //end check
 
                 if (value.Parent != owner)

@@ -34,10 +34,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         public MainMenu(IContainer container) : this()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
