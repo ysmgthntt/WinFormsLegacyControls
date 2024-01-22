@@ -168,16 +168,7 @@ namespace WinFormsLegacyControls
         MergableProperty(false)
         ]
         public MenuItemCollection MenuItems
-        {
-            get
-            {
-                if (itemsCollection is null)
-                {
-                    itemsCollection = new MenuItemCollection(this);
-                }
-                return itemsCollection;
-            }
-        }
+            => itemsCollection ??= new MenuItemCollection(this);
 
         internal virtual bool RenderIsRightToLeft
         {

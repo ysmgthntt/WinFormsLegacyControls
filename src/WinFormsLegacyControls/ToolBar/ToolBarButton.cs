@@ -100,17 +100,7 @@ namespace WinFormsLegacyControls
         }
 
         private ToolBarButtonImageIndexer ImageIndexer
-        {
-            get
-            {
-                if (imageIndexer is null)
-                {
-                    imageIndexer = new ToolBarButtonImageIndexer(this);
-                }
-
-                return imageIndexer;
-            }
-        }
+            => imageIndexer ??= new ToolBarButtonImageIndexer(this);
 
         /// <summary>
         ///

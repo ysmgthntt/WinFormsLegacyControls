@@ -1675,10 +1675,7 @@ namespace WinFormsLegacyControls
 
                     item._nextLinkedItem = firstItem;
                     firstItem = item;
-                    if (baseItem is null)
-                    {
-                        baseItem = item;
-                    }
+                    baseItem ??= item;
 
                     item._data = this;
                     item._dataVersion = 0;
@@ -1693,10 +1690,7 @@ namespace WinFormsLegacyControls
 
             internal int GetMenuID()
             {
-                if (_cmd is null)
-                {
-                    _cmd = new Command(this);
-                }
+                _cmd ??= new Command(this);
 
                 return _cmd.ID;
             }
@@ -1755,10 +1749,7 @@ namespace WinFormsLegacyControls
 
             internal void SetCaption(string value)
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!_caption.Equals(value))
                 {

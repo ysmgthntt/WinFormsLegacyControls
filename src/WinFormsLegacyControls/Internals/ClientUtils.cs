@@ -58,10 +58,7 @@ namespace System.Windows.Forms
         {
             Type t = value.GetType();
 
-            if (enumValueInfo is null)
-            {
-                enumValueInfo = new Hashtable();
-            }
+            enumValueInfo ??= new Hashtable();
 
             SequentialEnumInfo? sequentialEnumInfo = null;
 

@@ -71,10 +71,7 @@ namespace WinFormsLegacyControls
             {
                 if (VisualStyleRenderer.IsSupported)
                 {
-                    if (renderer is null)
-                    {
-                        renderer = new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
-                    }
+                    renderer ??= new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
                 }
                 else
                 {
@@ -348,17 +345,7 @@ namespace WinFormsLegacyControls
         MergableProperty(false)
         ]
         public StatusBarPanelCollection Panels
-        {
-            get
-            {
-                if (panelsCollection is null)
-                {
-                    panelsCollection = new StatusBarPanelCollection(this);
-                }
-
-                return panelsCollection;
-            }
-        }
+            => panelsCollection ??= new StatusBarPanelCollection(this);
 
         /// <summary>
         ///  The status bar text.
@@ -969,11 +956,7 @@ namespace WinFormsLegacyControls
             if (panel.Parent == this && panel.ToolTipText.Length > 0)
             {
                 int border = SystemInformation.Border3DSize.Width;
-                ControlToolTip.Tool? t = tooltips.GetTool(panel);
-                if (t is null)
-                {
-                    t = new ControlToolTip.Tool();
-                }
+                ControlToolTip.Tool t = tooltips.GetTool(panel) ?? new();
                 t.text = panel.ToolTipText;
                 t.rect = new Rectangle(panel.Right - panel.Width + border, 0, panel.Width - border, Height);
                 tooltips.SetTool(panel, t);

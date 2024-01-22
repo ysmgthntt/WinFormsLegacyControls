@@ -391,10 +391,7 @@ namespace WinFormsLegacyControls
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!Text.Equals(value))
                 {
@@ -424,23 +421,10 @@ namespace WinFormsLegacyControls
         ]
         public string ToolTipText
         {
-            get
-            {
-                if (toolTipText is null)
-                {
-                    return "";
-                }
-                else
-                {
-                    return toolTipText;
-                }
-            }
+            get => toolTipText ?? string.Empty;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!ToolTipText.Equals(value))
                 {

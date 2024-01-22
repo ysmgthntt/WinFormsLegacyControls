@@ -37,8 +37,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             {
                 if (Handle == 0)
                 {
-                    if (_fiWindow is null)
-                        _fiWindow = typeof(NotifyIcon).GetField("_window", BindingFlags.NonPublic | BindingFlags.Instance)!;
+                    _fiWindow ??= typeof(NotifyIcon).GetField("_window", BindingFlags.NonPublic | BindingFlags.Instance)!;
                     NativeWindow window = (NativeWindow)_fiWindow.GetValue(_notifyIcon)!;
                     AssignHandle(window.Handle);
                 }

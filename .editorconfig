@@ -19,3 +19,6 @@ dotnet_diagnostic.CA1512.severity = warning
 
 # CA1513: ObjectDisposedException スロー ヘルパーを使用する
 dotnet_diagnostic.CA1513.severity = warning
+
+# IDE0074: 複合代入を使用
+dotnet_diagnostic.IDE0074.severity = warning
