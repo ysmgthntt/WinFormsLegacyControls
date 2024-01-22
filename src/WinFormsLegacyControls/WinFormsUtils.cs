@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -122,7 +120,7 @@ namespace System.Windows.Forms
 
         public class ArraySubsetEnumerator : IEnumerator
         {
-            private readonly object[] _array;
+            private readonly object[]? _array;
             private readonly int _total;
             private int _current;
 
@@ -151,7 +149,7 @@ namespace System.Windows.Forms
                 _current = -1;
             }
 
-            public object Current => _current == -1 ? null : _array[_current];
+            public object? Current => _current == -1 ? null : _array![_current];
         }
     }
 }

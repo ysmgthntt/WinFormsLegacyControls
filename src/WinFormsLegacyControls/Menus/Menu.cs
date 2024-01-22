@@ -30,19 +30,19 @@ namespace WinFormsLegacyControls
         /// </summary>
         public const int FindShortcut = 1;
 
-        private MenuItemCollection itemsCollection;
-        internal MenuItem[] items;
+        private MenuItemCollection? itemsCollection;
+        internal MenuItem[] items = null!;
         private int _itemCount;
         internal IntPtr handle;
         internal bool created;
-        private object userData;
-        private string name;
+        private object? userData;
+        private string? name;
 
         /// <summary>
         ///  This is an abstract class.  Instances cannot be created, so the constructor
         ///  is only called from derived classes.
         /// </summary>
-        protected Menu(MenuItem[] items)
+        protected Menu(MenuItem[]? items)
         {
             if (items != null)
             {
@@ -104,13 +104,13 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.MenuMDIListItemDescr))
         ]
-        public MenuItem MdiListItem
+        public MenuItem? MdiListItem
         {
             get
             {
                 for (int i = 0; i < ItemCount; i++)
                 {
-                    MenuItem item = items[i];
+                    MenuItem? item = items[i];
                     if (item.MdiList)
                     {
                         return item;
@@ -197,7 +197,7 @@ namespace WinFormsLegacyControls
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
-        public object Tag
+        public object? Tag
         {
             get
             {
@@ -239,7 +239,7 @@ namespace WinFormsLegacyControls
                 throw new ArgumentNullException(nameof(menuSrc));
             }
 
-            MenuItem[] newItems = null;
+            MenuItem[]? newItems = null;
             if (menuSrc.items != null)
             {
                 int count = menuSrc.MenuItems.Count;
@@ -313,7 +313,7 @@ namespace WinFormsLegacyControls
                     item.Parent = null;
                     item.Dispose();
                 }
-                items = null;
+                items = null!;
             }
             if (handle != IntPtr.Zero)
             {
@@ -327,11 +327,11 @@ namespace WinFormsLegacyControls
             base.Dispose(disposing);
         }
 
-        public MenuItem FindMenuItem(int type, IntPtr value)
+        public MenuItem? FindMenuItem(int type, IntPtr value)
         {
             for (int i = 0; i < ItemCount; i++)
             {
-                MenuItem item = items[i];
+                MenuItem? item = items[i];
                 switch (type)
                 {
                     case FindHandle:
@@ -430,9 +430,9 @@ namespace WinFormsLegacyControls
         ///  This can occur if it's contained in a MainMenu or if it isn't
         ///  currently contained in any menu at all.
         /// </summary>
-        public ContextMenu GetContextMenu()
+        public ContextMenu? GetContextMenu()
         {
-            Menu menuT;
+            Menu? menuT;
             for (menuT = this; !(menuT is ContextMenu);)
             {
                 if (!(menuT is MenuItem))
@@ -453,9 +453,9 @@ namespace WinFormsLegacyControls
         ///  This can occur if it's contained in a ContextMenu or if it isn't
         ///  currently contained in any menu at all.
         /// </summary>
-        public MainMenu GetMainMenu()
+        public MainMenu? GetMainMenu()
         {
-            Menu menuT;
+            Menu? menuT;
             for (menuT = this; !(menuT is MainMenu);)
             {
                 if (!(menuT is MenuItem))
@@ -554,7 +554,7 @@ namespace WinFormsLegacyControls
 
             for (i = 0; i < menuSrc.ItemCount; i++)
             {
-                item = menuSrc.items[i];
+                item = menuSrc.items![i];
 
                 switch (item.MergeType)
                 {
@@ -585,7 +585,7 @@ namespace WinFormsLegacyControls
                         MenuItems.Add(j, item.MergeMenu());
                         break;
                     }
-                    itemDst = items[j];
+                    itemDst = items![j];
                     if (itemDst.MergeOrder != mergeOrder)
                     {
                         MenuItems.Add(j, item.MergeMenu());
@@ -611,7 +611,7 @@ namespace WinFormsLegacyControls
 
         internal virtual bool ProcessInitMenuPopup(IntPtr handle)
         {
-            MenuItem item = FindMenuItem(FindHandle, handle);
+            MenuItem? item = FindMenuItem(FindHandle, handle);
             if (item != null)
             {
                 item.OnInitMenuPopup(EventArgs.Empty);
@@ -623,7 +623,7 @@ namespace WinFormsLegacyControls
 
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            MenuItem item = FindMenuItem(FindShortcut, (IntPtr)(int)keyData);
+            MenuItem? item = FindMenuItem(FindShortcut, (IntPtr)(int)keyData);
             return item != null ? item.ShortcutClick() : false;
         }
 
@@ -662,7 +662,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal void WmMenuChar(ref Message m)
         {
-            Menu menu = (m.LParam == handle) ? this : FindMenuItem(FindHandle, m.LParam);
+            Menu? menu = (m.LParam == handle) ? this : FindMenuItem(FindHandle, m.LParam);
 
             if (menu == null)
             {
@@ -728,7 +728,7 @@ namespace WinFormsLegacyControls
                 // set not supported
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -743,7 +743,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual MenuItem this[string key]
+            public virtual MenuItem? this[string key]
             {
                 get
                 {
@@ -909,7 +909,7 @@ namespace WinFormsLegacyControls
                     MenuItem[] newItems = new MenuItem[owner.ItemCount < 2 ? 4 : owner.ItemCount * 2];
                     if (owner.ItemCount > 0)
                     {
-                        System.Array.Copy(owner.items, 0, newItems, 0, owner.ItemCount);
+                        System.Array.Copy(owner.items!, 0, newItems, 0, owner.ItemCount);
                     }
 
                     owner.items = newItems;
@@ -939,7 +939,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            int IList.Add(object value)
+            int IList.Add(object? value)
             {
                 if (value is MenuItem)
                 {
@@ -956,7 +956,7 @@ namespace WinFormsLegacyControls
                 return IndexOf(value) != -1;
             }
 
-            bool IList.Contains(object value)
+            bool IList.Contains(object? value)
             {
                 if (value is MenuItem)
                 {
@@ -1005,7 +1005,7 @@ namespace WinFormsLegacyControls
             {
                 if ((menuItemsToLookIn == null) || (foundMenuItems == null))
                 {
-                    return null;  //
+                    return null!;  //
                 }
 
                 // Perform breadth first search - as it's likely people will want controls belonging
@@ -1056,7 +1056,7 @@ namespace WinFormsLegacyControls
                 return -1;
             }
 
-            int IList.IndexOf(object value)
+            int IList.IndexOf(object? value)
             {
                 if (value is MenuItem)
                 {
@@ -1103,7 +1103,7 @@ namespace WinFormsLegacyControls
                 return -1;
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 if (value is MenuItem)
                 {
@@ -1137,7 +1137,7 @@ namespace WinFormsLegacyControls
                     }
 
                     owner._itemCount = 0;
-                    owner.items = null;
+                    owner.items = null!;
 
                     owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
@@ -1176,7 +1176,7 @@ namespace WinFormsLegacyControls
                 item.Parent = null;
                 owner._itemCount--;
                 System.Array.Copy(owner.items, index + 1, owner.items, index, owner.ItemCount - index);
-                owner.items[owner.ItemCount] = null;
+                owner.items[owner.ItemCount] = null!;
                 owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
                 //if the last item was removed, clear the collection
@@ -1212,7 +1212,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 if (value is MenuItem)
                 {

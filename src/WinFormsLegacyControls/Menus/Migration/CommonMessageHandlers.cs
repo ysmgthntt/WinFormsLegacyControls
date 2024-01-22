@@ -52,7 +52,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             // A pointer to the correct MenuItem is stored in the draw item
             // information sent with the message.
             // (See MenuItem.CreateMenuItemInfo)
-            MenuItem menuItem = MenuItem.GetMenuItemFromItemData(itemData);
+            MenuItem? menuItem = MenuItem.GetMenuItemFromItemData(itemData);
 
             // Delegate this message to the menu item
             if (menuItem != null)
@@ -90,7 +90,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 // A pointer to the correct MenuItem is stored in the measure item
                 // information sent with the message.
                 // (See MenuItem.CreateMenuItemInfo)
-                MenuItem menuItem = MenuItem.GetMenuItemFromItemData(itemData);
+                MenuItem? menuItem = MenuItem.GetMenuItemFromItemData(itemData);
                 Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
 
                 // Delegate this message to the menu item
@@ -121,7 +121,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             int item = PARAM.LOWORD(m.WParam);
             MENU_ITEM_FLAGS flags = (MENU_ITEM_FLAGS)PARAM.HIWORD(m.WParam);
             IntPtr hmenu = m.LParam;
-            MenuItem mi = null;
+            MenuItem? mi = null;
 
             if ((flags & MENU_ITEM_FLAGS.MF_SYSMENU) != 0)
             {
@@ -129,10 +129,10 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
             else if ((flags & MENU_ITEM_FLAGS.MF_POPUP) == 0)
             {
-                Command cmd = Command.GetCommandFromID(item);
+                Command? cmd = Command.GetCommandFromID(item);
                 if (cmd != null)
                 {
-                    object reference = cmd.Target;
+                    object? reference = cmd.Target;
                     if (reference != null && reference is MenuItem.MenuItemData)
                     {
                         mi = ((MenuItem.MenuItemData)reference).baseItem;
@@ -152,22 +152,22 @@ namespace WinFormsLegacyControls.Menus.Migration
             //DefWndProc(ref m);
         }
 
-        private static MenuItem GetMenuItemFromHandleId(IntPtr hmenu, int item)
+        private static MenuItem? GetMenuItemFromHandleId(IntPtr hmenu, int item)
         {
-            MenuItem mi = null;
+            MenuItem? mi = null;
             int id = (int)PInvoke.GetMenuItemID((HMENU)hmenu, item);
             if (id == unchecked((int)0xFFFFFFFF))
             {
                 IntPtr childMenu = IntPtr.Zero;
                 childMenu = PInvoke.GetSubMenu((HMENU)hmenu, item);
                 int count = PInvoke.GetMenuItemCount((HMENU)childMenu);
-                MenuItem found = null;
+                MenuItem? found = null;
                 for (int i = 0; i < count; i++)
                 {
                     found = GetMenuItemFromHandleId(childMenu, i);
                     if (found != null)
                     {
-                        Menu parent = found.Parent;
+                        Menu? parent = found.Parent;
                         if (parent != null && parent is MenuItem)
                         {
                             found = (MenuItem)parent;
@@ -181,10 +181,10 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
             else
             {
-                Command cmd = Command.GetCommandFromID(id);
+                Command? cmd = Command.GetCommandFromID(id);
                 if (cmd != null)
                 {
-                    object reference = cmd.Target;
+                    object? reference = cmd.Target;
                     if (reference != null && reference is MenuItem.MenuItemData)
                     {
                         mi = ((MenuItem.MenuItemData)reference).baseItem;

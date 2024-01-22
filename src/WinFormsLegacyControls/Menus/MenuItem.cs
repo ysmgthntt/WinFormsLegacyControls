@@ -40,9 +40,9 @@ namespace WinFormsLegacyControls
         private const int StateHiLite = 0x00000080;
 
         private bool _hasHandle;
-        private MenuItemData _data;
+        private MenuItemData _data = null!;
         private int _dataVersion;
-        private MenuItem _nextLinkedItem; // Next item linked to the same MenuItemData.
+        private MenuItem? _nextLinkedItem; // Next item linked to the same MenuItemData.
 
         // We need to store a table of all created menuitems, so that other objects
         // such as ContainerControl can get a reference to a particular menuitem,
@@ -55,7 +55,7 @@ namespace WinFormsLegacyControls
         private bool _menuItemIsCreated = false;
 
 #if DEBUG
-        private string _debugText;
+        private string? _debugText;
         private readonly int _creationNumber;
         private static int CreateCount;
 #endif
@@ -116,8 +116,8 @@ namespace WinFormsLegacyControls
         ///  a merge type, and order specified for the menu item.
         /// </summary>
         public MenuItem(MenuMerge mergeType, int mergeOrder, Shortcut shortcut,
-                        string text, EventHandler onClick, EventHandler onPopup,
-                        EventHandler onSelect, MenuItem[] items) : base(items)
+                        string? text, EventHandler? onClick, EventHandler? onPopup,
+                        EventHandler? onSelect, MenuItem[]? items) : base(items)
         {
             new MenuItemData(this, mergeType, mergeOrder, shortcut, true,
                              text, onClick, onPopup, onSelect, null, null);
@@ -294,7 +294,7 @@ namespace WinFormsLegacyControls
                 int oldIndex = Index;
                 if (oldIndex >= 0)
                 {
-                    if (value < 0 || value >= Parent.ItemCount)
+                    if (value < 0 || value >= Parent!.ItemCount)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, nameof(Index), value));
                     }
@@ -329,7 +329,7 @@ namespace WinFormsLegacyControls
                         }
                     }
 
-                    if (FindMdiForms().Length > 0)
+                    if (FindMdiForms(out _).Length > 0)
                     {
                         return true;
                     }
@@ -512,7 +512,7 @@ namespace WinFormsLegacyControls
         ///  Gets the menu in which this menu item appears.
         /// </summary>
         [Browsable(false)]
-        public Menu Parent { get; internal set; }
+        public Menu? Parent { get; internal set; }
 
         /// <summary>
         ///  Gets or sets a value that indicates whether the menu item, if checked,
@@ -768,7 +768,7 @@ namespace WinFormsLegacyControls
                     fixed(char* ptr = dwTypeData)
                     {
                         info.dwTypeData = ptr;
-                        PInvoke.InsertMenuItem(Parent, unchecked((uint)-1), true, ref info);
+                        PInvoke.InsertMenuItem(Parent!, unchecked((uint)-1), true, ref info);
                     }
                 }
 
@@ -779,7 +779,7 @@ namespace WinFormsLegacyControls
                 // TODO: Pref
                 if (RenderIsRightToLeft)
                 {
-                    Parent.UpdateRtl(true);
+                    Parent!.UpdateRtl(true);
                 }
 
 #if DEBUG
@@ -793,7 +793,7 @@ namespace WinFormsLegacyControls
                                 MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
                     };
                 }
-                PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
+                PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref infoVerify);
 #endif
             }
         }
@@ -949,7 +949,7 @@ namespace WinFormsLegacyControls
         ///  To reliably tell IDs and structure addresses apart, IDs live in the 0xC0000000-0xFFFFFFFF range.
         ///  This is the top 1Gb of unmananged process memory, where an app's heap allocations should never be.
         /// </summary>
-        internal static MenuItem GetMenuItemFromItemData(IntPtr itemData)
+        internal static MenuItem? GetMenuItemFromItemData(IntPtr itemData)
         {
             uint uniqueID = (uint)(ulong)itemData;
             if (uniqueID == 0)
@@ -1079,7 +1079,7 @@ namespace WinFormsLegacyControls
                     UpdateMenuItem(force: true);
                 }
 
-                MainMenu main = GetMainMenu();
+                MainMenu? main = GetMainMenu();
                 if (main != null && ((_data.State & StateInMdiPopup) == 0))
                 {
                     main.ItemsChanged(change, this);
@@ -1101,7 +1101,7 @@ namespace WinFormsLegacyControls
                 }
                 else if (_data != null)
                 {
-                    MenuItem currentMenuItem = _data.firstItem;
+                    MenuItem? currentMenuItem = _data.firstItem;
                     while (currentMenuItem != null)
                     {
                         if (currentMenuItem.created)
@@ -1117,11 +1117,12 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private Form[] FindMdiForms()
+        private Form[] FindMdiForms(out Form? activeMdiChild)
         {
-            Form[] forms = null;
-            MainMenu main = GetMainMenu();
-            Form menuForm = null;
+            Form[]? forms = null;
+            MainMenu? main = GetMainMenu();
+            Form? menuForm = null;
+            activeMdiChild = null;
             if (main != null)
             {
                 menuForm = main./*GetFormUnsafe()*/form;
@@ -1129,6 +1130,7 @@ namespace WinFormsLegacyControls
             if (menuForm != null)
             {
                 forms = menuForm.MdiChildren;
+                activeMdiChild = menuForm.ActiveMdiChild;
             }
             if (forms == null)
             {
@@ -1154,11 +1156,11 @@ namespace WinFormsLegacyControls
                 CleanListItems(this);
 
                 // Add new items
-                Form[] forms = FindMdiForms();
+                Form[] forms = FindMdiForms(out var activeMdiChild);
                 if (forms != null && forms.Length > 0)
                 {
 
-                    Form activeMdiChild = GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
+                    //Form activeMdiChild = GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
 
                     if (senderMenu.MenuItems.Count > 0)
                     {
@@ -1437,7 +1439,7 @@ namespace WinFormsLegacyControls
             char* dwTypeData = stackalloc char[Text.Length + 2];
             info.dwTypeData = dwTypeData;
             info.cch = (uint)((Text.Length + 2) - 1);
-            PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
+            PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
             if (setRightToLeftBit)
             {
                 info.fType |= MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER;
@@ -1447,7 +1449,7 @@ namespace WinFormsLegacyControls
                 info.fType &= ~(MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER);
             }
 
-            PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
+            PInvoke.SetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
         }
 
         internal void UpdateMenuItem(bool force)
@@ -1491,7 +1493,7 @@ namespace WinFormsLegacyControls
                 _dataVersion = _data._version;
                 if (Parent is MainMenu mainMenu)
                 {
-                    Form f = mainMenu./*GetFormUnsafe()*/form;
+                    Form? f = mainMenu./*GetFormUnsafe()*/form;
                     if (f != null)
                     {
                         PInvoke.DrawMenuBar(f);
@@ -1548,8 +1550,8 @@ namespace WinFormsLegacyControls
 
         internal sealed class MenuItemData : ICommandExecutor
         {
-            internal MenuItem baseItem;
-            internal MenuItem firstItem;
+            internal MenuItem baseItem = null!;
+            internal MenuItem? firstItem;
 
             private int _state;
             internal int _version;
@@ -1559,17 +1561,17 @@ namespace WinFormsLegacyControls
             private short _mnemonic;
             internal Shortcut _shortcut;
             internal bool _showShortcut;
-            internal EventHandler _onClick;
-            internal EventHandler _onPopup;
-            internal EventHandler _onSelect;
-            internal DrawItemEventHandler _onDrawItem;
-            internal MeasureItemEventHandler _onMeasureItem;
+            internal EventHandler? _onClick;
+            internal EventHandler? _onPopup;
+            internal EventHandler? _onSelect;
+            internal DrawItemEventHandler? _onDrawItem;
+            internal MeasureItemEventHandler? _onMeasureItem;
 
-            private Command _cmd;
+            private Command? _cmd;
 
             internal MenuItemData(MenuItem baseItem, MenuMerge mergeType, int mergeOrder, Shortcut shortcut, bool showShortcut,
-                                  string caption, EventHandler onClick, EventHandler onPopup, EventHandler onSelect,
-                                  DrawItemEventHandler onDrawItem, MeasureItemEventHandler onMeasureItem)
+                                  string? caption, EventHandler? onClick, EventHandler? onPopup, EventHandler? onSelect,
+                                  DrawItemEventHandler? onDrawItem, MeasureItemEventHandler? onMeasureItem)
             {
                 AddItem(baseItem);
                 _mergeType = mergeType;
@@ -1600,7 +1602,7 @@ namespace WinFormsLegacyControls
                     if (((_state & StateMdiList) != 0) != value)
                     {
                         SetState(StateMdiList, value);
-                        for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
+                        for (MenuItem? item = firstItem; item != null; item = item._nextLinkedItem)
                         {
                             item.ItemsChanged(MenuChangeKind.CHANGE_MDI);
                         }
@@ -1662,7 +1664,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            internal object UserData { get; set; }
+            internal object? UserData { get; set; }
 
             internal void AddItem(MenuItem item)
             {
@@ -1700,7 +1702,7 @@ namespace WinFormsLegacyControls
 
             private void ItemsChanged(MenuChangeKind change)
             {
-                for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
+                for (MenuItem? item = firstItem; item != null; item = item._nextLinkedItem)
                 {
                     item.Parent?.ItemsChanged(change);
                 }
@@ -1716,8 +1718,8 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    MenuItem itemT;
-                    for (itemT = firstItem; item != itemT._nextLinkedItem;)
+                    MenuItem? itemT;
+                    for (itemT = firstItem; item != itemT!._nextLinkedItem;)
                     {
                         itemT = itemT._nextLinkedItem;
                     }
@@ -1725,12 +1727,12 @@ namespace WinFormsLegacyControls
                     itemT._nextLinkedItem = item._nextLinkedItem;
                 }
                 item._nextLinkedItem = null;
-                item._data = null;
+                item._data = null!;
                 item._dataVersion = 0;
 
                 if (item == baseItem)
                 {
-                    baseItem = firstItem;
+                    baseItem = firstItem!;
                 }
 
                 if (firstItem == null)
@@ -1783,7 +1785,7 @@ namespace WinFormsLegacyControls
             private void UpdateMenuItems()
             {
                 _version++;
-                for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
+                for (MenuItem? item = firstItem; item != null; item = item._nextLinkedItem)
                 {
                     item.UpdateMenuItem(force: true);
                 }
@@ -1813,7 +1815,7 @@ namespace WinFormsLegacyControls
             {
                 if (_boundIndex != -1)
                 {
-                    Form[] forms = _parent.FindMdiForms();
+                    Form[] forms = _parent.FindMdiForms(out _);
                     Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
 
                     if (forms != null && forms.Length > _boundIndex)
@@ -1840,9 +1842,9 @@ namespace WinFormsLegacyControls
 
             public override void OnClick(EventArgs e)
             {
-                Form[] forms = _parent.FindMdiForms();
+                Form[] forms = _parent.FindMdiForms(out var active);
                 Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
-                Form active = _parent.GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
+                //Form active = _parent.GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
                 Debug.Assert(active != null, "Didn't get the active MDI child");
                 if (forms != null && forms.Length > 0 && active != null)
                 {
@@ -1852,10 +1854,11 @@ namespace WinFormsLegacyControls
                         DialogResult result = dialog.ShowDialog();
                         if (result == DialogResult.OK)
                         {
-                            dialog.ActiveChildForm.Activate();
-                            if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused)
+                            active = dialog.ActiveChildForm!;
+                            active.Activate();
+                            if (active.ActiveControl != null && !active.ActiveControl.Focused)
                             {
-                                dialog.ActiveChildForm.ActiveControl.Focus();
+                                active.ActiveControl.Focus();
                             }
                         }
                     }

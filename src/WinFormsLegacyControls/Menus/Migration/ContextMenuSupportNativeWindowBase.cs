@@ -1,7 +1,5 @@
 ﻿// https://github.com/dotnet/winforms/pull/2157/files#diff-07a0a87cedab0d76c974ce8b105912a1b986c87116c7ee0ac73d6d5d65e4b48a
 
-#nullable disable
-
 using WinFormsLegacyControls.Migration;
 using static Interop;
 
@@ -11,7 +9,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         where TControl : Control
     {
         private readonly TControl _control;
-        private ContextMenu _contextMenu;
+        private ContextMenu? _contextMenu;
 
         protected ContextMenuSupportNativeWindowBase(TControl control)
         {
@@ -32,12 +30,12 @@ namespace WinFormsLegacyControls.Menus.Migration
 
         protected virtual void OnDetach() { }
 
-        private void Control_Disposed(object sender, EventArgs e)
+        private void Control_Disposed(object? sender, EventArgs e)
         {
             ControlDispose();
         }
 
-        private void Control_HandleCreated(object sender, EventArgs e)
+        private void Control_HandleCreated(object? sender, EventArgs e)
         {
             AssignHandle(_control.Handle);
         }
@@ -53,12 +51,12 @@ namespace WinFormsLegacyControls.Menus.Migration
         ///  Whidbey: ContextMenu is browsable false.  In all cases where both a context menu
         ///  and a context menu strip are assigned, context menu will be shown instead of context menu strip.
         /// </summary>
-        public /*virtual*/ ContextMenu ContextMenu
+        public /*virtual*/ ContextMenu? ContextMenu
         {
             get => _contextMenu;
             set
             {
-                ContextMenu oldValue = _contextMenu;
+                ContextMenu? oldValue = _contextMenu;
 
                 if (oldValue != value)
                 {
@@ -93,12 +91,12 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
         }
 
-        private void DetachContextMenu(object sender, EventArgs e) => ContextMenu = null;
+        private void DetachContextMenu(object? sender, EventArgs e) => ContextMenu = null;
 
         //protected override void Dispose(bool disposing)
         private void ControlDispose()
         {
-            ContextMenu contextMenu = _contextMenu;
+            ContextMenu? contextMenu = _contextMenu;
             if (contextMenu != null)
             {
                 contextMenu.Disposed -= new EventHandler(DetachContextMenu);
@@ -145,7 +143,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmContextMenu(ref Message m, Control sourceControl)
         {
-            ContextMenu contextMenu = _contextMenu;
+            ContextMenu? contextMenu = _contextMenu;
 
             if (contextMenu is not null)
             {
@@ -199,7 +197,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
             if (isContextMenu)
             {
-                ContextMenu contextMenu = _contextMenu;
+                ContextMenu? contextMenu = _contextMenu;
                 if (contextMenu != null)
                 {
                     //contextMenu.OnCollapse(EventArgs.Empty);
@@ -215,7 +213,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmInitMenuPopup(ref Message m)
         {
-            ContextMenu contextMenu = _contextMenu;
+            ContextMenu? contextMenu = _contextMenu;
             if (contextMenu != null)
             {
 
@@ -234,7 +232,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmMenuChar(ref Message m)
         {
-            Menu menu = ContextMenu;
+            Menu? menu = ContextMenu;
             if (menu != null)
             {
                 menu.WmMenuChar(ref m);

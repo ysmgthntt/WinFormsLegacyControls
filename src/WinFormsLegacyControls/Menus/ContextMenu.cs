@@ -22,7 +22,7 @@ namespace WinFormsLegacyControls
     {
         private static readonly object _popupEvent = new();
         private static readonly object _collapseEvent = new();
-        private Control sourceControl;
+        private Control? sourceControl;
 
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
 
@@ -51,7 +51,7 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ContextMenuSourceControlDescr))
         ]
-        public Control SourceControl
+        public Control? SourceControl
         {
             get
             {

@@ -1,7 +1,5 @@
 ﻿// https://github.com/dotnet/winforms/pull/2157/files#diff-a9c810ef421afef2fe48558e9290e42db90f749eb89335109e130b8d679314c6
 
-#nullable disable
-
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using WinFormsLegacyControls.Migration;
@@ -50,13 +48,13 @@ namespace WinFormsLegacyControls.Menus.Migration
             ReleaseHandle();
         }
 
-        MainMenu ISupportNativeWindow<Form, MainMenu, MainMenuSupportFormNativeWindow>.Property
+        MainMenu? ISupportNativeWindow<Form, MainMenu, MainMenuSupportFormNativeWindow>.Property
         {
             get => Menu;
             set => Menu = value;
         }
 
-        private void Form_HandleCreated(object sender, EventArgs e)
+        private void Form_HandleCreated(object? sender, EventArgs e)
         {
             AssignHandle(_form.Handle);
 
@@ -74,7 +72,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             OnHandleCreated();
         }
 
-        private void Form_StyleChanged(object sender, EventArgs e)
+        private void Form_StyleChanged(object? sender, EventArgs e)
         {
             if (_form.MdiParent is not null)
             {
@@ -112,12 +110,12 @@ namespace WinFormsLegacyControls.Menus.Migration
         ///  Gets or sets the <see cref='MainMenu'/>
         ///  that is displayed in the form.
         /// </summary>
-        public MainMenu Menu
+        public MainMenu? Menu
         {
             get => _mainMenu;
             set
             {
-                MainMenu mainMenu = Menu;
+                MainMenu? mainMenu = Menu;
 
                 if (mainMenu != value)
                 {
@@ -158,24 +156,24 @@ namespace WinFormsLegacyControls.Menus.Migration
         ///  Gets the merged menu for the
         ///  form.
         /// </summary>
-        public MainMenu MergedMenu
+        public MainMenu? MergedMenu
         {
             get
             {
-                Form formMdiParent = _form.MdiParent;
+                Form? formMdiParent = _form.MdiParent;
                 if (formMdiParent == null)
                 {
                     return null;
                 }
 
-                MainMenu mergedMenu = _mergedMenu;
+                MainMenu? mergedMenu = _mergedMenu;
                 if (mergedMenu != null)
                 {
                     return mergedMenu;
                 }
 
-                MainMenu parentMenu = formMdiParent.GetMenu();
-                MainMenu mainMenu = Menu;
+                MainMenu? parentMenu = formMdiParent.GetMenu();
+                MainMenu? mainMenu = Menu;
 
                 if (mainMenu == null)
                 {
@@ -200,14 +198,14 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         //protected override void SetVisibleCore(bool value)
-        private void Form_VisibleChanged(object sender, EventArgs e)
+        private void Form_VisibleChanged(object? sender, EventArgs e)
         {
             if (_form.IsMdiChild && !_form.Visible)
                 InvalidateMergedMenu();
         }
 
         //internal override void AfterControlRemoved(Control control, Control oldParent)
-        private void Form_ControlRemoved(object sender, ControlEventArgs e)
+        private void Form_ControlRemoved(object? sender, ControlEventArgs e)
         {
             if (e.Control is MdiClient)
             {
@@ -263,9 +261,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         */
 
         //protected override void Dispose(bool disposing)
-        private void Form_Disposed(object sender, EventArgs e)
+        private void Form_Disposed(object? sender, EventArgs e)
         {
-            MainMenu mainMenu = Menu;
+            MainMenu? mainMenu = Menu;
 
             // We should only dispose this form's menus!
             if (mainMenu != null && mainMenu.ownerForm == _form)
@@ -281,7 +279,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
             MenuChanged(MenuChangeKind.CHANGE_ITEMS, null);
 
-            MainMenu dummyMenu = _dummyMenu;
+            MainMenu? dummyMenu = _dummyMenu;
 
             if (dummyMenu != null)
             {
@@ -289,7 +287,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 _dummyMenu = null;
             }
 
-            MainMenu mergedMenu = _mergedMenu;
+            MainMenu? mergedMenu = _mergedMenu;
 
             if (mergedMenu != null)
             {
@@ -323,9 +321,9 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         // Package scope for menu interop
-        internal void MenuChanged(MenuChangeKind change, Menu menu)
+        internal void MenuChanged(MenuChangeKind change, Menu? menu)
         {
-            Form parForm = _form.ParentForm;
+            Form? parForm = _form.ParentForm;
             if (parForm != null && _form == GetActiveMdiChildInternal(parForm))
             {
                 parForm.MenuChanged(change, menu);
@@ -389,7 +387,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         }
 
         //protected virtual void OnMdiChildActivate(EventArgs e)
-        private void Form_MdiChildActivate(object sender, EventArgs e)
+        private void Form_MdiChildActivate(object? sender, EventArgs e)
         {
             if (GetActiveMdiChildInternal(_form) is null)
                 //private void DeactivateMdiChild()
@@ -402,7 +400,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         internal bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            MainMenu curMenu = _curMenu;
+            MainMenu? curMenu = _curMenu;
             if (curMenu != null && curMenu.ProcessCmdKey(ref msg, keyData))
             {
                 return true;
@@ -442,7 +440,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
         private void UpdateMenuHandles()
         {
-            Form form;
+            Form? form;
 
             // Forget the current menu.
             if (_curMenu is not null)
@@ -477,7 +475,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
         }
 
-        private void UpdateMenuHandles(MainMenu menu, bool forceRedraw)
+        private void UpdateMenuHandles(MainMenu? menu, bool forceRedraw)
         {
             Debug.Assert(_form.IsHandleCreated, "shouldn't call when handle == 0");
 
@@ -488,7 +486,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 return;
             }
 
-            MainMenu curMenu = menu;
+            MainMenu? curMenu = menu;
             if (curMenu != null)
             {
                 curMenu.form = _form;
@@ -529,7 +527,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                     // (set to null) so that duplicate control buttons are not placed on the menu bar when
                     // an ole menu is being removed.
                     // Make MDI forget the mdi item position.
-                    MainMenu dummyMenu = _dummyMenu;
+                    MainMenu? dummyMenu = _dummyMenu;
 
                     if (dummyMenu == null)
                     {
@@ -539,7 +537,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                         };
                         _dummyMenu = dummyMenu;
                     }
-                    PInvoke.SendMessage(ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)_dummyMenu.Handle);
+                    PInvoke.SendMessage(ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Handle);
 
                     if (menu != null)
                     {
@@ -573,7 +571,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmInitMenuPopup(ref Message m)
         {
-            MainMenu curMenu = _curMenu;
+            MainMenu? curMenu = _curMenu;
             if (curMenu != null)
             {
 
@@ -592,11 +590,11 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmMenuChar(ref Message m)
         {
-            MainMenu curMenu = _curMenu;
+            MainMenu? curMenu = _curMenu;
             if (curMenu == null)
             {
 
-                Form formMdiParent = _form.MdiParent;
+                Form? formMdiParent = _form.MdiParent;
                 if (formMdiParent?.GetMenu() is not null)
                 {
                     PInvoke.PostMessage(formMdiParent, PInvoke.WM_SYSCOMMAND, PInvoke.SC_KEYMENU, m.WParam);
@@ -625,10 +623,10 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmNCDestroy(ref Message m)
         {
-            MainMenu mainMenu = Menu;
-            MainMenu dummyMenu = _dummyMenu;
-            MainMenu curMenu = _curMenu;
-            MainMenu mergedMenu = _mergedMenu;
+            MainMenu? mainMenu = Menu;
+            MainMenu? dummyMenu = _dummyMenu;
+            MainMenu? curMenu = _curMenu;
+            MainMenu? mergedMenu = _mergedMenu;
 
             if (mainMenu != null)
             {

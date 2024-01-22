@@ -60,7 +60,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The array of buttons we're working with.
         /// </summary>
-        private ToolBarButton[] buttons;
+        private ToolBarButton[] buttons = null!;
 
         /// <summary>
         ///  The number of buttons we're working with
@@ -76,7 +76,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The ImageList object that contains the main images for our control.
         /// </summary>
-        private ImageList imageList = null;
+        private ImageList? imageList = null;
 
         /// <summary>
         ///  The maximum width of buttons currently being displayed.  This is needed
@@ -232,7 +232,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get
             {
@@ -609,7 +609,7 @@ namespace WinFormsLegacyControls
         DefaultValue(null),
         SRDescription(nameof(SR.ToolBarImageListDescr))
         ]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
             get
             {
@@ -901,6 +901,7 @@ namespace WinFormsLegacyControls
         Bindable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
+        [AllowNull]
         public override string Text
         {
             get
@@ -1072,7 +1073,7 @@ namespace WinFormsLegacyControls
         ///  Resets the imageList to null.  We wire this method up to the imageList's
         ///  Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </summary>
-        private void DetachImageList(object sender, EventArgs e)
+        private void DetachImageList(object? sender, EventArgs e)
         {
             ImageList = null;
         }
@@ -1103,7 +1104,7 @@ namespace WinFormsLegacyControls
                             b.Dispose();
                         }
                         // from ToolBarButtonCollection.Clear
-                        buttons = null;
+                        buttons = null!;
                         buttonCount = 0;
                     }
                 }
@@ -1161,7 +1162,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private void ImageListRecreateHandle(object sender, EventArgs e)
+        private void ImageListRecreateHandle(object? sender, EventArgs e)
         {
             if (IsHandleCreated)
             {
@@ -1462,7 +1463,7 @@ namespace WinFormsLegacyControls
                 System.Array.Copy(buttons, index + 1, buttons, index, buttonCount - index);
             }
 
-            buttons[buttonCount] = null;
+            buttons[buttonCount] = null!;
         }
 
         /// <summary>
@@ -1614,7 +1615,7 @@ namespace WinFormsLegacyControls
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
-            Menu menu = tbb.DropDownMenu;
+            Menu? menu = tbb.DropDownMenu;
             if (menu != null)
             {
                 RECT rc = new RECT();
@@ -1629,7 +1630,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    Menu main = menu.GetMainMenu();
+                    Menu? main = menu.GetMainMenu();
                     if (main != null)
                     {
                         main.ProcessInitMenuPopup(menu.Handle);
@@ -1916,7 +1917,7 @@ namespace WinFormsLegacyControls
             {
                 get
                 {
-                    if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
+                    if (index < 0 || (/*(owner.buttons != null) && */(index >= owner.buttonCount)))
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
@@ -1941,7 +1942,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -1962,7 +1963,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
-            public virtual ToolBarButton this[string key]
+            public virtual ToolBarButton? this[string key]
             {
                 get
                 {
@@ -2052,7 +2053,7 @@ namespace WinFormsLegacyControls
                 return Add(button);
             }
 
-            int IList.Add(object button)
+            int IList.Add(object? button)
             {
                 if (button is ToolBarButton)
                 {
@@ -2106,7 +2107,7 @@ namespace WinFormsLegacyControls
                     owner.RemoveAt(x - 1);
                 }
 
-                owner.buttons = null;
+                owner.buttons = null!;
                 owner.buttonCount = 0;
                 if (!owner.Disposing)
                 {
@@ -2119,7 +2120,7 @@ namespace WinFormsLegacyControls
                 return IndexOf(button) != -1;
             }
 
-            bool IList.Contains(object button)
+            bool IList.Contains(object? button)
             {
                 if (button is ToolBarButton)
                 {
@@ -2159,7 +2160,7 @@ namespace WinFormsLegacyControls
                 return -1;
             }
 
-            int IList.IndexOf(object button)
+            int IList.IndexOf(object? button)
             {
                 if (button is ToolBarButton)
                 {
@@ -2211,7 +2212,7 @@ namespace WinFormsLegacyControls
                 owner.InsertButton(index, button);
             }
 
-            void IList.Insert(int index, object button)
+            void IList.Insert(int index, object? button)
             {
                 if (button is ToolBarButton)
                 {
@@ -2274,7 +2275,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            void IList.Remove(object button)
+            void IList.Remove(object? button)
             {
                 if (button is ToolBarButton)
                 {

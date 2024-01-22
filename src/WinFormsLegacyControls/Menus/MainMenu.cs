@@ -16,8 +16,8 @@ namespace WinFormsLegacyControls
     [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
     public partial class MainMenu : Menu
     {
-        internal Form form;
-        internal Form ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
+        internal Form? form;
+        internal Form? ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
         private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
         private static readonly object _collapseEvent = new();
 
@@ -156,7 +156,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates which form in which we are currently residing [if any]
         /// </summary>
-        public Form GetForm()
+        public Form? GetForm()
         {
             return form;
         }

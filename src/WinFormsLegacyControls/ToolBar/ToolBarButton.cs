@@ -28,19 +28,19 @@ namespace WinFormsLegacyControls
     ]
     public class ToolBarButton : Component
     {
-        string text;
-        string name = null;
-        string tooltipText;
+        string? text;
+        string? name = null;
+        string? tooltipText;
         bool enabled = true;
         bool visible = true;
         bool pushed = false;
         bool partialPush = false;
         private int commandId = -1; // the cached command id of the button.
-        private ToolBarButtonImageIndexer imageIndexer;
+        private ToolBarButtonImageIndexer? imageIndexer;
 
         ToolBarButtonStyle style = ToolBarButtonStyle.PushButton;
 
-        object userData;
+        object? userData;
 
         // These variables below are used by the ToolBar control to help
         // it manage some information about us.
@@ -54,13 +54,13 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Our parent ToolBar control.
         /// </summary>
-        internal ToolBar parent;
+        internal ToolBar? parent;
 
         /// <summary>
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
-        private Menu dropDownMenu = null;
+        private Menu? dropDownMenu = null;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
@@ -85,7 +85,7 @@ namespace WinFormsLegacyControls
                 owner = button;
             }
 
-            public override ImageList ImageList
+            public override ImageList? ImageList
             {
                 get
                 {
@@ -122,7 +122,7 @@ namespace WinFormsLegacyControls
         TypeConverter(typeof(ReferenceConverter)),
         SRDescription(nameof(SR.ToolBarButtonMenuDescr))
         ]
-        public Menu DropDownMenu
+        public Menu? DropDownMenu
         {
             get
             {
@@ -267,7 +267,7 @@ namespace WinFormsLegacyControls
         [
             Browsable(false),
         ]
-        public ToolBar Parent
+        public ToolBar? Parent
         {
             get
             {
@@ -404,7 +404,7 @@ namespace WinFormsLegacyControls
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
-        public object Tag
+        public object? Tag
         {
             get
             {
@@ -424,6 +424,7 @@ namespace WinFormsLegacyControls
         DefaultValue(""),
         SRDescription(nameof(SR.ToolBarButtonTextDescr))
         ]
+        [AllowNull]
         public string Text
         {
             get
@@ -434,7 +435,7 @@ namespace WinFormsLegacyControls
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    value = null;
+                    value = null!;
                 }
 
                 if ((value == null && text != null) ||
@@ -595,7 +596,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private int FindButtonIndex()
         {
-            for (int x = 0; x < parent.Buttons.Count; x++)
+            for (int x = 0; x < parent!.Buttons.Count; x++)
             {
                 if (parent.Buttons[x] == this)
                 {
@@ -611,7 +612,7 @@ namespace WinFormsLegacyControls
         internal int GetButtonWidth()
         {
             // Assume that this button is the same width as the parent's ButtonSize's Width
-            int buttonWidth = Parent.ButtonSize.Width;
+            int buttonWidth = Parent!.ButtonSize.Width;
 
             TBBUTTONINFOW button;
             unsafe
@@ -634,7 +635,7 @@ namespace WinFormsLegacyControls
 
         private bool GetPushedState()
         {
-            if (PInvoke.SendMessage(parent, PInvoke.TB_ISBUTTONCHECKED, (WPARAM)FindButtonIndex()) != 0)
+            if (PInvoke.SendMessage(parent!, PInvoke.TB_ISBUTTONCHECKED, (WPARAM)FindButtonIndex()) != 0)
             {
                 pushed = true;
             }
@@ -780,7 +781,7 @@ namespace WinFormsLegacyControls
         internal unsafe void SetButtonInfo(bool updateText, int index)
         {
             TBBUTTONINFOW tbbi = GetTBBUTTONINFO(updateText, index);
-            string textValue = text;
+            string? textValue = text;
             if (textValue is null)
                 textValue = "\0\0";
             else
@@ -788,7 +789,7 @@ namespace WinFormsLegacyControls
             fixed (char* pszText = textValue)
             {
                 tbbi.pszText = pszText;
-                PInvoke.SendMessage(parent, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, ref tbbi);
+                PInvoke.SendMessage(parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, ref tbbi);
             }
         }
 

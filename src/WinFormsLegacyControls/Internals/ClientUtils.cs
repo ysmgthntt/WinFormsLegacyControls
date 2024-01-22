@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
         [ThreadStatic]
-        private static Hashtable enumValueInfo;
+        private static Hashtable? enumValueInfo;
         public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
 
         private class SequentialEnumInfo
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 enumValueInfo = new Hashtable();
             }
 
-            SequentialEnumInfo sequentialEnumInfo = null;
+            SequentialEnumInfo? sequentialEnumInfo = null;
 
             if (enumValueInfo.ContainsKey(t))
             {

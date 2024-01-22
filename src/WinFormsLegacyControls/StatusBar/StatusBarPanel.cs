@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -31,10 +29,10 @@ namespace WinFormsLegacyControls
         private const int PANELTEXTINSET = 3;
         private const int PANELGAP = 2;
 
-        private string text = string.Empty;
+        private string? text = string.Empty;
         private string name = string.Empty;
-        private string toolTipText = string.Empty;
-        private Icon icon = null;
+        private string? toolTipText = string.Empty;
+        private Icon? icon = null;
 
         private HorizontalAlignment alignment = HorizontalAlignment.Left;
         private StatusBarPanelBorderStyle borderStyle = StatusBarPanelBorderStyle.Sunken;
@@ -42,7 +40,7 @@ namespace WinFormsLegacyControls
 
         // these are package scope so the parent can get at them.
         //
-        private StatusBar parent = null;
+        private StatusBar? parent = null;
         private int width = DEFAULTWIDTH;
         private int right = 0;
         private int minWidth = DEFAULTMINWIDTH;
@@ -51,7 +49,7 @@ namespace WinFormsLegacyControls
 
         private bool initializing = false;
 
-        private object userData;
+        private object? userData;
 
         /// <summary>
         ///  Initializes a new default instance of the <see cref='StatusBarPanel'/> class.
@@ -153,6 +151,7 @@ namespace WinFormsLegacyControls
             }
         }
 
+        [MemberNotNullWhen(true, nameof(parent))]
         private bool Created
         {
             get
@@ -171,7 +170,7 @@ namespace WinFormsLegacyControls
         Localizable(true),
         SRDescription(nameof(SR.StatusBarPanelIconDescr))
         ]
-        public Icon Icon
+        public Icon? Icon
         {
             get
             {
@@ -284,7 +283,7 @@ namespace WinFormsLegacyControls
         ///  panel.
         /// </summary>
         [Browsable(false)]
-        public StatusBar Parent
+        public StatusBar? Parent
         {
             get
             {
@@ -295,7 +294,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Expose a direct setter for parent internally
         /// </summary>
-        internal StatusBar ParentInternal
+        internal StatusBar? ParentInternal
         {
             set
             {
@@ -356,7 +355,7 @@ namespace WinFormsLegacyControls
         DefaultValue(null),
         TypeConverter(typeof(StringConverter)),
         ]
-        public object Tag
+        public object? Tag
         {
             get
             {
@@ -549,7 +548,7 @@ namespace WinFormsLegacyControls
                 text = Text;
             }
 
-            Graphics g = parent.CreateGraphics/*Internal*/();
+            Graphics g = parent!.CreateGraphics/*Internal*/();
             Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
             if (icon != null)
             {
