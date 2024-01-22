@@ -1121,24 +1121,24 @@ namespace WinFormsLegacyControls
         private Form[] FindMdiForms(out Form? activeMdiChild)
         {
             Form[]? forms = null;
-            MainMenu? main = GetMainMenu();
             Form? menuForm = null;
             activeMdiChild = null;
-            if (main is not null)
+            if (GetMainMenu() is { } main)
             {
                 menuForm = main./*GetFormUnsafe()*/form;
+            }
+            // [spec]
+            else if (GetContextMenu()?.SourceControl?.FindForm() is { } form)
+            {
+                menuForm = form;
             }
             if (menuForm is not null)
             {
                 forms = menuForm.MdiChildren;
                 activeMdiChild = menuForm.ActiveMdiChild;
             }
-            if (forms is null)
-            {
-                forms = Array.Empty<Form>();
-            }
 
-            return forms;
+            return forms ?? Array.Empty<Form>();
         }
 
         /// <summary>
