@@ -118,7 +118,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public class ArraySubsetEnumerator : IEnumerator
+        public sealed class ArraySubsetEnumerator : IEnumerator
         {
             private readonly object[]? _array;
             private readonly int _total;

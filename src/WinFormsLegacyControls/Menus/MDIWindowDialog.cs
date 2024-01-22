@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private class ListItem
+        private sealed class ListItem
         {
             public Form form;
 
