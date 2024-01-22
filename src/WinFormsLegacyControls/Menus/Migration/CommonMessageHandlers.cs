@@ -129,14 +129,9 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
             else if ((flags & MENU_ITEM_FLAGS.MF_POPUP) == 0)
             {
-                Command? cmd = Command.GetCommandFromID(item);
-                if (cmd is not null)
+                if (Command.GetCommandFromID(item)?.Target is MenuItem.MenuItemData menuItemData)
                 {
-                    object? reference = cmd.Target;
-                    if (reference is not null && reference is MenuItem.MenuItemData)
-                    {
-                        mi = ((MenuItem.MenuItemData)reference).baseItem;
-                    }
+                    mi = menuItemData.baseItem;
                 }
             }
             else
@@ -144,54 +139,35 @@ namespace WinFormsLegacyControls.Menus.Migration
                 mi = GetMenuItemFromHandleId(hmenu, item);
             }
 
-            if (mi is not null)
-            {
-                mi.PerformSelect();
-            }
+            mi?.PerformSelect();
 
             //DefWndProc(ref m);
         }
 
         private static MenuItem? GetMenuItemFromHandleId(IntPtr hmenu, int item)
         {
-            MenuItem? mi = null;
             int id = (int)PInvoke.GetMenuItemID((HMENU)hmenu, item);
             if (id == unchecked((int)0xFFFFFFFF))
             {
                 IntPtr childMenu = IntPtr.Zero;
                 childMenu = PInvoke.GetSubMenu((HMENU)hmenu, item);
                 int count = PInvoke.GetMenuItemCount((HMENU)childMenu);
-                MenuItem? found = null;
                 for (int i = 0; i < count; i++)
                 {
-                    found = GetMenuItemFromHandleId(childMenu, i);
-                    if (found is not null)
+                    if (GetMenuItemFromHandleId(childMenu, i)?.Parent is MenuItem menuItem)
                     {
-                        Menu? parent = found.Parent;
-                        if (parent is not null && parent is MenuItem)
-                        {
-                            found = (MenuItem)parent;
-                            break;
-                        }
-                        found = null;
+                        return menuItem;
                     }
                 }
-
-                mi = found;
             }
             else
             {
-                Command? cmd = Command.GetCommandFromID(id);
-                if (cmd is not null)
+                if (Command.GetCommandFromID(id)?.Target is MenuItem.MenuItemData menuItemData)
                 {
-                    object? reference = cmd.Target;
-                    if (reference is not null && reference is MenuItem.MenuItemData)
-                    {
-                        mi = ((MenuItem.MenuItemData)reference).baseItem;
-                    }
+                    return menuItemData.baseItem;
                 }
             }
-            return mi;
+            return null;
         }
     }
 }
