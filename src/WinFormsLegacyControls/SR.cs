@@ -79,7 +79,7 @@ internal static class SR
     internal static string drawItemEventDescr => nameof(drawItemEventDescr);
     internal static string FindKeyMayNotBeEmptyOrNull => nameof(FindKeyMayNotBeEmptyOrNull);
     internal static string MainMenuCollapseDescr => nameof(MainMenuCollapseDescr);
-    internal static string MDIMenuMoreWindows => nameof(MDIMenuMoreWindows);
+    internal static string MDIMenuMoreWindows => GetResourceString(nameof(MDIMenuMoreWindows));
     internal static string measureItemEventDescr => nameof(measureItemEventDescr);
     internal static string MenuBadMenuItem => nameof(MenuBadMenuItem);
     internal static string MenuIsParentDescr => nameof(MenuIsParentDescr);

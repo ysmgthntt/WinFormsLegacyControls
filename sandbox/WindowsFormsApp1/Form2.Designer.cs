@@ -34,6 +34,9 @@
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -41,7 +44,8 @@
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem1,
             this.menuItem3,
-            this.menuItem4});
+            this.menuItem4,
+            this.menuItem5});
             // 
             // menuItem1
             // 
@@ -70,11 +74,29 @@
             this.menuItem4.Text = "Is&MDIContainer";
             this.menuItem4.Click += new System.EventHandler(this.menuItem4_Click);
             // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 3;
+            this.menuItem5.MdiList = true;
+            this.menuItem5.Text = "&Window";
+            // 
+            // contextMenu1
+            // 
+            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem6});
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 0;
+            this.menuItem6.MdiList = true;
+            this.menuItem6.Text = "&Window";
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ContextMenu = this.contextMenu1;
             this.IsMdiContainer = true;
             this.Menu = this.mainMenu1;
             this.Name = "Form2";
@@ -90,5 +112,8 @@
         private MenuItem menuItem2;
         private MenuItem menuItem3;
         private MenuItem menuItem4;
+        private MenuItem menuItem5;
+        private ContextMenu contextMenu1;
+        private MenuItem menuItem6;
     }
 }

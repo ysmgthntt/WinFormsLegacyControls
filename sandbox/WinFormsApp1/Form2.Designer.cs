@@ -34,11 +34,14 @@
             menuItem2 = new WinFormsLegacyControls.MenuItem();
             menuItem3 = new WinFormsLegacyControls.MenuItem();
             menuItem4 = new WinFormsLegacyControls.MenuItem();
+            menuItem5 = new WinFormsLegacyControls.MenuItem();
+            contextMenu1 = new WinFormsLegacyControls.ContextMenu();
+            menuItem6 = new WinFormsLegacyControls.MenuItem();
             SuspendLayout();
             // 
             // mainMenu1
             // 
-            mainMenu1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem1, menuItem3, menuItem4 });
+            mainMenu1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem1, menuItem3, menuItem4, menuItem5 });
             // 
             // menuItem1
             // 
@@ -63,11 +66,28 @@
             menuItem4.Index = 2;
             menuItem4.Text = "Is&MDIContainer";
             // 
+            // menuItem5
+            // 
+            menuItem5.Index = 3;
+            menuItem5.MdiList = true;
+            menuItem5.Text = "&Window";
+            // 
+            // contextMenu1
+            // 
+            contextMenu1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem6 });
+            // 
+            // menuItem6
+            // 
+            menuItem6.Index = 0;
+            menuItem6.MdiList = true;
+            menuItem6.Text = "&Window";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            contextMenu1.SetContextMenu(this, true);
             IsMdiContainer = true;
             mainMenu1.SetMenu(this, true);
             Name = "Form2";
@@ -82,5 +102,8 @@
         private WinFormsLegacyControls.MenuItem menuItem2;
         private WinFormsLegacyControls.MenuItem menuItem3;
         private WinFormsLegacyControls.MenuItem menuItem4;
+        private WinFormsLegacyControls.MenuItem menuItem5;
+        private WinFormsLegacyControls.ContextMenu contextMenu1;
+        private WinFormsLegacyControls.MenuItem menuItem6;
     }
 }

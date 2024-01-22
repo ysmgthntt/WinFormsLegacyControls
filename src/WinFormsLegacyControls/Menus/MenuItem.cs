@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Reflection;
 
 #if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
@@ -1848,6 +1849,27 @@ namespace WinFormsLegacyControls
                 Debug.Assert(active is not null, "Didn't get the active MDI child");
                 if (forms is not null && forms.Length > 0 && active is not null)
                 {
+                    Type? t = Type.GetType("System.Windows.Forms.MdiWindowDialog, System.Windows.Forms");
+                    if (t is not null)
+                    {
+                        MethodInfo? miSetItems = t.GetMethod("SetItems");
+                        if (miSetItems is not null)
+                        {
+                            PropertyInfo? piActiveChildForm = t.GetProperty("ActiveChildForm");
+                            if (piActiveChildForm is not null)
+                            {
+                                using Form dialog = (Form)Activator.CreateInstance(t)!;
+                                miSetItems.Invoke(dialog, [active, forms]);
+                                if (dialog.ShowDialog() == DialogResult.OK)
+                                {
+                                    active = (Form)piActiveChildForm.GetValue(dialog)!;
+                                    goto activate;
+                                }
+                                return;
+                            }
+                        }
+                    }
+
                     using (var dialog = new MdiWindowDialog())
                     {
                         dialog.SetItems(active, forms);
@@ -1855,12 +1877,18 @@ namespace WinFormsLegacyControls
                         if (result == DialogResult.OK)
                         {
                             active = dialog.ActiveChildForm!;
-                            active.Activate();
-                            if (active.ActiveControl is not null && !active.ActiveControl.Focused)
-                            {
-                                active.ActiveControl.Focus();
-                            }
                         }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    activate:
+                    active.Activate();
+                    if (active.ActiveControl is not null && !active.ActiveControl.Focused)
+                    {
+                        active.ActiveControl.Focus();
                     }
                 }
             }
