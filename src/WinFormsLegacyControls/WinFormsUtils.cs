@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         public static char GetMnemonic(string text, bool convertToUpperCase)
         {
             char mnemonic = '\0';
-            if (text != null)
+            if (text is not null)
             {
                 int len = text.Length;
                 for (int i = 0; i < len - 1; i++)
@@ -126,8 +126,8 @@ namespace System.Windows.Forms
 
             public ArraySubsetEnumerator(object[] array, int count)
             {
-                Debug.Assert(count == 0 || array != null, "if array is null, count should be 0");
-                Debug.Assert(array == null || count <= array.Length, "Trying to enumerate more than the array contains");
+                Debug.Assert(count == 0 || array is not null, "if array is null, count should be 0");
+                Debug.Assert(array is null || count <= array.Length, "Trying to enumerate more than the array contains");
                 _array = array;
                 _total = count;
                 _current = -1;

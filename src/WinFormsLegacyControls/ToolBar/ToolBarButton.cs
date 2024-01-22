@@ -89,7 +89,7 @@ namespace WinFormsLegacyControls
             {
                 get
                 {
-                    if ((owner != null) && (owner.parent != null))
+                    if ((owner is not null) && (owner.parent is not null))
                     {
                         return owner.parent.ImageList;
                     }
@@ -103,7 +103,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (imageIndexer == null)
+                if (imageIndexer is null)
                 {
                     imageIndexer = new ToolBarButtonImageIndexer(this);
                 }
@@ -133,7 +133,7 @@ namespace WinFormsLegacyControls
             {
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
                 //
-                if (value != null && !(value is ContextMenu))
+                if (value is not null && !(value is ContextMenu))
                 {
                     throw new ArgumentException(SR.ToolBarButtonInvalidDropDownMenuType);
                 }
@@ -163,7 +163,7 @@ namespace WinFormsLegacyControls
 
                     enabled = value;
 
-                    if (parent != null && parent.IsHandleCreated)
+                    if (parent is not null && parent.IsHandleCreated)
                     {
                         PInvoke.SendMessage(parent, PInvoke.TB_ENABLEBUTTON, (WPARAM)FindButtonIndex(), enabled ? 1 : 0);
                     }
@@ -245,7 +245,7 @@ namespace WinFormsLegacyControls
             }
             set
             {
-                if (value == null || value.Length == 0)
+                if (value is null || value.Length == 0)
                 {
                     name = null;
                 }
@@ -253,7 +253,7 @@ namespace WinFormsLegacyControls
                 {
                     name = value;
                 }
-                if (Site != null)
+                if (Site is not null)
                 {
                     Site.Name = name;
                 }
@@ -288,7 +288,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (parent == null || !parent.IsHandleCreated)
+                if (parent is null || !parent.IsHandleCreated)
                 {
                     return partialPush;
                 }
@@ -327,7 +327,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (parent == null || !parent.IsHandleCreated)
+                if (parent is null || !parent.IsHandleCreated)
                 {
                     return pushed;
                 }
@@ -354,7 +354,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (parent != null)
+                if (parent is not null)
                 {
                     RECT rc = new RECT();
                     PInvoke.SendMessage(parent, PInvoke.TB_GETRECT, (WPARAM)FindButtonIndex(), ref rc);
@@ -438,8 +438,8 @@ namespace WinFormsLegacyControls
                     value = null!;
                 }
 
-                if ((value == null && text != null) ||
-                     (value != null && (text == null || !text.Equals(value))))
+                if ((value is null && text is not null) ||
+                     (value is not null && (text is null || !text.Equals(value))))
                 {
                     text = value;
                     // Adding a mnemonic requires a handle recreate.
@@ -506,7 +506,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                Debug.Assert(parent != null, "Parent should be non-null when button width is requested");
+                Debug.Assert(parent is not null, "Parent should be non-null when button width is requested");
 
                 int width = 0;
                 ToolBarButtonStyle style = Style;
@@ -527,7 +527,7 @@ namespace WinFormsLegacyControls
                         }
                         else
                         {
-                            if (parent.ImageList != null || !string.IsNullOrEmpty(Text))
+                            if (parent.ImageList is not null || !string.IsNullOrEmpty(Text))
                             {
                                 Size imageSize = parent.ImageSize;
                                 Size textSize = Size.Ceiling(g.MeasureString(Text, parent.Font));
@@ -579,7 +579,7 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (parent != null)
+                if (parent is not null)
                 {
                     int index = FindButtonIndex();
                     if (index != -1)
@@ -803,7 +803,7 @@ namespace WinFormsLegacyControls
 
             // Sanity check parameter
             //
-            if (value == null || value.Length == 0)
+            if (value is null || value.Length == 0)
             {
                 return;
             }
@@ -862,7 +862,7 @@ namespace WinFormsLegacyControls
             // lose the DropDownButton very easily - so we need to recreate
             // the button each time it changes just to be sure.
             //
-            if (style == ToolBarButtonStyle.DropDownButton && parent != null && parent.DropDownArrows)
+            if (style == ToolBarButtonStyle.DropDownButton && parent is not null && parent.DropDownArrows)
             {
                 recreate = true;
             }
@@ -874,11 +874,11 @@ namespace WinFormsLegacyControls
             // the GetButtonInfo method uses the "pushed" variable..
 
             //rather than setting it ourselves .... we asks the button to set it for us..
-            if (updatePushedState && parent != null && parent.IsHandleCreated)
+            if (updatePushedState && parent is not null && parent.IsHandleCreated)
             {
                 GetPushedState();
             }
-            if (parent != null)
+            if (parent is not null)
             {
                 int index = FindButtonIndex();
                 if (index != -1)

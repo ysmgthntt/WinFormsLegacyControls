@@ -62,14 +62,14 @@ namespace WinFormsLegacyControls.Menus.Migration
                 {
                     EventHandler disposedHandler = new EventHandler(DetachContextMenu);
 
-                    if (oldValue != null)
+                    if (oldValue is not null)
                     {
                         oldValue.Disposed -= disposedHandler;
                     }
 
                     _contextMenu = value;
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.Disposed += disposedHandler;
                     }
@@ -97,7 +97,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         private void ControlDispose()
         {
             ContextMenu? contextMenu = _contextMenu;
-            if (contextMenu != null)
+            if (contextMenu is not null)
             {
                 contextMenu.Disposed -= new EventHandler(DetachContextMenu);
             }
@@ -198,7 +198,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             if (isContextMenu)
             {
                 ContextMenu? contextMenu = _contextMenu;
-                if (contextMenu != null)
+                if (contextMenu is not null)
                 {
                     //contextMenu.OnCollapse(EventArgs.Empty);
                     contextMenu.RaiseCollapse();
@@ -214,7 +214,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         private void WmInitMenuPopup(ref Message m)
         {
             ContextMenu? contextMenu = _contextMenu;
-            if (contextMenu != null)
+            if (contextMenu is not null)
             {
 
                 if (contextMenu.ProcessInitMenuPopup(m.WParam))
@@ -233,7 +233,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         private void WmMenuChar(ref Message m)
         {
             Menu? menu = ContextMenu;
-            if (menu != null)
+            if (menu is not null)
             {
                 menu.WmMenuChar(ref m);
                 if (m.Result != IntPtr.Zero)

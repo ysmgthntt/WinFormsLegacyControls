@@ -94,7 +94,7 @@ namespace WinFormsLegacyControls
             {
                 if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
                 {
-                    if (sourceControl != null)
+                    if (sourceControl is not null)
                     {
                         return ((Control)sourceControl).RightToLeft;
                     }
@@ -204,7 +204,7 @@ namespace WinFormsLegacyControls
 
         private void Show(Control control, Point pos, TRACK_POPUP_MENU_FLAGS flags)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }

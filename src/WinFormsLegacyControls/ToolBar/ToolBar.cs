@@ -344,7 +344,7 @@ namespace WinFormsLegacyControls
 
                     // Obtain the current buttonsize of the first button from the winctl control
                     //
-                    if (IsHandleCreated && buttons != null && buttonCount > 0)
+                    if (IsHandleCreated && buttons is not null && buttonCount > 0)
                     {
                         LRESULT result = PInvoke.SendMessage(this, PInvoke.TB_GETBUTTONSIZE);
                         if (result != 0)
@@ -622,7 +622,7 @@ namespace WinFormsLegacyControls
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
-                    if (imageList != null)
+                    if (imageList is not null)
                     {
                         imageList.Disposed -= disposedHandler;
                         imageList.RecreateHandle -= recreateHandler;
@@ -630,7 +630,7 @@ namespace WinFormsLegacyControls
 
                     imageList = value;
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.Disposed += disposedHandler;
                         value.RecreateHandle += recreateHandler;
@@ -658,7 +658,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (imageList != null)
+                if (imageList is not null)
                 {
                     return imageList.ImageSize;
                 }
@@ -699,7 +699,7 @@ namespace WinFormsLegacyControls
             {
                 int height = 0;
 
-                if (buttons == null || buttonCount == 0 || !IsHandleCreated)
+                if (buttons is null || buttonCount == 0 || !IsHandleCreated)
                 {
                     height = ButtonSize.Height;
                 }
@@ -712,7 +712,7 @@ namespace WinFormsLegacyControls
 
                     for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++)
                     {
-                        if (buttons[firstVisible] != null && buttons[firstVisible].Visible)
+                        if (buttons[firstVisible] is not null && buttons[firstVisible].Visible)
                         {
                             break;
                         }
@@ -781,7 +781,7 @@ namespace WinFormsLegacyControls
                 {
                     // don't have it, have to recompute
                     //
-                    if (!IsHandleCreated || buttons == null)
+                    if (!IsHandleCreated || buttons is null)
                     {
                         maxWidth = ButtonSize.Width;
                     }
@@ -1087,7 +1087,7 @@ namespace WinFormsLegacyControls
                 lock (this)
 #endif
                 {
-                    if (imageList != null)
+                    if (imageList is not null)
                     {
                         imageList.Disposed -= new EventHandler(DetachImageList);
                         imageList = null;
@@ -1131,7 +1131,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void ForceButtonWidths()
         {
-            if (buttons != null && buttonSize.IsEmpty && IsHandleCreated)
+            if (buttons is not null && buttonSize.IsEmpty && IsHandleCreated)
             {
 
                 // force ourselves to re-compute this each time
@@ -1174,7 +1174,7 @@ namespace WinFormsLegacyControls
         {
             button.parent = this;
 
-            if (buttons == null)
+            if (buttons is null)
             {
                 buttons = new ToolBarButton[4];
             }
@@ -1199,12 +1199,12 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void InsertButton(int index, ToolBarButton value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
 
-            if (index < 0 || ((buttons != null) && (index > buttonCount)))
+            if (index < 0 || ((buttons is not null) && (index > buttonCount)))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1228,7 +1228,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private int InternalAddButton(ToolBarButton button)
         {
-            if (button == null)
+            if (button is null)
             {
                 throw new ArgumentNullException(nameof(button));
             }
@@ -1324,7 +1324,7 @@ namespace WinFormsLegacyControls
 
             // if we have an imagelist, add it in now.
             //
-            if (imageList != null)
+            if (imageList is not null)
             {
                 PInvoke.SendMessage(this, PInvoke.TB_SETIMAGELIST, 0, imageList.Handle);
             }
@@ -1385,7 +1385,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void RealizeButtons()
         {
-            if (buttons != null)
+            if (buttons is not null)
             {
                 try
                 {
@@ -1608,7 +1608,7 @@ namespace WinFormsLegacyControls
                 hwndFrom = nmTB->hdr.hwndFrom;
             }
             ToolBarButton tbb = buttons[iItem];
-            if (tbb == null)
+            if (tbb is null)
             {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
             }
@@ -1616,7 +1616,7 @@ namespace WinFormsLegacyControls
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
             Menu? menu = tbb.DropDownMenu;
-            if (menu != null)
+            if (menu is not null)
             {
                 RECT rc = new RECT();
                 TPMPARAMS tpm;
@@ -1631,7 +1631,7 @@ namespace WinFormsLegacyControls
                 else
                 {
                     Menu? main = menu.GetMainMenu();
-                    if (main != null)
+                    if (main is not null)
                     {
                         main.ProcessInitMenuPopup(menu.Handle);
                     }
@@ -1732,7 +1732,7 @@ namespace WinFormsLegacyControls
             int id = PARAM.LOWORD(m.WParam);
             ToolBarButton tbb = buttons[id];
 
-            if (tbb != null)
+            if (tbb is not null)
             {
                 ToolBarButtonClickEventArgs e = new ToolBarButtonClickEventArgs(tbb);
                 OnButtonClick(e);
@@ -1929,11 +1929,11 @@ namespace WinFormsLegacyControls
 
                     // Sanity check parameters
                     //
-                    if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount))
+                    if (index < 0 || ((owner.buttons is not null) && index >= owner.buttonCount))
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
-                    if (value == null)
+                    if (value is null)
                     {
                         throw new ArgumentNullException(nameof(value));
                     }
@@ -2067,7 +2067,7 @@ namespace WinFormsLegacyControls
 
             public void AddRange(ToolBarButton[] buttons)
             {
-                if (buttons == null)
+                if (buttons is null)
                 {
                     throw new ArgumentNullException(nameof(buttons));
                 }
@@ -2093,7 +2093,7 @@ namespace WinFormsLegacyControls
             public void Clear()
             {
 
-                if (owner.buttons == null)
+                if (owner.buttons is null)
                 {
                     return;
                 }
@@ -2237,7 +2237,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public void RemoveAt(int index)
             {
-                int count = (owner.buttons == null) ? 0 : owner.buttonCount;
+                int count = (owner.buttons is null) ? 0 : owner.buttonCount;
 
                 if (index < 0 || index >= count)
                 {

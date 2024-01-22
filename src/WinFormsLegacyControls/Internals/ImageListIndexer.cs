@@ -44,7 +44,7 @@ internal class ImageListIndexer
             {
                 return Index;
             }
-            else if (ImageList != null)
+            else if (ImageList is not null)
             {
                 return ImageList.Images.IndexOfKey(Key);
             }

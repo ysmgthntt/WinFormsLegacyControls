@@ -156,7 +156,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                return parent != null && parent.ArePanelsRealized();
+                return parent is not null && parent.ArePanelsRealized();
             }
         }
 
@@ -180,7 +180,7 @@ namespace WinFormsLegacyControls
 
             set
             {
-                if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
+                if (value is not null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
                 {
                     icon = new Icon(value, SystemInformation.SmallIconSize);
                 }
@@ -191,7 +191,7 @@ namespace WinFormsLegacyControls
 
                 if (Created)
                 {
-                    IntPtr handle = (icon == null) ? IntPtr.Zero : icon.Handle;
+                    IntPtr handle = (icon is null) ? IntPtr.Zero : icon.Handle;
                     PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
                 }
                 UpdateSize();
@@ -270,7 +270,7 @@ namespace WinFormsLegacyControls
             set
             {
                 name = value;
-                if (Site != null)
+                if (Site is not null)
                 {
                     Site.Name = name;
                 }
@@ -380,7 +380,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (text == null)
+                if (text is null)
                 {
                     return "";
                 }
@@ -391,7 +391,7 @@ namespace WinFormsLegacyControls
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -426,7 +426,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (toolTipText == null)
+                if (toolTipText is null)
                 {
                     return "";
                 }
@@ -437,7 +437,7 @@ namespace WinFormsLegacyControls
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -501,7 +501,7 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (parent != null)
+                if (parent is not null)
                 {
                     int index = GetIndex();
                     if (index != -1)
@@ -534,7 +534,7 @@ namespace WinFormsLegacyControls
             string text;
             if (newPanel)
             {
-                if (this.text == null)
+                if (this.text is null)
                 {
                     text = string.Empty;
                 }
@@ -550,7 +550,7 @@ namespace WinFormsLegacyControls
 
             Graphics g = parent!.CreateGraphics/*Internal*/();
             Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
-            if (icon != null)
+            if (icon is not null)
             {
                 sz.Width += icon.Size.Width + 5;
             }
@@ -642,7 +642,7 @@ namespace WinFormsLegacyControls
                     throw new InvalidOperationException(SR.UnableToSetPanelText);
                 }
 
-                if (icon != null && style != StatusBarPanelStyle.OwnerDraw)
+                if (icon is not null && style != StatusBarPanelStyle.OwnerDraw)
                 {
                     PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), icon.Handle);
                 }
@@ -683,7 +683,7 @@ namespace WinFormsLegacyControls
         private void ApplyContentSizing()
         {
             if (autoSize == StatusBarPanelAutoSize.Contents &&
-                parent != null)
+                parent is not null)
             {
                 int newWidth = GetContentsWidth(false);
                 if (newWidth != Width)

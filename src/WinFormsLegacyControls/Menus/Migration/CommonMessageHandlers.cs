@@ -55,7 +55,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             MenuItem? menuItem = MenuItem.GetMenuItemFromItemData(itemData);
 
             // Delegate this message to the menu item
-            if (menuItem != null)
+            if (menuItem is not null)
             {
                 menuItem.WmDrawItem(ref m);
                 return true;
@@ -91,10 +91,10 @@ namespace WinFormsLegacyControls.Menus.Migration
                 // information sent with the message.
                 // (See MenuItem.CreateMenuItemInfo)
                 MenuItem? menuItem = MenuItem.GetMenuItemFromItemData(itemData);
-                Debug.Assert(menuItem != null, "UniqueID is not associated with a menu item");
+                Debug.Assert(menuItem is not null, "UniqueID is not associated with a menu item");
 
                 // Delegate this message to the menu item
-                if (menuItem != null)
+                if (menuItem is not null)
                 {
                     menuItem.WmMeasureItem(ref m);
                     return true;
@@ -130,10 +130,10 @@ namespace WinFormsLegacyControls.Menus.Migration
             else if ((flags & MENU_ITEM_FLAGS.MF_POPUP) == 0)
             {
                 Command? cmd = Command.GetCommandFromID(item);
-                if (cmd != null)
+                if (cmd is not null)
                 {
                     object? reference = cmd.Target;
-                    if (reference != null && reference is MenuItem.MenuItemData)
+                    if (reference is not null && reference is MenuItem.MenuItemData)
                     {
                         mi = ((MenuItem.MenuItemData)reference).baseItem;
                     }
@@ -144,7 +144,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 mi = GetMenuItemFromHandleId(hmenu, item);
             }
 
-            if (mi != null)
+            if (mi is not null)
             {
                 mi.PerformSelect();
             }
@@ -165,10 +165,10 @@ namespace WinFormsLegacyControls.Menus.Migration
                 for (int i = 0; i < count; i++)
                 {
                     found = GetMenuItemFromHandleId(childMenu, i);
-                    if (found != null)
+                    if (found is not null)
                     {
                         Menu? parent = found.Parent;
-                        if (parent != null && parent is MenuItem)
+                        if (parent is not null && parent is MenuItem)
                         {
                             found = (MenuItem)parent;
                             break;
@@ -182,10 +182,10 @@ namespace WinFormsLegacyControls.Menus.Migration
             else
             {
                 Command? cmd = Command.GetCommandFromID(id);
-                if (cmd != null)
+                if (cmd is not null)
                 {
                     object? reference = cmd.Target;
-                    if (reference != null && reference is MenuItem.MenuItemData)
+                    if (reference is not null && reference is MenuItem.MenuItemData)
                     {
                         mi = ((MenuItem.MenuItemData)reference).baseItem;
                     }

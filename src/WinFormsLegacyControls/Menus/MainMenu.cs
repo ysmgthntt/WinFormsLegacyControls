@@ -34,7 +34,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         public MainMenu(IContainer container) : this()
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -78,7 +78,7 @@ namespace WinFormsLegacyControls
 
                 if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
                 {
-                    if (form != null)
+                    if (form is not null)
                     {
                         return form.RightToLeft;
                     }
@@ -116,7 +116,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                return (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form == null || !form.IsMirrored));
+                return (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form is null || !form.IsMirrored));
             }
         }
 
@@ -144,7 +144,7 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (form != null && (ownerForm == null || form == ownerForm))
+                if (form is not null && (ownerForm is null || form == ownerForm))
                 {
                     if (form.TryGetMainMenuSupportFormNativeWindow(out var window))
                         window.Menu = null;
@@ -171,7 +171,7 @@ namespace WinFormsLegacyControls
         internal override void ItemsChanged(MenuChangeKind change)
         {
             base.ItemsChanged(change);
-            if (form != null)
+            if (form is not null)
             {
                 form.MenuChanged(change, this);
             }
@@ -179,7 +179,7 @@ namespace WinFormsLegacyControls
 
         internal void ItemsChanged(MenuChangeKind change, Menu menu)
         {
-            if (form != null)
+            if (form is not null)
             {
                 form.MenuChanged(change, menu);
             }

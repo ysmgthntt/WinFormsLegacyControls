@@ -1,0 +1,9 @@
+﻿root = true
+
+[*.cs]
+
+# CSIsNull001: Use `is null` for null checks
+dotnet_diagnostic.CSIsNull001.severity = error
+
+# CSIsNull002: Use `is object` for non-null checks
+dotnet_diagnostic.CSIsNull002.severity = error

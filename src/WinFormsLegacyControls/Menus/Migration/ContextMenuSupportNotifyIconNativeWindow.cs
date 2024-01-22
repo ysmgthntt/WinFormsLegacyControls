@@ -97,7 +97,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
         private void WmInitMenuPopup(ref Message m)
         {
-            if (contextMenu != null)
+            if (contextMenu is not null)
             {
                 if (contextMenu.ProcessInitMenuPopup(m.WParam))
                 {

@@ -71,7 +71,7 @@ namespace WinFormsLegacyControls
             {
                 if (VisualStyleRenderer.IsSupported)
                 {
-                    if (renderer == null)
+                    if (renderer is null)
                     {
                         renderer = new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
                     }
@@ -90,7 +90,7 @@ namespace WinFormsLegacyControls
             {
                 if (sizeGripWidth == 0)
                 {
-                    if (Application.RenderWithVisualStyles && VisualStyleRenderer != null)
+                    if (Application.RenderWithVisualStyles && VisualStyleRenderer is not null)
                     {
                         // Need to build up accurate gripper width to avoid cutting off other panes.
                         VisualStyleRenderer vsRenderer = VisualStyleRenderer;
@@ -351,7 +351,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (panelsCollection == null)
+                if (panelsCollection is null)
                 {
                     panelsCollection = new StatusBarPanelCollection(this);
                 }
@@ -371,7 +371,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (simpleText == null)
+                if (simpleText is null)
                 {
                     return "";
                 }
@@ -421,7 +421,7 @@ namespace WinFormsLegacyControls
                             PerformLayout();
                             RealizePanels();
                         }
-                        else if (tooltips != null)
+                        else if (tooltips is not null)
                         {
                             for (int i = 0; i < panels.Count; i++)
                             {
@@ -621,7 +621,7 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (panelsCollection != null)
+                if (panelsCollection is not null)
                 {
                     StatusBarPanel[] panelCopy = new StatusBarPanel[panelsCollection.Count];
                     ((ICollection)panelsCollection).CopyTo(panelCopy, 0);
@@ -679,7 +679,7 @@ namespace WinFormsLegacyControls
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
-            if (tooltips != null)
+            if (tooltips is not null)
             {
                 tooltips.Dispose();
                 tooltips = null;
@@ -865,7 +865,7 @@ namespace WinFormsLegacyControls
                     for (int i = 0; i < springNum; i++)
                     {
                         panel = pArray[i];
-                        if (panel == null)
+                        if (panel is null)
                         {
                             continue;
                         }
@@ -923,7 +923,7 @@ namespace WinFormsLegacyControls
         public override string ToString()
         {
             string s = base.ToString();
-            if (Panels != null)
+            if (Panels is not null)
             {
                 s += ", Panels.Count: " + Panels.Count.ToString(CultureInfo.CurrentCulture);
                 if (Panels.Count > 0)
@@ -952,7 +952,7 @@ namespace WinFormsLegacyControls
 
         internal void UpdateTooltip(StatusBarPanel panel)
         {
-            if (tooltips == null)
+            if (tooltips is null)
             {
                 if (IsHandleCreated && !DesignMode)
                 {
@@ -970,7 +970,7 @@ namespace WinFormsLegacyControls
             {
                 int border = SystemInformation.Border3DSize.Width;
                 ControlToolTip.Tool? t = tooltips.GetTool(panel);
-                if (t == null)
+                if (t is null)
                 {
                     t = new ControlToolTip.Tool();
                 }
@@ -1080,7 +1080,7 @@ namespace WinFormsLegacyControls
             if (x > bounds.X + bounds.Width - SizeGripWidth)
             {
                 Control? parent = Parent/*Internal*/;
-                if (parent != null && parent is Form)
+                if (parent is not null && parent is Form)
                 {
                     FormBorderStyle bs = ((Form)parent).FormBorderStyle;
 
@@ -1201,14 +1201,14 @@ namespace WinFormsLegacyControls
                 }
                 set
                 {
-                    if (value == null)
+                    if (value is null)
                     {
                         throw new ArgumentNullException(nameof(StatusBarPanel));
                     }
 
                     owner.layoutDirty = true;
 
-                    if (value.Parent != null)
+                    if (value.Parent is not null)
                     {
                         throw new ArgumentException(SR.ObjectHasParent, "value");
                     }
@@ -1365,7 +1365,7 @@ namespace WinFormsLegacyControls
 
             public virtual void AddRange(StatusBarPanel[] panels)
             {
-                if (panels == null)
+                if (panels is null)
                 {
                     throw new ArgumentNullException(nameof(panels));
                 }
@@ -1465,14 +1465,14 @@ namespace WinFormsLegacyControls
             public virtual void Insert(int index, StatusBarPanel value)
             {
                 //check for the value not to be null
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
                 //end check
 
                 owner.layoutDirty = true;
-                if (value.Parent != owner && value.Parent != null)
+                if (value.Parent != owner && value.Parent is not null)
                 {
                     throw new ArgumentException(SR.ObjectHasParent, "value");
                 }
@@ -1537,7 +1537,7 @@ namespace WinFormsLegacyControls
             public virtual void Remove(StatusBarPanel value)
             {
                 //check for the value not to be null
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(StatusBarPanel));
                 }
@@ -1607,7 +1607,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public IEnumerator GetEnumerator()
             {
-                if (owner.panels != null)
+                if (owner.panels is not null)
                 {
                     return owner.panels.GetEnumerator();
                 }
@@ -1725,15 +1725,15 @@ namespace WinFormsLegacyControls
                     toRemove = (Tool?)tools[key];
                 }
 
-                if (toRemove != null)
+                if (toRemove is not null)
                 {
                     remove = true;
                 }
-                if (tool != null)
+                if (tool is not null)
                 {
                     add = true;
                 }
-                if (tool != null && toRemove != null
+                if (tool is not null && toRemove is not null
                     && tool.id == toRemove.id)
                 {
                     update = true;
@@ -1755,7 +1755,7 @@ namespace WinFormsLegacyControls
                     }
                 }
 
-                if (tool != null)
+                if (tool is not null)
                 {
                     tools[key] = tool;
                 }
@@ -1789,7 +1789,7 @@ namespace WinFormsLegacyControls
 
             private void AddTool(Tool tool)
             {
-                if (tool != null && tool.text != null && tool.text.Length > 0)
+                if (tool is not null && tool.text is not null && tool.text.Length > 0)
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     if (SendMessage(info, PInvoke.TTM_ADDTOOLW) == 0)
@@ -1801,7 +1801,7 @@ namespace WinFormsLegacyControls
 
             private void RemoveTool(Tool tool)
             {
-                if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
+                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     SendMessage(info, PInvoke.TTM_DELTOOLW);
@@ -1810,7 +1810,7 @@ namespace WinFormsLegacyControls
 
             private void UpdateTool(Tool tool)
             {
-                if (tool != null && tool.text != null && tool.text.Length > 0 && (int)tool.id >= 0)
+                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool.id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     SendMessage(info, PInvoke.TTM_SETTOOLINFOW);
@@ -1893,7 +1893,7 @@ namespace WinFormsLegacyControls
 
                 // RightToLeft reading order
                 Control richParent = parent;
-                if (richParent != null && richParent.RightToLeft == RightToLeft.Yes)
+                if (richParent is not null && richParent.RightToLeft == RightToLeft.Yes)
                 {
                     ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                 }
@@ -1931,7 +1931,7 @@ namespace WinFormsLegacyControls
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (control != null)
+                    if (control is not null)
                     {
                         control.WndProc(ref m);
                     }

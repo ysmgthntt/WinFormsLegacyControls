@@ -44,7 +44,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         protected Menu(MenuItem[]? items)
         {
-            if (items != null)
+            if (items is not null)
             {
                 MenuItems.AddRange(items);
             }
@@ -84,7 +84,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                return null != items && ItemCount > 0;
+                return items is not null && ItemCount > 0;
             }
         }
 
@@ -119,7 +119,7 @@ namespace WinFormsLegacyControls
                     if (item.IsParent)
                     {
                         item = item.MdiListItem;
-                        if (item != null)
+                        if (item is not null)
                         {
                             return item;
                         }
@@ -146,7 +146,7 @@ namespace WinFormsLegacyControls
             }
             set
             {
-                if (value == null || value.Length == 0)
+                if (value is null || value.Length == 0)
                 {
                     name = null;
                 }
@@ -154,7 +154,7 @@ namespace WinFormsLegacyControls
                 {
                     name = value;
                 }
-                if (Site != null)
+                if (Site is not null)
                 {
                     Site.Name = name;
                 }
@@ -171,7 +171,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (itemsCollection == null)
+                if (itemsCollection is null)
                 {
                     itemsCollection = new MenuItemCollection(this);
                 }
@@ -234,13 +234,13 @@ namespace WinFormsLegacyControls
         /// </summary>
         protected void CloneMenu(Menu menuSrc)
         {
-            if (menuSrc == null)
+            if (menuSrc is null)
             {
                 throw new ArgumentNullException(nameof(menuSrc));
             }
 
             MenuItem[]? newItems = null;
-            if (menuSrc.items != null)
+            if (menuSrc.items is not null)
             {
                 int count = menuSrc.MenuItems.Count;
                 newItems = new MenuItem[count];
@@ -250,7 +250,7 @@ namespace WinFormsLegacyControls
                 }
             }
             MenuItems.Clear();
-            if (newItems != null)
+            if (newItems is not null)
             {
                 MenuItems.AddRange(newItems);
             }
@@ -305,7 +305,7 @@ namespace WinFormsLegacyControls
                     // remove the item before we dispose it so it still has valid state
                     // for undo/redo
                     //
-                    if (item.Site != null && item.Site.Container != null)
+                    if (item.Site is not null && item.Site.Container is not null)
                     {
                         item.Site.Container.Remove(item);
                     }
@@ -350,7 +350,7 @@ namespace WinFormsLegacyControls
                         break;
                 }
                 item = item.FindMenuItem(type, value);
-                if (item != null)
+                if (item is not null)
                 {
                     return item;
                 }
@@ -534,7 +534,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         public virtual void MergeMenu(Menu menuSrc)
         {
-            if (menuSrc == null)
+            if (menuSrc is null)
             {
                 throw new ArgumentNullException(nameof(menuSrc));
             }
@@ -547,7 +547,7 @@ namespace WinFormsLegacyControls
             MenuItem item;
             MenuItem itemDst;
 
-            if (menuSrc.items != null && items == null)
+            if (menuSrc.items is not null && items is null)
             {
                 MenuItems.Clear();
             }
@@ -612,7 +612,7 @@ namespace WinFormsLegacyControls
         internal virtual bool ProcessInitMenuPopup(IntPtr handle)
         {
             MenuItem? item = FindMenuItem(FindHandle, handle);
-            if (item != null)
+            if (item is not null)
             {
                 item.OnInitMenuPopup(EventArgs.Empty);
                 item.CreateMenuItems();
@@ -624,7 +624,7 @@ namespace WinFormsLegacyControls
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             MenuItem? item = FindMenuItem(FindShortcut, (IntPtr)(int)keyData);
-            return item != null ? item.ShortcutClick() : false;
+            return item is not null ? item.ShortcutClick() : false;
         }
 
         /// <summary>
@@ -638,7 +638,7 @@ namespace WinFormsLegacyControls
                 for (int i = 0; i < items.Length; ++i)
                 {
                     MenuItem mi = items[i];
-                    if (mi != null && mi.Selected)
+                    if (mi is not null && mi.Selected)
                     {
                         return i;
                     }
@@ -664,7 +664,7 @@ namespace WinFormsLegacyControls
         {
             Menu? menu = (m.LParam == handle) ? this : FindMenuItem(FindHandle, m.LParam);
 
-            if (menu == null)
+            if (menu is null)
             {
                 return;
             }
@@ -857,20 +857,20 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual int Add(int index, MenuItem item)
             {
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
 
                 // MenuItems can only belong to one menu at a time
-                if (item.Parent != null)
+                if (item.Parent is not null)
                 {
 
                     // First check that we're not adding ourself, i.e. walk
                     // the parent chain for equality
                     if (owner is MenuItem parent)
                     {
-                        while (parent != null)
+                        while (parent is not null)
                         {
                             if (parent.Equals(item))
                             {
@@ -904,7 +904,7 @@ namespace WinFormsLegacyControls
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (owner.items == null || owner.items.Length == owner.ItemCount)
+                if (owner.items is null || owner.items.Length == owner.ItemCount)
                 {
                     MenuItem[] newItems = new MenuItem[owner.ItemCount < 2 ? 4 : owner.ItemCount * 2];
                     if (owner.ItemCount > 0)
@@ -929,7 +929,7 @@ namespace WinFormsLegacyControls
 
             public virtual void AddRange(MenuItem[] items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -983,7 +983,7 @@ namespace WinFormsLegacyControls
             public MenuItem[] Find(string key, bool searchAllChildren)
             {
 
-                if ((key == null) || (key.Length == 0))
+                if ((key is null) || (key.Length == 0))
                 {
                     throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
@@ -1003,7 +1003,7 @@ namespace WinFormsLegacyControls
                     /// </summary>
             private ArrayList FindInternal(string key, bool searchAllChildren, MenuItemCollection menuItemsToLookIn, ArrayList foundMenuItems)
             {
-                if ((menuItemsToLookIn == null) || (foundMenuItems == null))
+                if ((menuItemsToLookIn is null) || (foundMenuItems is null))
                 {
                     return null!;  //
                 }
@@ -1013,7 +1013,7 @@ namespace WinFormsLegacyControls
 
                 for (int i = 0; i < menuItemsToLookIn.Count; i++)
                 {
-                    if (menuItemsToLookIn[i] == null)
+                    if (menuItemsToLookIn[i] is null)
                     {
                         continue;
                     }
@@ -1030,11 +1030,11 @@ namespace WinFormsLegacyControls
                 {
                     for (int i = 0; i < menuItemsToLookIn.Count; i++)
                     {
-                        if (menuItemsToLookIn[i] == null)
+                        if (menuItemsToLookIn[i] is null)
                         {
                             continue;
                         }
-                        if ((menuItemsToLookIn[i].MenuItems != null) && menuItemsToLookIn[i].MenuItems.Count > 0)
+                        if ((menuItemsToLookIn[i].MenuItems is not null) && menuItemsToLookIn[i].MenuItems.Count > 0)
                         {
                             // if it has a valid child collecion, append those results to our collection
                             foundMenuItems = FindInternal(key, searchAllChildren, menuItemsToLookIn[i].MenuItems, foundMenuItems);

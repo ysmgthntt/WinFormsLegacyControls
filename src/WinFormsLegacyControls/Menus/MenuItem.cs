@@ -211,7 +211,7 @@ namespace WinFormsLegacyControls
             set
             {
                 CheckIfDisposed();
-                if (Parent != null)
+                if (Parent is not null)
                 {
                     if (value)
                     {
@@ -276,7 +276,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (Parent != null)
+                if (Parent is not null)
                 {
                     for (int i = 0; i < Parent.ItemCount; i++)
                     {
@@ -319,7 +319,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (_data != null && MdiList)
+                if (_data is not null && MdiList)
                 {
                     for (int i = 0; i < ItemCount; i++)
                     {
@@ -334,7 +334,7 @@ namespace WinFormsLegacyControls
                         return true;
                     }
 
-                    if (Parent != null && !(Parent is MenuItem))
+                    if (Parent is not null && !(Parent is MenuItem))
                     {
                         return true;
                     }
@@ -386,7 +386,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (Parent == null)
+                if (Parent is null)
                 {
                     return false;
                 }
@@ -414,7 +414,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (Parent == null)
+                if (Parent is null)
                 {
                     return -1;
                 }
@@ -534,7 +534,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal override bool RenderIsRightToLeft => Parent != null && Parent.RenderIsRightToLeft;
+        internal override bool RenderIsRightToLeft => Parent is not null && Parent.RenderIsRightToLeft;
 
         /// <summary>
         ///  Gets or sets the text of the menu item.
@@ -1066,7 +1066,7 @@ namespace WinFormsLegacyControls
             {
                 // when the menu collection changes deal with it locally
                 Debug.Assert(!created, "base.ItemsChanged should have wiped out our handles");
-                if (Parent != null && Parent.created)
+                if (Parent is not null && Parent.created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
@@ -1080,7 +1080,7 @@ namespace WinFormsLegacyControls
                 }
 
                 MainMenu? main = GetMainMenu();
-                if (main != null && ((_data.State & StateInMdiPopup) == 0))
+                if (main is not null && ((_data.State & StateInMdiPopup) == 0))
                 {
                     main.ItemsChanged(change, this);
                 }
@@ -1090,19 +1090,19 @@ namespace WinFormsLegacyControls
         internal void ItemsChanged(MenuChangeKind change, MenuItem item)
         {
             if (change == MenuChangeKind.CHANGE_ITEMADDED &&
-                _data != null &&
-                _data.baseItem != null &&
+                _data is not null &&
+                _data.baseItem is not null &&
                 _data.baseItem.MenuItems.Contains(item))
             {
-                if (Parent != null && Parent.created)
+                if (Parent is not null && Parent.created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
                 }
-                else if (_data != null)
+                else if (_data is not null)
                 {
                     MenuItem? currentMenuItem = _data.firstItem;
-                    while (currentMenuItem != null)
+                    while (currentMenuItem is not null)
                     {
                         if (currentMenuItem.created)
                         {
@@ -1123,16 +1123,16 @@ namespace WinFormsLegacyControls
             MainMenu? main = GetMainMenu();
             Form? menuForm = null;
             activeMdiChild = null;
-            if (main != null)
+            if (main is not null)
             {
                 menuForm = main./*GetFormUnsafe()*/form;
             }
-            if (menuForm != null)
+            if (menuForm is not null)
             {
                 forms = menuForm.MdiChildren;
                 activeMdiChild = menuForm.ActiveMdiChild;
             }
-            if (forms == null)
+            if (forms is null)
             {
                 forms = Array.Empty<Form>();
             }
@@ -1157,7 +1157,7 @@ namespace WinFormsLegacyControls
 
                 // Add new items
                 Form[] forms = FindMdiForms(out var activeMdiChild);
-                if (forms != null && forms.Length > 0)
+                if (forms is not null && forms.Length > 0)
                 {
 
                     //Form activeMdiChild = GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
@@ -1454,7 +1454,7 @@ namespace WinFormsLegacyControls
 
         internal void UpdateMenuItem(bool force)
         {
-            if (Parent == null || !Parent.created)
+            if (Parent is null || !Parent.created)
             {
                 return;
             }
@@ -1494,7 +1494,7 @@ namespace WinFormsLegacyControls
                 if (Parent is MainMenu mainMenu)
                 {
                     Form? f = mainMenu./*GetFormUnsafe()*/form;
-                    if (f != null)
+                    if (f is not null)
                     {
                         PInvoke.DrawMenuBar(f);
                     }
@@ -1542,7 +1542,7 @@ namespace WinFormsLegacyControls
 
         private void CheckIfDisposed()
         {
-            if (_data == null)
+            if (_data is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -1602,7 +1602,7 @@ namespace WinFormsLegacyControls
                     if (((_state & StateMdiList) != 0) != value)
                     {
                         SetState(StateMdiList, value);
-                        for (MenuItem? item = firstItem; item != null; item = item._nextLinkedItem)
+                        for (MenuItem? item = firstItem; item is not null; item = item._nextLinkedItem)
                         {
                             item.ItemsChanged(MenuChangeKind.CHANGE_MDI);
                         }
@@ -1674,7 +1674,7 @@ namespace WinFormsLegacyControls
 
                     item._nextLinkedItem = firstItem;
                     firstItem = item;
-                    if (baseItem == null)
+                    if (baseItem is null)
                     {
                         baseItem = item;
                     }
@@ -1692,7 +1692,7 @@ namespace WinFormsLegacyControls
 
             internal int GetMenuID()
             {
-                if (_cmd == null)
+                if (_cmd is null)
                 {
                     _cmd = new Command(this);
                 }
@@ -1702,7 +1702,7 @@ namespace WinFormsLegacyControls
 
             private void ItemsChanged(MenuChangeKind change)
             {
-                for (MenuItem? item = firstItem; item != null; item = item._nextLinkedItem)
+                for (MenuItem? item = firstItem; item is not null; item = item._nextLinkedItem)
                 {
                     item.Parent?.ItemsChanged(change);
                 }
@@ -1735,16 +1735,16 @@ namespace WinFormsLegacyControls
                     baseItem = firstItem!;
                 }
 
-                if (firstItem == null)
+                if (firstItem is null)
                 {
                     // No longer needed. Toss all references and the Command object.
-                    Debug.Assert(baseItem == null, "why isn't baseItem null?");
+                    Debug.Assert(baseItem is null, "why isn't baseItem null?");
                     _onClick = null;
                     _onPopup = null;
                     _onSelect = null;
                     _onDrawItem = null;
                     _onMeasureItem = null;
-                    if (_cmd != null)
+                    if (_cmd is not null)
                     {
                         _cmd.Dispose();
                         _cmd = null;
@@ -1754,7 +1754,7 @@ namespace WinFormsLegacyControls
 
             internal void SetCaption(string value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -1785,7 +1785,7 @@ namespace WinFormsLegacyControls
             private void UpdateMenuItems()
             {
                 _version++;
-                for (MenuItem? item = firstItem; item != null; item = item._nextLinkedItem)
+                for (MenuItem? item = firstItem; item is not null; item = item._nextLinkedItem)
                 {
                     item.UpdateMenuItem(force: true);
                 }
@@ -1816,13 +1816,13 @@ namespace WinFormsLegacyControls
                 if (_boundIndex != -1)
                 {
                     Form[] forms = _parent.FindMdiForms(out _);
-                    Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
+                    Debug.Assert(forms is not null, "Didn't get a list of the MDI Forms.");
 
-                    if (forms != null && forms.Length > _boundIndex)
+                    if (forms is not null && forms.Length > _boundIndex)
                     {
                         Form boundForm = forms[_boundIndex];
                         boundForm.Activate();
-                        if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused)
+                        if (boundForm.ActiveControl is not null && !boundForm.ActiveControl.Focused)
                         {
                             boundForm.ActiveControl.Focus();
                         }
@@ -1843,10 +1843,10 @@ namespace WinFormsLegacyControls
             public override void OnClick(EventArgs e)
             {
                 Form[] forms = _parent.FindMdiForms(out var active);
-                Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
+                Debug.Assert(forms is not null, "Didn't get a list of the MDI Forms.");
                 //Form active = _parent.GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
-                Debug.Assert(active != null, "Didn't get the active MDI child");
-                if (forms != null && forms.Length > 0 && active != null)
+                Debug.Assert(active is not null, "Didn't get the active MDI child");
+                if (forms is not null && forms.Length > 0 && active is not null)
                 {
                     using (var dialog = new MdiWindowDialog())
                     {
@@ -1856,7 +1856,7 @@ namespace WinFormsLegacyControls
                         {
                             active = dialog.ActiveChildForm!;
                             active.Activate();
-                            if (active.ActiveControl != null && !active.ActiveControl.Focused)
+                            if (active.ActiveControl is not null && !active.ActiveControl.Focused)
                             {
                                 active.ActiveControl.Focus();
                             }
