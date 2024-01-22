@@ -1544,7 +1544,7 @@ namespace WinFormsLegacyControls
         {
             if (_data is null)
             {
-                throw new ObjectDisposedException(GetType().FullName);
+                ObjectDisposedException.ThrowIf(_data is null, this);
             }
         }
 

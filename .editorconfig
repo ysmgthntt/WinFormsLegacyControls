@@ -10,3 +10,12 @@ dotnet_diagnostic.CSIsNull002.severity = error
 
 # CA1510: ArgumentNullException スロー ヘルパーを使用する
 dotnet_diagnostic.CA1510.severity = warning
+
+# CA1511: ArgumentException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1511.severity = warning
+
+# CA1512: ArgumentOutOfRangeException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1512.severity = warning
+
+# CA1513: ObjectDisposedException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1513.severity = warning
