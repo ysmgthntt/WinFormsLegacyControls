@@ -94,16 +94,18 @@ namespace WinFormsLegacyControls
                         VisualStyleElement thisElement;
                         Size elementSize;
 
+                        using Graphics graphics = Graphics.FromHwndInternal(Handle);
+
                         // gripper pane width...
                         thisElement = VisualStyleElement.Status.GripperPane.Normal;
                         vsRenderer.SetParameters(thisElement);
-                        elementSize = vsRenderer.GetPartSize(Graphics.FromHwndInternal(Handle), ThemeSizeType.True);
+                        elementSize = vsRenderer.GetPartSize(graphics, ThemeSizeType.True);
                         sizeGripWidth = elementSize.Width;
 
                         // ...plus gripper width
                         thisElement = VisualStyleElement.Status.Gripper.Normal;
                         vsRenderer.SetParameters(thisElement);
-                        elementSize = vsRenderer.GetPartSize(Graphics.FromHwndInternal(Handle), ThemeSizeType.True);
+                        elementSize = vsRenderer.GetPartSize(graphics, ThemeSizeType.True);
                         sizeGripWidth += elementSize.Width;
 
                         // Either GetPartSize could have returned a width of zero, so make sure we have a reasonable number:

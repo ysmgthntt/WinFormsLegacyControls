@@ -532,13 +532,15 @@ namespace WinFormsLegacyControls
                 text = Text;
             }
 
-            Graphics g = parent!.CreateGraphics/*Internal*/();
-            Size sz = Size.Ceiling(g.MeasureString(text, parent.Font));
+            Size sz;
+            using (Graphics g = parent!.CreateGraphics/*Internal*/())
+            {
+                sz = Size.Ceiling(g.MeasureString(text, parent.Font));
+            }
             if (icon is not null)
             {
                 sz.Width += icon.Size.Width + 5;
             }
-            g.Dispose();
 
             int width = sz.Width + SystemInformation.BorderSize.Width * 2 + PANELTEXTINSET * 2 + PANELGAP;
             return Math.Max(width, minWidth);

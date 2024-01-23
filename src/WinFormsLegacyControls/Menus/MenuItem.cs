@@ -1536,11 +1536,11 @@ namespace WinFormsLegacyControls
             // Handles the OnMeasureItem message sent from ContainerControl
 
             // The OnMeasureItem handler now determines the height and width of the item
-            using ScreenDC screendc = ScreenDC.Create();
-            Graphics graphics = Graphics.FromHdcInternal(screendc);
-            MeasureItemEventArgs mie = new MeasureItemEventArgs(graphics, Index);
-            using (graphics)
+            MeasureItemEventArgs mie;
+            using (ScreenDC screendc = ScreenDC.Create())
+            using (Graphics graphics = Graphics.FromHdcInternal(screendc))
             {
+                mie = new MeasureItemEventArgs(graphics, Index);
                 OnMeasureItem(mie);
             }
 
