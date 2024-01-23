@@ -1624,11 +1624,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    Menu? main = menu.GetMainMenu();
-                    if (main is not null)
-                    {
-                        main.ProcessInitMenuPopup(menu.Handle);
-                    }
+                    menu.GetMainMenu()?.ProcessInitMenuPopup(menu.Handle);
 
                     PInvoke.MapWindowPoints(hwndFrom, HWND.Null, ref rc);
 

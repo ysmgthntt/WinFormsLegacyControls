@@ -168,18 +168,12 @@ namespace WinFormsLegacyControls
         internal override void ItemsChanged(MenuChangeKind change)
         {
             base.ItemsChanged(change);
-            if (form is not null)
-            {
-                form.MenuChanged(change, this);
-            }
+            form?.MenuChanged(change, this);
         }
 
         internal void ItemsChanged(MenuChangeKind change, Menu menu)
         {
-            if (form is not null)
-            {
-                form.MenuChanged(change, menu);
-            }
+            form?.MenuChanged(change, menu);
         }
 
         /// <summary>

@@ -1902,10 +1902,7 @@ namespace WinFormsLegacyControls
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (control is not null)
-                    {
-                        control.WndProc(ref m);
-                    }
+                    control.WndProc(ref m);
                 }
             }
         }

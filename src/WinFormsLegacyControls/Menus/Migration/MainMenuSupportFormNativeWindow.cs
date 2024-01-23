@@ -226,10 +226,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             // MDI child ornaments.
             Form? formMdiParent = _form.MdiParent;
             MainMenuSupportFormNativeWindow? form = formMdiParent?.GetMainMenuSupportFormNativeWindow();
-            if (form is not null)
-            {
-                form.SuspendUpdateMenuHandles();
-            }
+            form?.SuspendUpdateMenuHandles();
 
             try
             {
@@ -239,10 +236,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             }
             finally
             {
-                if (form is not null)
-                {
-                    form.ResumeUpdateMenuHandles();
-                }
+                form?.ResumeUpdateMenuHandles();
             }
         }
 
@@ -623,27 +617,10 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmNCDestroy(ref Message m)
         {
-            MainMenu? mainMenu = Menu;
-            MainMenu? dummyMenu = _dummyMenu;
-            MainMenu? curMenu = _curMenu;
-            MainMenu? mergedMenu = _mergedMenu;
-
-            if (mainMenu is not null)
-            {
-                mainMenu.ClearHandles();
-            }
-            if (curMenu is not null)
-            {
-                curMenu.ClearHandles();
-            }
-            if (mergedMenu is not null)
-            {
-                mergedMenu.ClearHandles();
-            }
-            if (dummyMenu is not null)
-            {
-                dummyMenu.ClearHandles();
-            }
+            _mainMenu?.ClearHandles();
+            _curMenu?.ClearHandles();
+            _mergedMenu?.ClearHandles();
+            _dummyMenu?.ClearHandles();
 
             base.WndProc(ref m);
         }
@@ -653,11 +630,8 @@ namespace WinFormsLegacyControls.Menus.Migration
         /// </summary>
         private void WmUnInitMenuPopup(ref Message m)
         {
-            if (Menu is not null)
-            {
-                //Whidbey addition - also raise the MainMenu.Collapse event for the current menu
-                Menu.OnCollapse(EventArgs.Empty);
-            }
+            //Whidbey addition - also raise the MainMenu.Collapse event for the current menu
+            Menu?.OnCollapse(EventArgs.Empty);
         }
 
         protected override void WndProc(ref Message m)

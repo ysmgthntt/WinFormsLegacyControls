@@ -77,8 +77,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                 // [spec]
                 case PInvoke.WM_MENUCHAR:
-                    if (contextMenu is not null)
-                        contextMenu.WmMenuChar(ref m);
+                    contextMenu?.WmMenuChar(ref m);
                     break;
 
                 // [spec]

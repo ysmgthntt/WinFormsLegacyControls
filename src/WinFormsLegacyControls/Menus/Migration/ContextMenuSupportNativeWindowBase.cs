@@ -197,12 +197,8 @@ namespace WinFormsLegacyControls.Menus.Migration
 
             if (isContextMenu)
             {
-                ContextMenu? contextMenu = _contextMenu;
-                if (contextMenu is not null)
-                {
-                    //contextMenu.OnCollapse(EventArgs.Empty);
-                    contextMenu.RaiseCollapse();
-                }
+                //_contextMenu?.OnCollapse(EventArgs.Empty);
+                _contextMenu?.RaiseCollapse();
             }
 
             //DefWndProc(ref m);
