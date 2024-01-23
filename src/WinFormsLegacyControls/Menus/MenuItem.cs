@@ -763,13 +763,19 @@ namespace WinFormsLegacyControls
         {
             if ((_data.State & StateHidden) == 0)
             {
-                MENUITEMINFOW info = CreateMenuItemInfo(out string dwTypeData);
+                bool setRightToLeftBit = RenderIsRightToLeft;
+                MENUITEMINFOW info = CreateMenuItemInfo(setRightToLeftBit, out string dwTypeData);
                 unsafe
                 {
                     fixed(char* ptr = dwTypeData)
                     {
                         info.dwTypeData = ptr;
                         PInvoke.InsertMenuItem(Parent!, unchecked((uint)-1), true, ref info);
+                        if (setRightToLeftBit)
+                        {
+                            // InsertMenuItem だけだと右からにならない。
+                            PInvoke.SetMenuItemInfo(Parent!, info.wID, false, ref info);
+                        }
                     }
                 }
 
@@ -777,11 +783,12 @@ namespace WinFormsLegacyControls
                 _dataVersion = _data._version;
 
                 _menuItemIsCreated = true;
-                // TODO: Pref
+                /*
                 if (RenderIsRightToLeft)
                 {
                     Parent!.UpdateRtl(true);
                 }
+                */
 
 #if DEBUG
                 MENUITEMINFOW infoVerify;
@@ -799,7 +806,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private MENUITEMINFOW CreateMenuItemInfo(out string dwTypeData)
+        private MENUITEMINFOW CreateMenuItemInfo(bool setRightToLeftBit, out string dwTypeData)
         {
             MENUITEMINFOW info;
             unsafe
@@ -827,6 +834,12 @@ namespace WinFormsLegacyControls
                 {
                     info.fType |= MENU_ITEM_TYPE.MFT_SEPARATOR;
                 }
+            }
+
+            // [fixed]
+            if (setRightToLeftBit)
+            {
+                info.fType |= MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER;
             }
 
             info.fState = (MENU_ITEM_STATE)(_data.State & (StateChecked | StateDefault | StateDisabled));
@@ -1465,7 +1478,7 @@ namespace WinFormsLegacyControls
 
             if (force || Parent is MainMenu || Parent is ContextMenu)
             {
-                MENUITEMINFOW info = CreateMenuItemInfo(out string dwTypeData);
+                MENUITEMINFOW info = CreateMenuItemInfo(RenderIsRightToLeft, out string dwTypeData);
                 unsafe
                 {
                     fixed(char* ptr = dwTypeData)

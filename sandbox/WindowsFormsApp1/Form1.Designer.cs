@@ -166,7 +166,7 @@ namespace WindowsFormsApp1
             this.toolBarButton1,
             this.toolBarButton2,
             this.toolBarButton3});
-            this.toolBar1.ContextMenu = contextMenu2;
+            this.toolBar1.ContextMenu = this.contextMenu2;
             this.toolBar1.DropDownArrows = true;
             this.toolBar1.Location = new System.Drawing.Point(0, 0);
             this.toolBar1.Name = "toolBar1";
@@ -185,7 +185,7 @@ namespace WindowsFormsApp1
             // toolBarButton2
             // 
             this.toolBarButton2.Name = "toolBarButton2";
-            this.toolBarButton2.Text = "toolBarButton2";
+            this.toolBarButton2.Text = "Switch RTL";
             this.toolBarButton2.ToolTipText = "tb";
             // 
             // toolBarButton3
@@ -242,7 +242,7 @@ namespace WindowsFormsApp1
             // 
             // treeView1
             // 
-            this.treeView1.ContextMenu = contextMenu2;
+            this.treeView1.ContextMenu = this.contextMenu2;
             this.treeView1.Location = new System.Drawing.Point(12, 106);
             this.treeView1.Name = "treeView1";
             treeNode1.Name = "treeNode1";

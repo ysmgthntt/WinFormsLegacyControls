@@ -39,6 +39,8 @@
             menuItem3 = new WinFormsLegacyControls.MenuItem();
             contextMenu1 = new WinFormsLegacyControls.ContextMenu();
             menuItem7 = new WinFormsLegacyControls.MenuItem();
+            menuItem10 = new WinFormsLegacyControls.MenuItem();
+            menuItem11 = new WinFormsLegacyControls.MenuItem();
             menuItem8 = new WinFormsLegacyControls.MenuItem();
             menuItem9 = new WinFormsLegacyControls.MenuItem();
             numericUpDown1 = new NumericUpDown();
@@ -57,8 +59,6 @@
             statusBarPanel1 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel2 = new WinFormsLegacyControls.StatusBarPanel();
             statusBarPanel3 = new WinFormsLegacyControls.StatusBarPanel();
-            menuItem10 = new WinFormsLegacyControls.MenuItem();
-            menuItem11 = new WinFormsLegacyControls.MenuItem();
             contextMenu2 = new WinFormsLegacyControls.ContextMenu();
             menuItem12 = new WinFormsLegacyControls.MenuItem();
             menuItem13 = new WinFormsLegacyControls.MenuItem();
@@ -114,6 +114,16 @@
             menuItem7.Index = 0;
             menuItem7.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem10, menuItem11 });
             menuItem7.Text = "menuItem7";
+            // 
+            // menuItem10
+            // 
+            menuItem10.Index = 0;
+            menuItem10.Text = "menuItem10";
+            // 
+            // menuItem11
+            // 
+            menuItem11.Index = 1;
+            menuItem11.Text = "menuItem11";
             // 
             // menuItem8
             // 
@@ -225,7 +235,7 @@
             // toolBarButton2
             // 
             toolBarButton2.Name = "toolBarButton2";
-            toolBarButton2.Text = "toolBarButton2";
+            toolBarButton2.Text = "Switch RTL";
             toolBarButton2.ToolTipText = "tb";
             // 
             // toolBarButton3
@@ -264,16 +274,6 @@
             statusBarPanel3.Name = "statusBarPanel3";
             statusBarPanel3.Text = "statusBarPanel3";
             statusBarPanel3.ToolTipText = "sc";
-            // 
-            // menuItem10
-            // 
-            menuItem10.Index = 0;
-            menuItem10.Text = "menuItem10";
-            // 
-            // menuItem11
-            // 
-            menuItem11.Index = 1;
-            menuItem11.Text = "menuItem11";
             // 
             // contextMenu2
             // 

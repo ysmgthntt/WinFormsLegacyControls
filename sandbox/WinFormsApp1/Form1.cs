@@ -79,9 +79,7 @@ namespace WinFormsApp1
         {
             statusBarPanel2.ToolTipText = textBox1.Text;
 
-            mainMenu1.RightToLeft = mainMenu1.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
-            contextMenu1.RightToLeft = contextMenu1.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
-            contextMenu2.RightToLeft = contextMenu2.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+            menuItem5.ShowShortcut = !menuItem5.ShowShortcut;
         }
 
         private void MenuItem_Click(object? sender, EventArgs e)
@@ -128,7 +126,18 @@ namespace WinFormsApp1
         private void toolBar1_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
         {
             if (e.Button == toolBarButton1)
+            {
                 new Form2().Show();
+            }
+            else if (e.Button == toolBarButton2)
+            {
+                /*
+                mainMenu1.RightToLeft = mainMenu1.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+                contextMenu1.RightToLeft = contextMenu1.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+                contextMenu2.RightToLeft = contextMenu2.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+                */
+                this.RightToLeft = this.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
+            }
         }
     }
 }
