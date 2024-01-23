@@ -1437,9 +1437,12 @@ namespace WinFormsLegacyControls
                 fMask = MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_STATE | MENU_ITEM_MASK.MIIM_SUBMENU,
                 cbSize = (uint)sizeof(MENUITEMINFOW)
             };
-            char* dwTypeData = stackalloc char[Text.Length + 2];
+            // [fixed]
+            // Get text length containing shortcut
+            PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
+            info.cch++;
+            char* dwTypeData = stackalloc char[(int)info.cch];
             info.dwTypeData = dwTypeData;
-            info.cch = (uint)((Text.Length + 2) - 1);
             PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
             if (setRightToLeftBit)
             {
