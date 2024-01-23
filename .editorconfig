@@ -8,6 +8,9 @@ dotnet_diagnostic.CSIsNull001.severity = error
 # CSIsNull002: Use `is object` for non-null checks
 dotnet_diagnostic.CSIsNull002.severity = error
 
+# CA1507: nameof を使用してシンボル名を表現します
+dotnet_diagnostic.CA1507.severity = warning
+
 # CA1510: ArgumentNullException スロー ヘルパーを使用する
 dotnet_diagnostic.CA1510.severity = warning
 

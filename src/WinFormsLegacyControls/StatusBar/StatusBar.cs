@@ -1192,7 +1192,7 @@ namespace WinFormsLegacyControls
 
                     if (value.Parent is not null)
                     {
-                        throw new ArgumentException(SR.ObjectHasParent, "value");
+                        throw new ArgumentException(SR.ObjectHasParent, nameof(value));
                     }
 
                     int length = owner.panels.Count;
@@ -1234,7 +1234,7 @@ namespace WinFormsLegacyControls
                     }
                     else
                     {
-                        throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
+                        throw new ArgumentException(SR.StatusBarBadStatusBarPanel, nameof(value));
                     }
                 }
             }
@@ -1341,7 +1341,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
+                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, nameof(value));
                 }
             }
 
@@ -1450,7 +1450,7 @@ namespace WinFormsLegacyControls
                 owner.layoutDirty = true;
                 if (value.Parent != owner && value.Parent is not null)
                 {
-                    throw new ArgumentException(SR.ObjectHasParent, "value");
+                    throw new ArgumentException(SR.ObjectHasParent, nameof(value));
                 }
 
                 int length = owner.panels.Count;
@@ -1486,7 +1486,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, "value");
+                    throw new ArgumentException(SR.StatusBarBadStatusBarPanel, nameof(value));
                 }
             }
 

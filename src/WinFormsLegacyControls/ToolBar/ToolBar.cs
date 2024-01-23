@@ -1943,7 +1943,7 @@ namespace WinFormsLegacyControls
                     }
                     else
                     {
-                        throw new ArgumentException(SR.ToolBarBadToolBarButton, "value");
+                        throw new ArgumentException(SR.ToolBarBadToolBarButton, nameof(value));
                     }
                 }
             }
@@ -2048,7 +2048,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    throw new ArgumentException(SR.ToolBarBadToolBarButton, "button");
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton, nameof(button));
                 }
             }
 
@@ -2204,7 +2204,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    throw new ArgumentException(SR.ToolBarBadToolBarButton, "button");
+                    throw new ArgumentException(SR.ToolBarBadToolBarButton, nameof(button));
                 }
             }
 

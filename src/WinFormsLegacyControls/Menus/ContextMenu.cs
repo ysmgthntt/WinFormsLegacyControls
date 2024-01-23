@@ -208,7 +208,7 @@ namespace WinFormsLegacyControls
 
             if (!control.IsHandleCreated || !control.Visible)
             {
-                throw new ArgumentException(SR.ContextMenuInvalidParent, "control");
+                throw new ArgumentException(SR.ContextMenuInvalidParent, nameof(control));
             }
 
             sourceControl = control;

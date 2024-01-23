@@ -856,7 +856,7 @@ namespace WinFormsLegacyControls
                         {
                             if (parent.Equals(item))
                             {
-                                throw new ArgumentException(string.Format(SR.MenuItemAlreadyExists, item.Text), "item");
+                                throw new ArgumentException(string.Format(SR.MenuItemAlreadyExists, item.Text), nameof(item));
                             }
                             if (parent.Parent is MenuItem)
                             {
@@ -926,7 +926,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    throw new ArgumentException(SR.MenuBadMenuItem, "value");
+                    throw new ArgumentException(SR.MenuBadMenuItem, nameof(value));
                 }
             }
 
@@ -1090,7 +1090,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    throw new ArgumentException(SR.MenuBadMenuItem, "value");
+                    throw new ArgumentException(SR.MenuBadMenuItem, nameof(value));
                 }
             }
 
