@@ -1610,7 +1610,7 @@ namespace WinFormsLegacyControls
             }
 
             private readonly Hashtable tools = new Hashtable();
-            private readonly ToolTipNativeWindow window;
+            private ToolTipNativeWindow? window;
             private readonly StatusBar parent;
             private int nextId = 0;
 
@@ -1619,8 +1619,6 @@ namespace WinFormsLegacyControls
             /// </summary>
             public ControlToolTip(StatusBar parent)
             {
-                // TODO: Lazy Initialize
-                window = new ToolTipNativeWindow(this);
                 this.parent = parent;
             }
 
@@ -1656,7 +1654,7 @@ namespace WinFormsLegacyControls
             {
                 get
                 {
-                    if (window.Handle == IntPtr.Zero)
+                    if (!IsHandleCreated)
                     {
                         CreateHandle();
                     }
@@ -1664,10 +1662,9 @@ namespace WinFormsLegacyControls
                 }
             }
 
+            [MemberNotNullWhen(true, nameof(window))]
             private bool IsHandleCreated
-            {
-                get { return window.Handle != IntPtr.Zero; }
-            }
+                => window is not null && window.Handle != IntPtr.Zero;
 
             private void AssignId(Tool tool)
             {
@@ -1793,13 +1790,10 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Creates the handle for the control.
             /// </summary>
+            [MemberNotNull(nameof(window))]
             private void CreateHandle()
             {
-                if (IsHandleCreated)
-                {
-                    return;
-                }
-
+                window ??= new();
                 window.CreateHandle(CreateParams);
                 PInvoke.SetWindowPos(
                     this,
@@ -1881,30 +1875,18 @@ namespace WinFormsLegacyControls
                 DestroyHandle();
             }
 
-            private void WndProc(ref Message msg)
-            {
-                switch ((uint)msg.Msg)
-                {
-                    case PInvoke.WM_SETFOCUS:
-                        return;
-                    default:
-                        window.DefWndProc(ref msg);
-                        break;
-                }
-            }
-
             private sealed class ToolTipNativeWindow : NativeWindow
             {
-                readonly ControlToolTip control;
-
-                internal ToolTipNativeWindow(ControlToolTip control)
-                {
-                    this.control = control;
-                }
-
                 protected override void WndProc(ref Message m)
                 {
-                    control.WndProc(ref m);
+                    switch ((uint)m.Msg)
+                    {
+                        case PInvoke.WM_SETFOCUS:
+                            return;
+                        default:
+                            base.WndProc(ref m);
+                            break;
+                    }
                 }
             }
         }

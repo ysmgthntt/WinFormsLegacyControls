@@ -160,7 +160,7 @@
             contextMenu1.SetContextMenu(textBox1, true);
             textBox1.Location = new Point(12, 6);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
+            textBox1.Size = new Size(182, 31);
             textBox1.TabIndex = 0;
             // 
             // notifyIcon1
@@ -197,11 +197,12 @@
             // button1
             // 
             button1.FlatStyle = FlatStyle.System;
-            button1.Location = new Point(168, 4);
+            button1.Location = new Point(200, 4);
             button1.Name = "button1";
             button1.Size = new Size(112, 34);
             button1.TabIndex = 1;
             button1.Text = "button1";
+            toolTip1.SetToolTip(button1, "button");
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
