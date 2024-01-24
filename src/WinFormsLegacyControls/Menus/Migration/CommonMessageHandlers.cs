@@ -149,8 +149,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             int id = (int)PInvoke.GetMenuItemID((HMENU)hmenu, item);
             if (id == unchecked((int)0xFFFFFFFF))
             {
-                IntPtr childMenu = IntPtr.Zero;
-                childMenu = PInvoke.GetSubMenu((HMENU)hmenu, item);
+                nint childMenu = PInvoke.GetSubMenu((HMENU)hmenu, item);
                 int count = PInvoke.GetMenuItemCount((HMENU)childMenu);
                 for (int i = 0; i < count; i++)
                 {

@@ -697,7 +697,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                int height = 0;
+                int height;
 
                 if (buttons is null || buttonCount == 0 || !IsHandleCreated)
                 {
@@ -1486,7 +1486,6 @@ namespace WinFormsLegacyControls
 
             base.SetBoundsCore(x, y, width, height, specified);
 
-            Rectangle bounds = Bounds;
             if (Dock == DockStyle.Left || Dock == DockStyle.Right)
             {
                 if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)

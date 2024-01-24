@@ -712,7 +712,6 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void RealizePanels()
         {
-            StatusBarPanel? panel = null;
             int length = panels.Count;
             int old = panelsRealized;
 
@@ -726,7 +725,7 @@ namespace WinFormsLegacyControls
             int i;
             for (i = 0; i < length; i++)
             {
-                panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = (StatusBarPanel)panels[i]!;
                 try
                 {
                     panel.Realize();
@@ -811,7 +810,6 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void LayoutPanels()
         {
-            StatusBarPanel? panel = null;
             int barPanelWidth = 0;
             int springNum = 0;
             StatusBarPanel?[] pArray = new StatusBarPanel[panels.Count];
@@ -819,7 +817,7 @@ namespace WinFormsLegacyControls
 
             for (int i = 0; i < pArray.Length; i++)
             {
-                panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = (StatusBarPanel)panels[i]!;
                 if (panel.AutoSize == StatusBarPanelAutoSize.Spring)
                 {
                     pArray[springNum] = panel;
@@ -853,7 +851,7 @@ namespace WinFormsLegacyControls
 
                     for (int i = 0; i < springNum; i++)
                     {
-                        panel = pArray[i];
+                        StatusBarPanel? panel = pArray[i];
                         if (panel is null)
                         {
                             continue;

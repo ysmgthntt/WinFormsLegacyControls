@@ -29,6 +29,9 @@ dotnet_diagnostic.IDE0031.severity = warning
 # IDE0038: パターン マッチングを使用します
 dotnet_diagnostic.IDE0038.severity = warning
 
+# IDE0059: 値の不必要な代入
+dotnet_diagnostic.IDE0059.severity = warning
+
 # IDE0074: 複合代入を使用
 dotnet_diagnostic.IDE0074.severity = warning
 
