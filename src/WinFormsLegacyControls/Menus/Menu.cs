@@ -421,14 +421,16 @@ namespace WinFormsLegacyControls
         public ContextMenu? GetContextMenu()
         {
             Menu? menuT;
-            for (menuT = this; !(menuT is ContextMenu);)
+            for (menuT = this; menuT is not ContextMenu;)
             {
-                if (!(menuT is MenuItem))
+                if (menuT is MenuItem menuItem)
+                {
+                    menuT = menuItem.Parent;
+                }
+                else
                 {
                     return null;
                 }
-
-                menuT = ((MenuItem)menuT).Parent;
             }
             return (ContextMenu)menuT;
 
@@ -444,14 +446,16 @@ namespace WinFormsLegacyControls
         public MainMenu? GetMainMenu()
         {
             Menu? menuT;
-            for (menuT = this; !(menuT is MainMenu);)
+            for (menuT = this; menuT is not MainMenu;)
             {
-                if (!(menuT is MenuItem))
+                if (menuT is MenuItem menuItem)
+                {
+                    menuT = menuItem.Parent;
+                }
+                else
                 {
                     return null;
                 }
-
-                menuT = ((MenuItem)menuT).Parent;
             }
             return (MainMenu)menuT;
         }

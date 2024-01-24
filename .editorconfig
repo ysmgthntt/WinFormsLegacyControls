@@ -31,3 +31,6 @@ dotnet_diagnostic.IDE0038.severity = warning
 
 # IDE0074: 複合代入を使用
 dotnet_diagnostic.IDE0074.severity = warning
+
+# IDE0083: パターン マッチングを使用します
+dotnet_diagnostic.IDE0083.severity = warning

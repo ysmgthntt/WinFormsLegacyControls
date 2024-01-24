@@ -123,7 +123,7 @@ namespace WinFormsLegacyControls
             {
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
                 //
-                if (value is not null && !(value is ContextMenu))
+                if (value is not null && value is not ContextMenu)
                 {
                     throw new ArgumentException(SR.ToolBarButtonInvalidDropDownMenuType);
                 }

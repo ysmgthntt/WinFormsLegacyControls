@@ -324,7 +324,7 @@ namespace WinFormsLegacyControls
                 {
                     for (int i = 0; i < ItemCount; i++)
                     {
-                        if (!(items[i]._data.UserData is MdiListUserData))
+                        if (items[i]._data.UserData is not MdiListUserData)
                         {
                             return true;
                         }
@@ -335,7 +335,7 @@ namespace WinFormsLegacyControls
                         return true;
                     }
 
-                    if (Parent is not null && !(Parent is MenuItem))
+                    if (Parent is not null && Parent is not MenuItem)
                     {
                         return true;
                     }
