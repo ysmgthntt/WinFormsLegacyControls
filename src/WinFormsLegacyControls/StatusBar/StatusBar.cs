@@ -1064,10 +1064,9 @@ namespace WinFormsLegacyControls
             // allow resizing, when it would resize the form.
             if (x > bounds.X + bounds.Width - SizeGripWidth)
             {
-                Control? parent = Parent/*Internal*/;
-                if (parent is not null && parent is Form)
+                if (Parent/*Internal*/ is Form form)
                 {
-                    FormBorderStyle bs = ((Form)parent).FormBorderStyle;
+                    FormBorderStyle bs = form.FormBorderStyle;
 
                     if (bs != FormBorderStyle.Sizable
                         && bs != FormBorderStyle.SizableToolWindow)
@@ -1075,7 +1074,7 @@ namespace WinFormsLegacyControls
                         callSuper = false;
                     }
 
-                    if (!((Form)parent).TopLevel
+                    if (!form.TopLevel
                         || Dock != DockStyle.Bottom)
                     {
                         callSuper = false;
@@ -1083,7 +1082,7 @@ namespace WinFormsLegacyControls
 
                     if (callSuper)
                     {
-                        ControlCollection children = parent.Controls;
+                        ControlCollection children = form.Controls;
                         int c = children.Count;
                         for (int i = 0; i < c; i++)
                         {
@@ -1228,9 +1227,9 @@ namespace WinFormsLegacyControls
                 }
                 set
                 {
-                    if (value is StatusBarPanel)
+                    if (value is StatusBarPanel statusBarPanel)
                     {
-                        this[index] = (StatusBarPanel)value;
+                        this[index] = statusBarPanel;
                     }
                     else
                     {
@@ -1335,9 +1334,9 @@ namespace WinFormsLegacyControls
 
             int IList.Add(object? value)
             {
-                if (value is StatusBarPanel)
+                if (value is StatusBarPanel statusBarPanel)
                 {
-                    return Add((StatusBarPanel)value);
+                    return Add(statusBarPanel);
                 }
                 else
                 {
@@ -1361,9 +1360,9 @@ namespace WinFormsLegacyControls
 
             bool IList.Contains(object? panel)
             {
-                if (panel is StatusBarPanel)
+                if (panel is StatusBarPanel statusBarPanel)
                 {
-                    return Contains((StatusBarPanel)panel);
+                    return Contains(statusBarPanel);
                 }
                 else
                 {
@@ -1393,9 +1392,9 @@ namespace WinFormsLegacyControls
 
             int IList.IndexOf(object? panel)
             {
-                if (panel is StatusBarPanel)
+                if (panel is StatusBarPanel statusBarPanel)
                 {
-                    return IndexOf((StatusBarPanel)panel);
+                    return IndexOf(statusBarPanel);
                 }
                 else
                 {
@@ -1480,9 +1479,9 @@ namespace WinFormsLegacyControls
 
             void IList.Insert(int index, object? value)
             {
-                if (value is StatusBarPanel)
+                if (value is StatusBarPanel statusBarPanel)
                 {
-                    Insert(index, (StatusBarPanel)value);
+                    Insert(index, statusBarPanel);
                 }
                 else
                 {
@@ -1525,9 +1524,9 @@ namespace WinFormsLegacyControls
 
             void IList.Remove(object? value)
             {
-                if (value is StatusBarPanel)
+                if (value is StatusBarPanel statusBarPanel)
                 {
-                    Remove((StatusBarPanel)value);
+                    Remove(statusBarPanel);
                 }
             }
 

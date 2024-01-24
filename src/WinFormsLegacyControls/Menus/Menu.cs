@@ -858,9 +858,9 @@ namespace WinFormsLegacyControls
                             {
                                 throw new ArgumentException(string.Format(SR.MenuItemAlreadyExists, item.Text), nameof(item));
                             }
-                            if (parent.Parent is MenuItem)
+                            if (parent.Parent is MenuItem menuItem)
                             {
-                                parent = (MenuItem)parent.Parent;
+                                parent = menuItem;
                             }
                             else
                             {
@@ -901,9 +901,9 @@ namespace WinFormsLegacyControls
                 owner._itemCount++;
                 item.Parent = owner;
                 owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
-                if (owner is MenuItem)
+                if (owner is MenuItem ownerMenuItem)
                 {
-                    ((MenuItem)owner).ItemsChanged(MenuChangeKind.CHANGE_ITEMADDED, item);
+                    ownerMenuItem.ItemsChanged(MenuChangeKind.CHANGE_ITEMADDED, item);
                 }
 
                 return index;
@@ -920,9 +920,9 @@ namespace WinFormsLegacyControls
 
             int IList.Add(object? value)
             {
-                if (value is MenuItem)
+                if (value is MenuItem menuItem)
                 {
-                    return Add((MenuItem)value);
+                    return Add(menuItem);
                 }
                 else
                 {
@@ -937,9 +937,9 @@ namespace WinFormsLegacyControls
 
             bool IList.Contains(object? value)
             {
-                if (value is MenuItem)
+                if (value is MenuItem menuItem)
                 {
-                    return Contains((MenuItem)value);
+                    return Contains(menuItem);
                 }
                 else
                 {
@@ -1037,9 +1037,9 @@ namespace WinFormsLegacyControls
 
             int IList.IndexOf(object? value)
             {
-                if (value is MenuItem)
+                if (value is MenuItem menuItem)
                 {
-                    return IndexOf((MenuItem)value);
+                    return IndexOf(menuItem);
                 }
                 else
                 {
@@ -1084,9 +1084,9 @@ namespace WinFormsLegacyControls
 
             void IList.Insert(int index, object? value)
             {
-                if (value is MenuItem)
+                if (value is MenuItem menuItem)
                 {
-                    Add(index, (MenuItem)value);
+                    Add(index, menuItem);
                 }
                 else
                 {
@@ -1120,9 +1120,9 @@ namespace WinFormsLegacyControls
 
                     owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
-                    if (owner is MenuItem)
+                    if (owner is MenuItem menuItem)
                     {
-                        ((MenuItem)(owner)).UpdateMenuItem(true);
+                        menuItem.UpdateMenuItem(true);
                     }
                 }
             }
@@ -1193,9 +1193,9 @@ namespace WinFormsLegacyControls
 
             void IList.Remove(object? value)
             {
-                if (value is MenuItem)
+                if (value is MenuItem menuItem)
                 {
-                    Remove((MenuItem)value);
+                    Remove(menuItem);
                 }
             }
         }

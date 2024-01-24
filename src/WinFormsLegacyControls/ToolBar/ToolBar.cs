@@ -1937,9 +1937,9 @@ namespace WinFormsLegacyControls
                 }
                 set
                 {
-                    if (value is ToolBarButton)
+                    if (value is ToolBarButton toolBarButton)
                     {
-                        this[index] = (ToolBarButton)value;
+                        this[index] = toolBarButton;
                     }
                     else
                     {
@@ -2042,9 +2042,9 @@ namespace WinFormsLegacyControls
 
             int IList.Add(object? button)
             {
-                if (button is ToolBarButton)
+                if (button is ToolBarButton toolBarButton)
                 {
-                    return Add((ToolBarButton)button);
+                    return Add(toolBarButton);
                 }
                 else
                 {
@@ -2106,9 +2106,9 @@ namespace WinFormsLegacyControls
 
             bool IList.Contains(object? button)
             {
-                if (button is ToolBarButton)
+                if (button is ToolBarButton toolBarButton)
                 {
-                    return Contains((ToolBarButton)button);
+                    return Contains(toolBarButton);
                 }
                 else
                 {
@@ -2146,9 +2146,9 @@ namespace WinFormsLegacyControls
 
             int IList.IndexOf(object? button)
             {
-                if (button is ToolBarButton)
+                if (button is ToolBarButton toolBarButton)
                 {
-                    return IndexOf((ToolBarButton)button);
+                    return IndexOf(toolBarButton);
                 }
                 else
                 {
@@ -2198,9 +2198,9 @@ namespace WinFormsLegacyControls
 
             void IList.Insert(int index, object? button)
             {
-                if (button is ToolBarButton)
+                if (button is ToolBarButton toolBarButton)
                 {
-                    Insert(index, (ToolBarButton)button);
+                    Insert(index, toolBarButton);
                 }
                 else
                 {
@@ -2261,9 +2261,9 @@ namespace WinFormsLegacyControls
 
             void IList.Remove(object? button)
             {
-                if (button is ToolBarButton)
+                if (button is ToolBarButton toolBarButton)
                 {
-                    Remove((ToolBarButton)button);
+                    Remove(toolBarButton);
                 }
             }
 

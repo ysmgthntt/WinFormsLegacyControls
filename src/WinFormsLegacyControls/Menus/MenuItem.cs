@@ -1281,9 +1281,9 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            if (_data.UserData is MdiListUserData)
+            if (_data.UserData is MdiListUserData mdiList)
             {
-                ((MdiListUserData)_data.UserData).OnClick(e);
+                mdiList.OnClick(e);
             }
             else if (_data.baseItem != this)
             {
