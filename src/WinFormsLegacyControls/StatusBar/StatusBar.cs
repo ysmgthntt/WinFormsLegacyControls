@@ -211,6 +211,12 @@ namespace WinFormsLegacyControls
                 }
                 cp.Style |= (int)(PInvoke.CCS_NOPARENTALIGN | PInvoke.CCS_NORESIZE);
 
+                // [fixed]
+                if (RightToLeft == RightToLeft.Yes)
+                {
+                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR;
+                }
+
                 return cp;
             }
         }
@@ -1741,6 +1747,7 @@ namespace WinFormsLegacyControls
                 return (Tool?)tools[key];
             }
 
+            // [fixed]
             // 指定した StatusBarPanel の ToolTipText が変更、削除できない。
             // TTM_SETTOOLINFOW, TTM_DELTOOLW も TTM_ADDTOOLW した Handle に送信する必要がある。
             private LRESULT SendMessage(ToolInfoWrapper<Control> info, uint message)
@@ -1838,6 +1845,7 @@ namespace WinFormsLegacyControls
 
                 return new ToolInfoWrapper<Control>(
                     parent,
+                    // [fixed]
                     // https://github.com/dotnet/winforms/pull/1612/files#diff-8d43c48c6ec7a62bb08bf0bb5f4669378adcba9417e33f554f9ff8fdab508aef
                     //id: parent is StatusBar sb ? sb.Handle : tool.id);
                     //id: parent is StatusBar sb && sb.mainToolTip is not null ? sb.Handle : tool.id);
