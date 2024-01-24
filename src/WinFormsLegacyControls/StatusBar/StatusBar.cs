@@ -41,7 +41,7 @@ namespace WinFormsLegacyControls
         private bool sizeGrip = true;
         private string? simpleText;
         private Point lastClick = new Point(0, 0);
-        private readonly IList panels = new ArrayList();
+        private readonly List<StatusBarPanel> _panels = new();
         private StatusBarPanelCollection? panelsCollection;
         private ControlToolTip? tooltips;
 
@@ -447,9 +447,9 @@ namespace WinFormsLegacyControls
                         }
                         else if (tooltips is not null)
                         {
-                            for (int i = 0; i < panels.Count; i++)
+                            for (int i = 0; i < _panels.Count; i++)
                             {
-                                tooltips.SetTool(panels[i]!, null);
+                                tooltips.SetTool(_panels[i], null);
                             }
                         }
 
@@ -576,8 +576,7 @@ namespace WinFormsLegacyControls
                 return;
             }
 
-            StatusBarPanel? panel = null;
-            int length = panels.Count;
+            int length = _panels.Count;
 
             if (length == 0)
             {
@@ -598,7 +597,7 @@ namespace WinFormsLegacyControls
             int currentOffset = 0;
             for (int i = 0; i < length; i++)
             {
-                panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = _panels[i];
                 currentOffset += panel.Width;
                 offsets2[i] = currentOffset;
                 panel.Right = offsets2[i];
@@ -612,7 +611,7 @@ namespace WinFormsLegacyControls
             // Tooltip setup...
             for (int i = 0; i < length; i++)
             {
-                panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = _panels[i];
                 UpdateTooltip(panel);
             }
 
@@ -733,7 +732,7 @@ namespace WinFormsLegacyControls
             if (showPanels)
             {
                 LayoutPanels();
-                if (IsHandleCreated && panelsRealized != panels.Count)
+                if (IsHandleCreated && panelsRealized != _panels.Count)
                 {
                     RealizePanels();
                 }
@@ -747,7 +746,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void RealizePanels()
         {
-            int length = panels.Count;
+            int length = _panels.Count;
             int old = panelsRealized;
 
             panelsRealized = 0;
@@ -760,7 +759,7 @@ namespace WinFormsLegacyControls
             int i;
             for (i = 0; i < length; i++)
             {
-                StatusBarPanel panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = _panels[i];
                 try
                 {
                     panel.Realize();
@@ -781,15 +780,15 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void RemoveAllPanelsWithoutUpdate()
         {
-            int size = panels.Count;
+            int size = _panels.Count;
             // remove the parent reference
             for (int i = 0; i < size; i++)
             {
-                StatusBarPanel sbp = (StatusBarPanel)panels[i]!;
+                StatusBarPanel sbp = _panels[i];
                 sbp.ParentInternal = null;
             }
 
-            panels.Clear();
+            _panels.Clear();
             if (showPanels == true)
             {
                 ApplyPanelWidths();
@@ -803,11 +802,11 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void SetPanelContentsWidths(bool newPanels)
         {
-            int size = panels.Count;
+            int size = _panels.Count;
             bool changed = false;
             for (int i = 0; i < size; i++)
             {
-                StatusBarPanel sbp = (StatusBarPanel)panels[i]!;
+                StatusBarPanel sbp = _panels[i];
                 if (sbp.AutoSize == StatusBarPanelAutoSize.Contents)
                 {
                     int newWidth = sbp.GetContentsWidth(newPanels);
@@ -847,12 +846,12 @@ namespace WinFormsLegacyControls
         {
             int barPanelWidth = 0;
             int springNum = 0;
-            StatusBarPanel?[] pArray = new StatusBarPanel[panels.Count];
+            StatusBarPanel?[] pArray = new StatusBarPanel[_panels.Count];
             bool changed = false;
 
             for (int i = 0; i < pArray.Length; i++)
             {
-                StatusBarPanel panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = _panels[i];
                 if (panel.AutoSize == StatusBarPanelAutoSize.Spring)
                 {
                     pArray[springNum] = panel;
@@ -1004,10 +1003,10 @@ namespace WinFormsLegacyControls
 
         private void UpdatePanelIndex()
         {
-            int length = panels.Count;
+            int length = _panels.Count;
             for (int i = 0; i < length; i++)
             {
-                ((StatusBarPanel)panels[i]!).Index = i;
+                _panels[i].Index = i;
             }
         }
 
@@ -1018,14 +1017,14 @@ namespace WinFormsLegacyControls
         {
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
 
-            int length = panels.Count;
+            int length = _panels.Count;
             if (dis->itemID < 0 || dis->itemID >= length)
             {
                 Debug.Fail("OwnerDraw item out of range");
             }
 
             // The itemState is not defined for a statusbar control
-            StatusBarPanel panel = (StatusBarPanel)panels[(int)dis->itemID]!;
+            StatusBarPanel panel = _panels[(int)dis->itemID];
 
             if (RightToLeftLayout && /*RightToLeft == RightToLeft.Yes*/PInvoke.GetLayout(dis->hDC) == (nint)DC_LAYOUT.LAYOUT_RTL)
             {
@@ -1057,12 +1056,12 @@ namespace WinFormsLegacyControls
                 return;
             }
 
-            int size = panels.Count;
+            int size = _panels.Count;
             int currentOffset = 0;
             int index = -1;
             for (int i = 0; i < size; i++)
             {
-                StatusBarPanel panel = (StatusBarPanel)panels[i]!;
+                StatusBarPanel panel = _panels[i];
                 currentOffset += panel.Width;
                 if (lastClick.X < currentOffset)
                 {
@@ -1096,7 +1095,7 @@ namespace WinFormsLegacyControls
                 }
 
                 Point pt = lastClick;
-                StatusBarPanel panel = (StatusBarPanel)panels[index]!;
+                StatusBarPanel panel = _panels[index];
 
                 StatusBarPanelClickEventArgs sbpce = new StatusBarPanelClickEventArgs(panel,
                                                                                       button, clicks, pt.X, pt.Y);
@@ -1224,6 +1223,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public StatusBarPanelCollection(StatusBar owner)
             {
+                ArgumentNullException.ThrowIfNull(owner);
                 this.owner = owner;
             }
 
@@ -1232,10 +1232,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual StatusBarPanel this[int index]
             {
-                get
-                {
-                    return (StatusBarPanel)owner.panels[index]!;
-                }
+                get => owner._panels[index];
                 set
                 {
                     ArgumentNullException.ThrowIfNull(value);
@@ -1247,21 +1244,21 @@ namespace WinFormsLegacyControls
                         throw new ArgumentException(SR.ObjectHasParent, nameof(value));
                     }
 
-                    int length = owner.panels.Count;
+                    int length = owner._panels.Count;
 
                     if (index < 0 || index >= length)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    StatusBarPanel oldPanel = (StatusBarPanel)owner.panels[index]!;
+                    StatusBarPanel oldPanel = owner._panels[index];
                     oldPanel.ParentInternal = null;
                     value.ParentInternal = owner;
                     if (value.AutoSize == StatusBarPanelAutoSize.Contents)
                     {
                         value.Width = value.GetContentsWidth(true);
                     }
-                    owner.panels[index] = value;
+                    owner._panels[index] = value;
                     value.Index = index;
 
                     if (owner.ArePanelsRealized())
@@ -1274,10 +1271,7 @@ namespace WinFormsLegacyControls
 
             object? IList.this[int index]
             {
-                get
-                {
-                    return this[index];
-                }
+                get => this[index];
                 set
                 {
                     if (value is StatusBarPanel statusBarPanel)
@@ -1322,45 +1316,15 @@ namespace WinFormsLegacyControls
             ///  in this collection.
             /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-            public int Count
-            {
-                get
-                {
-                    return owner.panels.Count;
-                }
-            }
+            public int Count => owner._panels.Count;
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool IList.IsFixedSize => false;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsReadOnly => false;
 
             /// <summary>
             ///  Adds a StatusBarPanel to the collection.
@@ -1380,7 +1344,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual int Add(StatusBarPanel value)
             {
-                int index = owner.panels.Count;
+                int index = owner._panels.Count;
                 Insert(index, value);
                 return index;
             }
@@ -1407,9 +1371,7 @@ namespace WinFormsLegacyControls
             }
 
             public bool Contains(StatusBarPanel panel)
-            {
-                return IndexOf(panel) != -1;
-            }
+                => IndexOf(panel) != -1;
 
             bool IList.Contains(object? panel)
             {
@@ -1427,9 +1389,7 @@ namespace WinFormsLegacyControls
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
             public virtual bool ContainsKey(string key)
-            {
-                return IsValidIndex(IndexOfKey(key));
-            }
+                => IsValidIndex(IndexOfKey(key));
 
             public int IndexOf(StatusBarPanel panel)
             {
@@ -1505,7 +1465,7 @@ namespace WinFormsLegacyControls
                     throw new ArgumentException(SR.ObjectHasParent, nameof(value));
                 }
 
-                int length = owner.panels.Count;
+                int length = owner._panels.Count;
 
                 if (index < 0 || index > length)
                 {
@@ -1524,7 +1484,7 @@ namespace WinFormsLegacyControls
                         break;
                 }
 
-                owner.panels.Insert(index, value);
+                owner._panels.Insert(index, value);
                 owner.UpdatePanelIndex();
 
                 owner.ForcePanelUpdate();
@@ -1546,9 +1506,7 @@ namespace WinFormsLegacyControls
             ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index)
-            {
-                return ((index >= 0) && (index < Count));
-            }
+                => ((index >= 0) && (index < Count));
 
             /// <summary>
             ///  Removes all the StatusBarPanels in the collection.
@@ -1596,9 +1554,9 @@ namespace WinFormsLegacyControls
 
                 // clear any tooltip
                 //
-                StatusBarPanel panel = (StatusBarPanel)owner.panels[index]!;
+                StatusBarPanel panel = owner._panels[index];
 
-                owner.panels.RemoveAt(index);
+                owner._panels.RemoveAt(index);
                 panel.ParentInternal = null;
 
                 // this will cause the panels tooltip to be removed since it's no longer a child
@@ -1623,24 +1581,13 @@ namespace WinFormsLegacyControls
             }
 
             void ICollection.CopyTo(Array dest, int index)
-            {
-                owner.panels.CopyTo(dest, index);
-            }
+                => ((ICollection)owner._panels).CopyTo(dest, index);
 
             /// <summary>
             ///  Returns the Enumerator for this collection.
             /// </summary>
             public IEnumerator GetEnumerator()
-            {
-                if (owner.panels is not null)
-                {
-                    return owner.panels.GetEnumerator();
-                }
-                else
-                {
-                    return Array.Empty<StatusBarPanel>().GetEnumerator();
-                }
-            }
+                => owner._panels.GetEnumerator();
         }
 
         /// <summary>
