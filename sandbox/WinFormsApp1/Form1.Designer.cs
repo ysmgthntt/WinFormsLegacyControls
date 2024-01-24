@@ -257,6 +257,7 @@
             statusBar1.TabIndex = 1;
             statusBar1.Text = "statusBar1";
             toolTip1.SetToolTip(statusBar1, "statusbar");
+            statusBar1.PanelClick += statusBar1_PanelClick;
             // 
             // statusBarPanel1
             // 

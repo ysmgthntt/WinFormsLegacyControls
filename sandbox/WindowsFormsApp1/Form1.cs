@@ -55,7 +55,7 @@ namespace WindowsFormsApp1
             menuItem9.MeasureItem += MenuItem_MeasureItem;
             menuItem9.DrawItem += MenuItem_DrawItem;
 
-            statusBarPanel3.Style = StatusBarPanelStyle.OwnerDraw;
+            statusBarPanel2.Style = StatusBarPanelStyle.OwnerDraw;
             statusBar1.DrawItem += StatusBar1_DrawItem;
         }
 
@@ -65,6 +65,8 @@ namespace WindowsFormsApp1
             statusBarPanel2.ToolTipText = textBox1.Text;
 
             menuItem5.ShowShortcut = !menuItem5.ShowShortcut;
+
+            this.RightToLeftLayout = !this.RightToLeftLayout;
         }
 
         private void MenuItem_Click(object? sender, EventArgs e)
@@ -105,6 +107,8 @@ namespace WindowsFormsApp1
         private void StatusBar1_DrawItem(object sender, StatusBarDrawItemEventArgs e)
         {
             e.DrawBackground();
+            e.Graphics.FillRectangle(Brushes.Red, e.Bounds);
+            //e.Graphics.DrawString(e.Panel.Text, e.Font!, SystemBrushes.ControlText, e.Bounds);
             TextRenderer.DrawText(e.Graphics, e.Panel.Text, e.Font, e.Bounds, e.ForeColor);
         }
 
@@ -123,6 +127,11 @@ namespace WindowsFormsApp1
                 */
                 this.RightToLeft = this.RightToLeft == RightToLeft.Yes ? RightToLeft.No : RightToLeft.Yes;
             }
+        }
+
+        private void statusBar1_PanelClick(object sender, StatusBarPanelClickEventArgs e)
+        {
+            Debug.WriteLine("statusBar1_PanelClick: " + e.StatusBarPanel.Name);
         }
     }
 }

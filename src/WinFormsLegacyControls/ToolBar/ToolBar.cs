@@ -89,11 +89,12 @@ namespace WinFormsLegacyControls
         private float currentScaleDX = 1.0F;
         private float currentScaleDY = 1.0F;
 
-        private const int TOOLBARSTATE_wrappable = 0x00000001;
-        private const int TOOLBARSTATE_dropDownArrows = 0x00000002;
-        private const int TOOLBARSTATE_divider = 0x00000004;
-        private const int TOOLBARSTATE_showToolTips = 0x00000008;
-        private const int TOOLBARSTATE_autoSize = 0x00000010;
+        private const int TOOLBARSTATE_wrappable        = 0x00000001;
+        private const int TOOLBARSTATE_dropDownArrows   = 0x00000002;
+        private const int TOOLBARSTATE_divider          = 0x00000004;
+        private const int TOOLBARSTATE_showToolTips     = 0x00000008;
+        private const int TOOLBARSTATE_autoSize         = 0x00000010;
+        private const int TOOLBARSTATE_rtllayout        = 0x00000020;
 
         // PERF: take all the bools and put them into a state variable
         private System.Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above
@@ -444,6 +445,12 @@ namespace WinFormsLegacyControls
                     case ToolBarTextAlign.Right:
                         cp.Style |= (int)PInvoke.TBSTYLE_LIST;
                         break;
+                }
+
+                if (RightToLeftLayout && (cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_RTLREADING) == (int)WINDOW_EX_STYLE.WS_EX_RTLREADING)
+                {
+                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
+                    cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                 }
 
                 return cp;
@@ -830,6 +837,26 @@ namespace WinFormsLegacyControls
         {
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
+        }
+
+        // [spec]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool RightToLeftLayout
+        {
+            get => toolBarState[TOOLBARSTATE_rtllayout];
+            set
+            {
+                if (RightToLeftLayout != value)
+                {
+                    toolBarState[TOOLBARSTATE_rtllayout] = value;
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
+                        RecreateHandle();
+                    }
+                }
+            }
         }
 
         /// <summary>

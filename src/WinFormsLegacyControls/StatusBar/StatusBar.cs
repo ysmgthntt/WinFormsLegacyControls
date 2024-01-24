@@ -47,6 +47,7 @@ namespace WinFormsLegacyControls
 
         private ToolTip? mainToolTip = null;
         //private bool toolTipSet = false;
+        private bool _rightToLeftLayout;
 
         /// <summary>
         ///  Initializes a new default instance of the <see cref='StatusBar'/> class.
@@ -211,10 +212,18 @@ namespace WinFormsLegacyControls
                 }
                 cp.Style |= (int)(PInvoke.CCS_NOPARENTALIGN | PInvoke.CCS_NORESIZE);
 
-                // [fixed]
-                if (RightToLeft == RightToLeft.Yes)
+                if ((cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_RTLREADING) == (int)WINDOW_EX_STYLE.WS_EX_RTLREADING)
                 {
-                    cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR;
+                    if (RightToLeftLayout)
+                    {
+                        cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
+                        cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
+                    }
+                    else
+                    {
+                        // [fixed]
+                        cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR;
+                    }
                 }
 
                 return cp;
@@ -354,6 +363,26 @@ namespace WinFormsLegacyControls
         ]
         public StatusBarPanelCollection Panels
             => panelsCollection ??= new StatusBarPanelCollection(this);
+
+        // [spec]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool RightToLeftLayout
+        {
+            get => _rightToLeftLayout;
+            set
+            {
+                if (RightToLeftLayout != value)
+                {
+                    _rightToLeftLayout = value;
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
+                        RecreateHandle();
+                    }
+                }
+            }
+        }
 
         /// <summary>
         ///  The status bar text.
@@ -997,8 +1026,28 @@ namespace WinFormsLegacyControls
 
             // The itemState is not defined for a statusbar control
             StatusBarPanel panel = (StatusBarPanel)panels[(int)dis->itemID]!;
-            using Graphics g = Graphics.FromHdcInternal(dis->hDC);
-            OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
+
+            if (RightToLeftLayout && /*RightToLeft == RightToLeft.Yes*/PInvoke.GetLayout(dis->hDC) == (nint)DC_LAYOUT.LAYOUT_RTL)
+            {
+                // RTL to LTR Coordinate transformation for GDI+
+                int left = Width - dis->rcItem.right;
+                RECT rect = new RECT(left, dis->rcItem.top, left + dis->rcItem.Width, dis->rcItem.bottom);
+                uint oldLayout = PInvoke.SetLayout(dis->hDC, DC_LAYOUT.LAYOUT_BITMAPORIENTATIONPRESERVED);
+                try
+                {
+                    using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                    OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, rect, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
+                }
+                finally
+                {
+                    PInvoke.SetLayout(dis->hDC, (DC_LAYOUT)oldLayout);
+                }
+            }
+            else
+            {
+                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
+                OnDrawItem(new StatusBarDrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, DrawItemState.None, panel, ForeColor, BackColor));
+            }
         }
 
         private unsafe void WmNotifyNMClick(NMHDR* note)

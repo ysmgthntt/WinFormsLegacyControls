@@ -208,6 +208,7 @@ namespace WindowsFormsApp1
             this.statusBar1.Size = new System.Drawing.Size(800, 22);
             this.statusBar1.TabIndex = 1;
             this.toolTip1.SetToolTip(this.statusBar1, "statusbar");
+            this.statusBar1.PanelClick += new System.Windows.Forms.StatusBarPanelClickEventHandler(this.statusBar1_PanelClick);
             // 
             // statusBarPanel1
             // 

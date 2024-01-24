@@ -10,6 +10,7 @@ DrawMenuBar
 GetCursorPos
 GetDC
 GetDeviceCaps
+GetLayout
 GetMenuItemCount
 GetMenuItemID
 GetMenuItemInfo
@@ -42,6 +43,7 @@ SC_KEYMENU
 SelectPalette
 SendMessage
 SetForegroundWindow
+SetLayout
 SetMenu
 SetMenuDefaultItem
 SetMenuItemInfo

@@ -570,7 +570,7 @@ namespace WinFormsLegacyControls
                 HorizontalAlignment align = alignment;
                 // Translate the alignment for Rtl apps
                 //
-                if (parent.RightToLeft == RightToLeft.Yes)
+                if (!parent.RightToLeftLayout && parent.RightToLeft == RightToLeft.Yes)
                 {
                     switch (align)
                     {
