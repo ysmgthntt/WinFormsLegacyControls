@@ -903,29 +903,19 @@ namespace WinFormsLegacyControls
                     throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
-                ArrayList foundMenuItems = FindInternal(key, searchAllChildren, this, new ArrayList());
-
-                // Make this a stongly typed collection.
-                MenuItem[] stronglyTypedfoundMenuItems = new MenuItem[foundMenuItems.Count];
-                foundMenuItems.CopyTo(stronglyTypedfoundMenuItems, 0);
-
-                return stronglyTypedfoundMenuItems;
+                List<MenuItem> foundMenuItems = new();
+                FindInternal(key, searchAllChildren, this, foundMenuItems);
+                return foundMenuItems.ToArray();
             }
 
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array list
             ///  of all the controls that match.
-                    /// </summary>
-            private ArrayList FindInternal(string key, bool searchAllChildren, MenuItemCollection menuItemsToLookIn, ArrayList foundMenuItems)
+            /// </summary>
+            private static void FindInternal(string key, bool searchAllChildren, MenuItemCollection menuItemsToLookIn, List<MenuItem> foundMenuItems)
             {
-                if ((menuItemsToLookIn is null) || (foundMenuItems is null))
-                {
-                    return null!;  //
-                }
-
                 // Perform breadth first search - as it's likely people will want controls belonging
                 // to the same parent close to each other.
-
                 for (int i = 0; i < menuItemsToLookIn.Count; i++)
                 {
                     if (menuItemsToLookIn[i] is null)
@@ -933,14 +923,13 @@ namespace WinFormsLegacyControls
                         continue;
                     }
 
-                    if (WindowsFormsUtils.SafeCompareStrings(menuItemsToLookIn[i].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(menuItemsToLookIn[i].Name, key, ignoreCase: true))
                     {
                         foundMenuItems.Add(menuItemsToLookIn[i]);
                     }
                 }
 
                 // Optional recurive search for controls in child collections.
-
                 if (searchAllChildren)
                 {
                     for (int i = 0; i < menuItemsToLookIn.Count; i++)
@@ -949,14 +938,13 @@ namespace WinFormsLegacyControls
                         {
                             continue;
                         }
-                        if ((menuItemsToLookIn[i].MenuItems is not null) && menuItemsToLookIn[i].MenuItems.Count > 0)
+                        if (menuItemsToLookIn[i].ItemCount > 0)
                         {
                             // if it has a valid child collecion, append those results to our collection
-                            foundMenuItems = FindInternal(key, searchAllChildren, menuItemsToLookIn[i].MenuItems, foundMenuItems);
+                            FindInternal(key, searchAllChildren, menuItemsToLookIn[i].MenuItems, foundMenuItems);
                         }
                     }
                 }
-                return foundMenuItems;
             }
 
             public int IndexOf(MenuItem value)
