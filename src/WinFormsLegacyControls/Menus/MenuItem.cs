@@ -281,7 +281,7 @@ namespace WinFormsLegacyControls
                 {
                     for (int i = 0; i < Parent.ItemCount; i++)
                     {
-                        if (Parent.items[i] == this)
+                        if (Parent._items[i] == this)
                         {
                             return i;
                         }
@@ -324,7 +324,7 @@ namespace WinFormsLegacyControls
                 {
                     for (int i = 0; i < ItemCount; i++)
                     {
-                        if (items[i]._data.UserData is not MdiListUserData)
+                        if (_items[i]._data.UserData is not MdiListUserData)
                         {
                             return true;
                         }
@@ -1339,10 +1339,10 @@ namespace WinFormsLegacyControls
             bool recreate = false;
             for (int i = 0; i < ItemCount; i++)
             {
-                if (items[i].MdiList)
+                if (_items[i].MdiList)
                 {
                     recreate = true;
-                    items[i].UpdateMenuItem(force: true);
+                    _items[i].UpdateMenuItem(force: true);
                 }
             }
             if (recreate || (_hasHandle && !IsParent))
@@ -1362,7 +1362,7 @@ namespace WinFormsLegacyControls
             // Update any subitem states that got changed in the event
             for (int i = 0; i < ItemCount; i++)
             {
-                MenuItem item = items[i];
+                MenuItem item = _items[i];
                 if (item._dataVersion != item._data._version)
                 {
                     item.UpdateMenuItem(force: true);
