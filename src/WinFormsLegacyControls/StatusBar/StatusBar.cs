@@ -1031,7 +1031,7 @@ namespace WinFormsLegacyControls
                 // RTL to LTR Coordinate transformation for GDI+
                 int left = Width - dis->rcItem.right;
                 RECT rect = new RECT(left, dis->rcItem.top, left + dis->rcItem.Width, dis->rcItem.bottom);
-                uint oldLayout = PInvoke.SetLayout(dis->hDC, DC_LAYOUT.LAYOUT_BITMAPORIENTATIONPRESERVED);
+                uint oldLayout = PInvoke.SetLayout(dis->hDC, (DC_LAYOUT)0);
                 try
                 {
                     using Graphics g = Graphics.FromHdcInternal(dis->hDC);
