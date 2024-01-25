@@ -1608,7 +1608,7 @@ namespace WinFormsLegacyControls
                 internal IntPtr id = new IntPtr(-1);
             }
 
-            private readonly Hashtable tools = new Hashtable();
+            private Dictionary<StatusBarPanel, Tool>? _tools;
             private ToolTipNativeWindow? window;
             private readonly StatusBar parent;
             private int nextId = 0;
@@ -1682,17 +1682,14 @@ namespace WinFormsLegacyControls
             ///  tool parameter will result in the tool
             ///  region being removed.
             /// </summary>
-            public void SetTool(object key, Tool? tool)
+            public void SetTool(StatusBarPanel key, Tool? tool)
             {
                 bool remove = false;
                 bool add = false;
                 bool update = false;
 
                 Tool? toRemove = null;
-                if (tools.ContainsKey(key))
-                {
-                    toRemove = (Tool?)tools[key];
-                }
+                _tools?.TryGetValue(key, out toRemove);
 
                 if (toRemove is not null)
                 {
@@ -1726,11 +1723,12 @@ namespace WinFormsLegacyControls
 
                 if (tool is not null)
                 {
-                    tools[key] = tool;
+                    _tools ??= new();
+                    _tools[key] = tool;
                 }
                 else
                 {
-                    tools.Remove(key);
+                    _tools?.Remove(key);
                 }
             }
 
@@ -1738,9 +1736,11 @@ namespace WinFormsLegacyControls
             ///  Returns the tool associated with the specified key,
             ///  or null if there is no area.
             /// </summary>
-            public Tool? GetTool(object key)
+            public Tool? GetTool(StatusBarPanel key)
             {
-                return (Tool?)tools[key];
+                Tool? tool = null;
+                _tools?.TryGetValue(key, out tool);
+                return tool;
             }
 
             // [fixed]
@@ -1813,7 +1813,7 @@ namespace WinFormsLegacyControls
                 if (IsHandleCreated)
                 {
                     window.DestroyHandle();
-                    tools.Clear();
+                    _tools?.Clear();
                 }
             }
 
