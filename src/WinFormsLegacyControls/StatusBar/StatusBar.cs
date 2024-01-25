@@ -1026,7 +1026,7 @@ namespace WinFormsLegacyControls
             // The itemState is not defined for a statusbar control
             StatusBarPanel panel = _panels[(int)dis->itemID];
 
-            if (RightToLeftLayout && /*RightToLeft == RightToLeft.Yes*/PInvoke.GetLayout(dis->hDC) == (nint)DC_LAYOUT.LAYOUT_RTL)
+            if (RightToLeftLayout && /*RightToLeft == RightToLeft.Yes*/PInvoke.GetLayout(dis->hDC) == (uint)DC_LAYOUT.LAYOUT_RTL)
             {
                 // RTL to LTR Coordinate transformation for GDI+
                 int left = Width - dis->rcItem.right;
@@ -1039,7 +1039,7 @@ namespace WinFormsLegacyControls
                 }
                 finally
                 {
-                    PInvoke.SetLayout(dis->hDC, (DC_LAYOUT)oldLayout);
+                    _ = PInvoke.SetLayout(dis->hDC, (DC_LAYOUT)oldLayout);
                 }
             }
             else

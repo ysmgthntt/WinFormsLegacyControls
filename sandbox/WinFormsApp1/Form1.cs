@@ -116,8 +116,15 @@ namespace WinFormsApp1
         {
             var menuItem = (MenuItem)sender!;
             e.DrawBackground();
-            var pt = new Point(e.Bounds.X + SystemInformation.MenuCheckSize.Width, e.Bounds.Y);
-            TextRenderer.DrawText(e.Graphics, menuItem.Text, e.Font, pt, e.ForeColor);
+            var bounds = e.Bounds;
+            if ((e.State & DrawItemState.Selected) != DrawItemState.Selected)
+                e.Graphics.FillRectangle(Brushes.Red, bounds);
+            int menuCheckWidth = SystemInformation.MenuCheckSize.Width;
+            bounds = new Rectangle(bounds.X + menuCheckWidth, bounds.Y, bounds.Width - menuCheckWidth, bounds.Height);
+            e.Graphics.DrawRectangle(Pens.Blue, bounds);
+            //using Brush brush = new SolidBrush(e.ForeColor);
+            //e.Graphics.DrawString(menuItem.Text, e.Font!, brush, bounds, new StringFormat() { Alignment = StringAlignment.Near });
+            TextRenderer.DrawText(e.Graphics, menuItem.Text, e.Font, bounds, e.ForeColor, TextFormatFlags.Left);
             e.DrawFocusRectangle();
         }
 
