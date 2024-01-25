@@ -60,12 +60,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The array of buttons we're working with.
         /// </summary>
-        private ToolBarButton[] buttons = null!;
-
-        /// <summary>
-        ///  The number of buttons we're working with
-        /// </summary>
-        private int buttonCount = 0;
+        private readonly List<ToolBarButton> _buttons = new();
 
         /// <summary>
         ///  Indicates if text captions should go underneath images in buttons or
@@ -345,7 +340,7 @@ namespace WinFormsLegacyControls
 
                     // Obtain the current buttonsize of the first button from the winctl control
                     //
-                    if (IsHandleCreated && buttons is not null && buttonCount > 0)
+                    if (IsHandleCreated && _buttons.Count > 0)
                     {
                         LRESULT result = PInvoke.SendMessage(this, PInvoke.TB_GETBUTTONSIZE);
                         if (result != 0)
@@ -706,7 +701,7 @@ namespace WinFormsLegacyControls
             {
                 int height;
 
-                if (buttons is null || buttonCount == 0 || !IsHandleCreated)
+                if (_buttons.Count == 0 || !IsHandleCreated)
                 {
                     height = ButtonSize.Height;
                 }
@@ -717,14 +712,14 @@ namespace WinFormsLegacyControls
                     RECT rect = new RECT();
                     int firstVisible;
 
-                    for (firstVisible = 0; firstVisible < buttons.Length; firstVisible++)
+                    for (firstVisible = 0; firstVisible < _buttons.Count; firstVisible++)
                     {
-                        if (buttons[firstVisible] is not null && buttons[firstVisible].Visible)
+                        if (_buttons[firstVisible].Visible)
                         {
                             break;
                         }
                     }
-                    if (firstVisible == buttons.Length)
+                    if (firstVisible == _buttons.Count)
                     {
                         firstVisible = 0;
                     }
@@ -788,7 +783,7 @@ namespace WinFormsLegacyControls
                 {
                     // don't have it, have to recompute
                     //
-                    if (!IsHandleCreated || buttons is null)
+                    if (!IsHandleCreated || _buttons.Count == 0)
                     {
                         maxWidth = ButtonSize.Width;
                     }
@@ -797,8 +792,9 @@ namespace WinFormsLegacyControls
 
                         RECT rect = new RECT();
 
-                        for (int x = 0; x < buttonCount; x++)
+                        for (int x = 0; x < _buttons.Count; x++)
                         {
+                            // ? 0 -> x ?
                             PInvoke.SendMessage(this, PInvoke.TB_GETRECT, 0, ref rect);
                             if ((rect.right - rect.left) > maxWidth)
                             {
@@ -1120,19 +1116,18 @@ namespace WinFormsLegacyControls
                         imageList = null;
                     }
 
-                    if (buttons is not null)
+                    if (_buttons.Count > 0)
                     {
-                        for (int i = 0; i < buttonCount; i++)
+                        for (int i = 0; i < _buttons.Count; i++)
                         {
-                            ToolBarButton b = buttons[i];
+                            ToolBarButton b = _buttons[i];
                             // from ToolBar.RemoveAt
                             b.parent = null;
                             b.stringIndex = (IntPtr)(-1);
                             b.Dispose();
                         }
                         // from ToolBarButtonCollection.Clear
-                        buttons = null!;
-                        buttonCount = 0;
+                        _buttons.Clear();
                     }
                 }
             }
@@ -1158,14 +1153,14 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void ForceButtonWidths()
         {
-            if (buttons is not null && buttonSize.IsEmpty && IsHandleCreated)
+            if (_buttons.Count > 0 && buttonSize.IsEmpty && IsHandleCreated)
             {
 
                 // force ourselves to re-compute this each time
                 //
                 maxWidth = -1;
 
-                for (int x = 0; x < buttonCount; x++)
+                for (int x = 0; x < _buttons.Count; x++)
                 {
 
                     TBBUTTONINFOW tbbi;
@@ -1174,7 +1169,7 @@ namespace WinFormsLegacyControls
                         tbbi = new TBBUTTONINFOW
                         {
                             cbSize = (uint)sizeof(TBBUTTONINFOW),
-                            cx = (ushort)buttons[x].Width
+                            cx = (ushort)_buttons[x].Width
                         };
                     }
 
@@ -1200,25 +1195,7 @@ namespace WinFormsLegacyControls
         private void Insert(int index, ToolBarButton button)
         {
             button.parent = this;
-
-            if (buttons is null)
-            {
-                buttons = new ToolBarButton[4];
-            }
-            else if (buttons.Length == buttonCount)
-            {
-                ToolBarButton[] newButtons = new ToolBarButton[buttonCount + 4];
-                System.Array.Copy(buttons, 0, newButtons, 0, buttonCount);
-                buttons = newButtons;
-            }
-
-            if (index < buttonCount)
-            {
-                System.Array.Copy(buttons, index, buttons, index + 1, buttonCount - index);
-            }
-
-            buttons[index] = button;
-            buttonCount++;
+            _buttons.Insert(index, button);
         }
 
         /// <summary>
@@ -1228,7 +1205,7 @@ namespace WinFormsLegacyControls
         {
             ArgumentNullException.ThrowIfNull(value);
 
-            if (index < 0 || ((buttons is not null) && (index > buttonCount)))
+            if (index < 0 || index > _buttons.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1254,7 +1231,7 @@ namespace WinFormsLegacyControls
         {
             ArgumentNullException.ThrowIfNull(button);
 
-            int index = buttonCount;
+            int index = _buttons.Count;
             Insert(index, button);
             return index;
         }
@@ -1269,10 +1246,11 @@ namespace WinFormsLegacyControls
             // string for the button if it has one, so we just have to leave
             // it in there.
             //
-            buttons[index].parent = null;
-            buttons[index].stringIndex = (IntPtr)(-1);
-            buttons[index] = value;
-            buttons[index].parent = this;
+            ToolBarButton oldButton = _buttons[index];
+            oldButton.parent = null;
+            oldButton.stringIndex = (IntPtr)(-1);
+            _buttons[index] = value;
+            value.parent = this;
 
             if (IsHandleCreated)
             {
@@ -1406,36 +1384,37 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void RealizeButtons()
         {
-            if (buttons is not null)
+            int count = _buttons.Count;
+            if (count > 0)
             {
                 try
                 {
                     BeginUpdate();
                     //  go and add in all the strings for all of our buttons
                     //
-                    for (int x = 0; x < buttonCount; x++)
+                    for (int x = 0; x < count; x++)
                     {
-                        if (buttons[x].Text.Length > 0)
+                        ToolBarButton button = _buttons[x];
+                        if (button.Text.Length > 0)
                         {
-                            string addString = buttons[x].Text + '\0'.ToString();
-                            buttons[x].stringIndex = PInvoke.SendMessage(this, PInvoke.TB_ADDSTRING, 0, addString);
+                            string addString = button.Text + '\0'.ToString();
+                            button.stringIndex = PInvoke.SendMessage(this, PInvoke.TB_ADDSTRING, 0, addString);
                         }
                         else
                         {
-                            buttons[x].stringIndex = (IntPtr)(-1);
+                            button.stringIndex = (IntPtr)(-1);
                         }
                     }
 
                     // insert the buttons and set their parent pointers
                     //
-                    int count = buttonCount;
                     Span<NativeMethods.TBBUTTON> ptbbuttons = stackalloc NativeMethods.TBBUTTON[count];
 
                     for (int x = 0; x < count; x++)
                     {
-
-                        buttons[x].GetTBBUTTON(x, ref ptbbuttons[x]);
-                        buttons[x].parent = this;
+                        ToolBarButton button = _buttons[x];
+                        button.GetTBBUTTON(x, ref ptbbuttons[x]);
+                        button.parent = this;
                     }
 
                     unsafe
@@ -1475,16 +1454,11 @@ namespace WinFormsLegacyControls
 
         private void RemoveAt(int index)
         {
-            buttons[index].parent = null;
-            buttons[index].stringIndex = (IntPtr)(-1);
-            buttonCount--;
+            ToolBarButton oldButton = _buttons[index];
+            oldButton.parent = null;
+            oldButton.stringIndex = (IntPtr)(-1);
 
-            if (index < buttonCount)
-            {
-                System.Array.Copy(buttons, index + 1, buttons, index, buttonCount - index);
-            }
-
-            buttons[buttonCount] = null!;
+            _buttons.RemoveAt(index);
         }
 
         /// <summary>
@@ -1589,10 +1563,10 @@ namespace WinFormsLegacyControls
         public override string ToString()
         {
             string s = base.ToString();
-            s += ", Buttons.Count: " + buttonCount.ToString(CultureInfo.CurrentCulture);
-            if (buttonCount > 0)
+            s += ", Buttons.Count: " + _buttons.Count.ToString(CultureInfo.CurrentCulture);
+            if (_buttons.Count > 0)
             {
-                s += ", Buttons[0]: " + buttons[0].ToString();
+                s += ", Buttons[0]: " + _buttons[0].ToString();
             }
 
             return s;
@@ -1627,11 +1601,13 @@ namespace WinFormsLegacyControls
                 iItem = nmTB->iItem;
                 hwndFrom = nmTB->hdr.hwndFrom;
             }
-            ToolBarButton tbb = buttons[iItem];
+            ToolBarButton tbb = _buttons[iItem];
+            /*
             if (tbb is null)
             {
                 throw new InvalidOperationException(SR.ToolBarButtonNotFound);
             }
+            */
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
@@ -1681,7 +1657,7 @@ namespace WinFormsLegacyControls
         {
             NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParam;
             int commandID = (int)ttt->hdr.idFrom;
-            ToolBarButton tbb = buttons[commandID];
+            ToolBarButton tbb = _buttons[commandID];
             _toolTipBuffer.SetText(tbb?.ToolTipText);
             ttt->lpszText = (char*)_toolTipBuffer.Buffer;
 
@@ -1746,9 +1722,9 @@ namespace WinFormsLegacyControls
         private void WmReflectCommand(ref Message m)
         {
             int id = PARAM.LOWORD(m.WParam);
-            ToolBarButton tbb = buttons[id];
+            ToolBarButton tbb = _buttons[id];
 
-            if (tbb is not null)
+            //if (tbb is not null)
             {
                 ToolBarButtonClickEventArgs e = new ToolBarButtonClickEventArgs(tbb);
                 OnButtonClick(e);
@@ -1922,6 +1898,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public ToolBarButtonCollection(ToolBar owner)
             {
+                ArgumentNullException.ThrowIfNull(owner);
                 this.owner = owner;
             }
 
@@ -1933,19 +1910,19 @@ namespace WinFormsLegacyControls
             {
                 get
                 {
-                    if (index < 0 || (/*(owner.buttons != null) && */(index >= owner.buttonCount)))
+                    if (index < 0 || index >= owner._buttons.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return owner.buttons[index];
+                    return owner._buttons[index];
                 }
                 set
                 {
 
                     // Sanity check parameters
                     //
-                    if (index < 0 || ((owner.buttons is not null) && index >= owner.buttonCount))
+                    if (index < 0 || index >= owner._buttons.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
@@ -1957,10 +1934,7 @@ namespace WinFormsLegacyControls
 
             object? IList.this[int index]
             {
-                get
-                {
-                    return this[index];
-                }
+                get => this[index];
                 set
                 {
                     if (value is ToolBarButton toolBarButton)
@@ -2003,45 +1977,15 @@ namespace WinFormsLegacyControls
             ///  Gets the number of buttons in the toolbar button collection.
             /// </summary>
             [Browsable(false)]
-            public int Count
-            {
-                get
-                {
-                    return owner.buttonCount;
-                }
-            }
+            public int Count => owner._buttons.Count;
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool IList.IsFixedSize => false;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsReadOnly => false;
 
             /// <summary>
             ///  Adds a new toolbar button to
@@ -2103,12 +2047,12 @@ namespace WinFormsLegacyControls
             public void Clear()
             {
 
-                if (owner.buttons is null)
+                if (owner._buttons.Count == 0)
                 {
                     return;
                 }
 
-                for (int x = owner.buttonCount; x > 0; x--)
+                for (int x = owner._buttons.Count; x > 0; x--)
                 {
                     if (owner.IsHandleCreated)
                     {
@@ -2117,8 +2061,8 @@ namespace WinFormsLegacyControls
                     owner.RemoveAt(x - 1);
                 }
 
-                owner.buttons = null!;
-                owner.buttonCount = 0;
+                owner._buttons.Clear();
+
                 if (!owner.Disposing)
                 {
                     owner.UpdateButtons();
@@ -2126,9 +2070,7 @@ namespace WinFormsLegacyControls
             }
 
             public bool Contains(ToolBarButton button)
-            {
-                return IndexOf(button) != -1;
-            }
+                => IndexOf(button) != -1;
 
             bool IList.Contains(object? button)
             {
@@ -2146,17 +2088,10 @@ namespace WinFormsLegacyControls
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
             public virtual bool ContainsKey(string key)
-            {
-                return IsValidIndex(IndexOfKey(key));
-            }
+                => IsValidIndex(IndexOfKey(key));
 
             void ICollection.CopyTo(Array dest, int index)
-            {
-                if (owner.buttonCount > 0)
-                {
-                    System.Array.Copy(owner.buttons, 0, dest, index, owner.buttonCount);
-                }
-            }
+                => ((ICollection)owner._buttons).CopyTo(dest, index);
 
             public int IndexOf(ToolBarButton button)
             {
@@ -2218,9 +2153,7 @@ namespace WinFormsLegacyControls
             }
 
             public void Insert(int index, ToolBarButton button)
-            {
-                owner.InsertButton(index, button);
-            }
+                => owner.InsertButton(index, button);
 
             void IList.Insert(int index, object? button)
             {
@@ -2238,18 +2171,15 @@ namespace WinFormsLegacyControls
             ///  Determines if the index is valid for the collection.
             /// </summary>
             private bool IsValidIndex(int index)
-            {
-                return ((index >= 0) && (index < Count));
-            }
+                => ((index >= 0) && (index < Count));
+
             /// <summary>
             ///  Removes
             ///  a given button from the toolbar button collection.
             /// </summary>
             public void RemoveAt(int index)
             {
-                int count = (owner.buttons is null) ? 0 : owner.buttonCount;
-
-                if (index < 0 || index >= count)
+                if (index < 0 || index >= owner._buttons.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                 }
@@ -2298,9 +2228,7 @@ namespace WinFormsLegacyControls
             ///  through the toolbar button collection.
             /// </summary>
             public IEnumerator GetEnumerator()
-            {
-                return new WindowsFormsUtils.ArraySubsetEnumerator(owner.buttons, owner.buttonCount);
-            }
+                => owner._buttons.GetEnumerator();
         }
 
     }
