@@ -1107,69 +1107,54 @@ namespace WinFormsLegacyControls
 
         private void WmNCHitTest(ref Message m)
         {
-            int x = PARAM.SignedLOWORD(m.LParam);
-            Rectangle bounds = Bounds;
-            bool callSuper = true;
-
-            // [fixed]
-            // WM_NCHITTEST message has screen coordinates.
-            x = PointToClient(new Point(x, bounds.Y)).X;
-
-            // The default implementation of the statusbar
-            // will let you size the form when it is docked on the bottom,
-            // but when it is anywhere else, the statusbar will be resized.
-            // to prevent that we provide a little bit a sanity to only
-            // allow resizing, when it would resize the form.
-            if (x > bounds.X + bounds.Width - SizeGripWidth)
+            if (SizingGrip)
             {
-                if (Parent/*Internal*/ is Form form)
+                int x = PARAM.SignedLOWORD(m.LParam);
+                Rectangle bounds = Bounds;
+
+                // [fixed]
+                // WM_NCHITTEST message has screen coordinates.
+                x = PointToClient(new Point(x, bounds.Y)).X;
+
+                // The default implementation of the statusbar
+                // will let you size the form when it is docked on the bottom,
+                // but when it is anywhere else, the statusbar will be resized.
+                // to prevent that we provide a little bit a sanity to only
+                // allow resizing, when it would resize the form.
+                if (x > bounds.X + bounds.Width - SizeGripWidth)
                 {
-                    FormBorderStyle bs = form.FormBorderStyle;
-
-                    if (bs != FormBorderStyle.Sizable
-                        && bs != FormBorderStyle.SizableToolWindow)
+                    if (Parent/*Internal*/ is not Form form || !form.TopLevel || form is not { FormBorderStyle: FormBorderStyle.Sizable or FormBorderStyle.SizableToolWindow } || Dock != DockStyle.Bottom)
                     {
-                        callSuper = false;
+                        m.Result = (nint)PInvoke.HTCLIENT;
+                        return;
                     }
 
-                    if (!form.TopLevel
-                        || Dock != DockStyle.Bottom)
+                    /*
+                    ControlCollection children = form.Controls;
+                    int c = children.Count;
+                    for (int i = 0; i < c; i++)
                     {
-                        callSuper = false;
-                    }
-
-                    if (callSuper)
-                    {
-                        ControlCollection children = form.Controls;
-                        int c = children.Count;
-                        for (int i = 0; i < c; i++)
+                        Control ctl = children[i];
+                        if (ctl != this && ctl.Dock == DockStyle.Bottom)
                         {
-                            Control ctl = children[i];
-                            if (ctl != this && ctl.Dock == DockStyle.Bottom)
+                            if (ctl.Top > Top)
                             {
-                                if (ctl.Top > Top)
-                                {
-                                    callSuper = false;
-                                    break;
-                                }
+                                callSuper = false;
+                                break;
                             }
                         }
                     }
-                }
-                else
-                {
-                    callSuper = false;
+                    */
+                    Size formClientSize = form.ClientSize;
+                    if (bounds.Bottom < formClientSize.Height)
+                    {
+                        m.Result = (nint)PInvoke.HTCLIENT;
+                        return;
+                    }
                 }
             }
 
-            if (callSuper)
-            {
-                base.WndProc(ref m);
-            }
-            else
-            {
-                m.Result = (nint)PInvoke.HTCLIENT;
-            }
+            base.WndProc(ref m);
         }
 
         /// <summary>
