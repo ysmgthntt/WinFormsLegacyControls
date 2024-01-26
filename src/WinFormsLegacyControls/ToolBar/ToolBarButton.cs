@@ -29,12 +29,12 @@ namespace WinFormsLegacyControls
     public class ToolBarButton : Component
     {
         string? text;
-        string? name = null;
+        string? name;
         string? tooltipText;
         bool enabled = true;
         bool visible = true;
-        bool pushed = false;
-        bool partialPush = false;
+        bool pushed;
+        bool partialPush;
         private int commandId = -1; // the cached command id of the button.
         private ToolBarButtonImageIndexer? imageIndexer;
 
@@ -60,7 +60,7 @@ namespace WinFormsLegacyControls
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
-        private Menu? dropDownMenu = null;
+        private Menu? dropDownMenu;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.

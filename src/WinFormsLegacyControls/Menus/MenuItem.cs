@@ -51,9 +51,9 @@ namespace WinFormsLegacyControls
         private static readonly Dictionary<uint, WeakReference<MenuItem>> s_allCreatedMenuItems = new();
         private const uint FirstUniqueID = 0xC0000000;
         private static long s_nextUniqueID = FirstUniqueID;
-        private uint _uniqueID = 0;
+        private uint _uniqueID;
         private IntPtr _msaaMenuInfoPtr = IntPtr.Zero;
-        private bool _menuItemIsCreated = false;
+        private bool _menuItemIsCreated;
 
 #if DEBUG
         private string? _debugText;

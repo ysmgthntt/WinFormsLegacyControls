@@ -23,6 +23,9 @@ dotnet_diagnostic.CA1512.severity = warning
 # CA1513: ObjectDisposedException スロー ヘルパーを使用する
 dotnet_diagnostic.CA1513.severity = warning
 
+# CA1805: 不必要に初期化しません
+dotnet_diagnostic.CA1805.severity = warning
+
 # IDE0031: null 値の反映を使用します
 dotnet_diagnostic.IDE0031.severity = warning
 

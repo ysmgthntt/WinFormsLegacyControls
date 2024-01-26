@@ -32,7 +32,7 @@ namespace WinFormsLegacyControls
         private string? text = string.Empty;
         private string name = string.Empty;
         private string? toolTipText = string.Empty;
-        private Icon? icon = null;
+        private Icon? icon;
 
         private HorizontalAlignment alignment = HorizontalAlignment.Left;
         private StatusBarPanelBorderStyle borderStyle = StatusBarPanelBorderStyle.Sunken;
@@ -40,14 +40,14 @@ namespace WinFormsLegacyControls
 
         // these are package scope so the parent can get at them.
         //
-        private StatusBar? parent = null;
+        private StatusBar? parent;
         private int width = DEFAULTWIDTH;
-        private int right = 0;
+        private int right;
         private int minWidth = DEFAULTMINWIDTH;
-        private int index = 0;
+        private int index;
         private StatusBarPanelAutoSize autoSize = StatusBarPanelAutoSize.None;
 
-        private bool initializing = false;
+        private bool initializing;
 
         private object? userData;
 

@@ -71,7 +71,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The ImageList object that contains the main images for our control.
         /// </summary>
-        private ImageList? imageList = null;
+        private ImageList? imageList;
 
         /// <summary>
         ///  The maximum width of buttons currently being displayed.  This is needed

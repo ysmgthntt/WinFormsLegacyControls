@@ -5,7 +5,7 @@ internal class ImageListIndexer
     private string key = string.Empty;
     private int index = -1;
     private bool useIntegerIndex = true;
-    private ImageList? imageList = null;
+    private ImageList? imageList;
 
     public virtual ImageList? ImageList
     {

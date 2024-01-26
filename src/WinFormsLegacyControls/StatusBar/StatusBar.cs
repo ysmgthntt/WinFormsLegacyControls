@@ -29,7 +29,7 @@ namespace WinFormsLegacyControls
     ]
     public class StatusBar : Control
     {
-        private int sizeGripWidth = 0;
+        private int sizeGripWidth;
         private const int SIMPLE_INDEX = 0xFF;
 
         private static readonly object EVENT_PANELCLICK = new object();
@@ -45,7 +45,7 @@ namespace WinFormsLegacyControls
         private StatusBarPanelCollection? panelsCollection;
         private ControlToolTip? tooltips;
 
-        private ToolTip? mainToolTip = null;
+        private ToolTip? mainToolTip;
         //private bool toolTipSet = false;
         private bool _rightToLeftLayout;
 
@@ -61,7 +61,7 @@ namespace WinFormsLegacyControls
             TabStop = false;
         }
 
-        private static VisualStyleRenderer? renderer = null;
+        private static VisualStyleRenderer? renderer;
 
         /// <summary>
         ///  A VisualStyleRenderer we can use to get information about the current UI theme
@@ -1611,7 +1611,7 @@ namespace WinFormsLegacyControls
             private Dictionary<StatusBarPanel, Tool>? _tools;
             private ToolTipNativeWindow? window;
             private readonly StatusBar parent;
-            private int nextId = 0;
+            private int nextId;
 
             /// <summary>
             ///  Creates a new ControlToolTip.
