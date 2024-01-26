@@ -1123,7 +1123,7 @@ namespace WinFormsLegacyControls
                 // allow resizing, when it would resize the form.
                 if (x > bounds.X + bounds.Width - SizeGripWidth)
                 {
-                    if (Parent/*Internal*/ is not Form form || !form.TopLevel || form is not { FormBorderStyle: FormBorderStyle.Sizable or FormBorderStyle.SizableToolWindow } || Dock != DockStyle.Bottom)
+                    if (Parent/*Internal*/ is not Form form)
                     {
                         m.Result = (nint)PInvoke.HTCLIENT;
                         return;
@@ -1145,8 +1145,12 @@ namespace WinFormsLegacyControls
                         }
                     }
                     */
+
+                    // [fixed]
                     Size formClientSize = form.ClientSize;
-                    if (bounds.Bottom < formClientSize.Height)
+                    if (bounds.Bottom < formClientSize.Height || bounds.Right < formClientSize.Width ||
+                        !form.TopLevel || form is not { FormBorderStyle: FormBorderStyle.Sizable or FormBorderStyle.SizableToolWindow } ||
+                        Dock != DockStyle.Bottom)
                     {
                         m.Result = (nint)PInvoke.HTCLIENT;
                         return;
