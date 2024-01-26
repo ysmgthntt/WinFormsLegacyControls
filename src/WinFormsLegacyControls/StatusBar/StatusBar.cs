@@ -1111,6 +1111,10 @@ namespace WinFormsLegacyControls
             Rectangle bounds = Bounds;
             bool callSuper = true;
 
+            // [fixed]
+            // WM_NCHITTEST message has screen coordinates.
+            x = PointToClient(new Point(x, bounds.Y)).X;
+
             // The default implementation of the statusbar
             // will let you size the form when it is docked on the bottom,
             // but when it is anywhere else, the statusbar will be resized.
