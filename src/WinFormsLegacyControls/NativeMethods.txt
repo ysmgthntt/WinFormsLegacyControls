@@ -10,7 +10,6 @@ DrawMenuBar
 GetCursorPos
 GetDC
 GetDeviceCaps
-GetLayout
 GetMenuItemCount
 GetMenuItemID
 GetMenuItemInfo
