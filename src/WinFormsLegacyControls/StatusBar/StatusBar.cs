@@ -110,11 +110,13 @@ namespace WinFormsLegacyControls
                         sizeGripWidth += elementSize.Width;
 
                         // Either GetPartSize could have returned a width of zero, so make sure we have a reasonable number:
-                        sizeGripWidth = Math.Max(sizeGripWidth, 16);
+                        // [fixed] [DPI]
+                        sizeGripWidth = Math.Max(sizeGripWidth, LogicalToDeviceUnits(16));
                     }
                     else
                     {
-                        sizeGripWidth = 16;
+                        // [fixed] [DPI]
+                        sizeGripWidth = LogicalToDeviceUnits(/*16*/18);
                     }
                 }
                 return sizeGripWidth;

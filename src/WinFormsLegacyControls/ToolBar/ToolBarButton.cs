@@ -545,7 +545,8 @@ namespace WinFormsLegacyControls
                                 }
                                 if (style == ToolBarButtonStyle.DropDownButton && parent.DropDownArrows)
                                 {
-                                    width += ToolBar.DDARROW_WIDTH;
+                                    // [fixed] [DPI]
+                                    width += parent.LogicalToDeviceUnits(ToolBar.DDARROW_WIDTH);
                                 }
                             }
                             else
