@@ -1611,25 +1611,23 @@ namespace WinFormsLegacyControls
 
             OnButtonDropDown(new ToolBarButtonClickEventArgs(tbb));
 
-            Menu? menu = tbb.DropDownMenu;
-            if (menu is not null)
+            if (tbb.DropDownMenuInternal is { } contextMenu)
             {
                 RECT rc = new RECT();
-                TPMPARAMS tpm;
 
                 PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)iItem, ref rc);
 
-                if (menu is ContextMenu contextMenu)
-                {
-                    _toolBarButtonContextMenu = contextMenu;
-                    contextMenu.Show(this, new Point(rc.left, rc.bottom));
-                }
+                _toolBarButtonContextMenu = contextMenu;
+                contextMenu.Show(this, new Point(rc.left, rc.bottom));
+
+                /* MainMenu?
                 else
                 {
                     menu.GetMainMenu()?.ProcessInitMenuPopup(menu.Handle);
 
                     PInvoke.MapWindowPoints(hwndFrom, HWND.Null, ref rc);
 
+                    TPMPARAMS tpm;
                     unsafe
                     {
                         tpm = new TPMPARAMS
@@ -1647,6 +1645,7 @@ namespace WinFormsLegacyControls
                         rc.left, rc.bottom, this, ref tpm);
                     Debug.Assert(result);
                 }
+                */
             }
         }
 

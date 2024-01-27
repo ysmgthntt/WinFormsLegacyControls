@@ -60,7 +60,7 @@ namespace WinFormsLegacyControls
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
-        private Menu? dropDownMenu;
+        private ContextMenu? dropDownMenu;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
@@ -114,22 +114,21 @@ namespace WinFormsLegacyControls
         ]
         public Menu? DropDownMenu
         {
-            get
-            {
-                return dropDownMenu;
-            }
-
+            get => dropDownMenu;
             set
             {
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
                 //
-                if (value is not null && value is not ContextMenu)
+                dropDownMenu = value switch
                 {
-                    throw new ArgumentException(SR.ToolBarButtonInvalidDropDownMenuType);
-                }
-                dropDownMenu = value;
+                    null => null,
+                    ContextMenu contextMenu => contextMenu,
+                    _ => throw new ArgumentException(SR.ToolBarButtonInvalidDropDownMenuType),
+                };
             }
         }
+
+        internal ContextMenu? DropDownMenuInternal => dropDownMenu;
 
         /// <summary>
         ///  Indicates whether the button is enabled or not.
