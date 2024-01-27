@@ -185,7 +185,7 @@ namespace WinFormsLegacyControls
                 if (AutoSize != value)
                 {
                     toolBarState[TOOLBARSTATE_autoSize] = value;
-                    if (Dock == DockStyle.Left || Dock == DockStyle.Right)
+                    if (Dock is DockStyle.Left or DockStyle.Right)
                     {
                         SetStyle(ControlStyles.FixedWidth, AutoSize);
                         SetStyle(ControlStyles.FixedHeight, false);
@@ -523,7 +523,7 @@ namespace WinFormsLegacyControls
 
                 if (Dock != value)
                 {
-                    if (value == DockStyle.Left || value == DockStyle.Right)
+                    if (value is DockStyle.Left or DockStyle.Right)
                     {
                         SetStyle(ControlStyles.FixedWidth, AutoSize);
                         SetStyle(ControlStyles.FixedHeight, false);
@@ -1052,7 +1052,7 @@ namespace WinFormsLegacyControls
             int saveSize = requestedSize;
             try
             {
-                if (dock == DockStyle.Left || dock == DockStyle.Right)
+                if (dock is DockStyle.Left or DockStyle.Right)
                 {
                     Width = AutoSize ? PreferredWidth : saveSize;
                 }
@@ -1490,7 +1490,7 @@ namespace WinFormsLegacyControls
 
             base.SetBoundsCore(x, y, width, height, specified);
 
-            if (Dock == DockStyle.Left || Dock == DockStyle.Right)
+            if (Dock is DockStyle.Left or DockStyle.Right)
             {
                 if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
                 {
