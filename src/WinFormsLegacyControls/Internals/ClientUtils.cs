@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private static Hashtable? enumValueInfo;
         public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
 
-        private class SequentialEnumInfo
+        private sealed class SequentialEnumInfo
         {
             public SequentialEnumInfo(Type t)
             {

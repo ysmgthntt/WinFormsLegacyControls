@@ -38,7 +38,7 @@ namespace WinFormsLegacyControls
         private const int StateCloneMask = 0x0003136B;
         private const int StateOwnerDraw = 0x00000100;
         private const int StateInMdiPopup = 0x00000200;
-        private const int StateHiLite = 0x00000080;
+        //private const int StateHiLite = 0x00000080;
 
         private bool _hasHandle;
         private MenuItemData _data = null!;

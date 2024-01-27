@@ -13,7 +13,7 @@ namespace Windows.Win32.Graphics.Gdi;
 ///  </para>
 /// </remarks>
 #if DEBUG
-internal class SelectPaletteScope : DisposalTracking.Tracker, IDisposable
+internal sealed class SelectPaletteScope : DisposalTracking.Tracker, IDisposable
 #else
 internal readonly ref struct SelectPaletteScope
 #endif

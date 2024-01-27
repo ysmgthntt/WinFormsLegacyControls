@@ -8,6 +8,9 @@ dotnet_diagnostic.CSIsNull001.severity = error
 # CSIsNull002: Use `is object` for non-null checks
 dotnet_diagnostic.CSIsNull002.severity = error
 
+# CA1052: スタティック ホルダー型は Static または NotInheritable でなければなりません
+dotnet_diagnostic.CA1052.severity = warning
+
 # CA1507: nameof を使用してシンボル名を表現します
 dotnet_diagnostic.CA1507.severity = warning
 
@@ -26,6 +29,18 @@ dotnet_diagnostic.CA1513.severity = warning
 # CA1805: 不必要に初期化しません
 dotnet_diagnostic.CA1805.severity = warning
 
+# CA1822: メンバーを static に設定します
+dotnet_diagnostic.CA1822.severity = warning
+
+# CA1823: 使用されていないプライベート フィールドを使用しません
+dotnet_diagnostic.CA1823.severity = warning
+
+# CA1852: 内部型のシール
+dotnet_diagnostic.CA1852.severity = warning
+
+# CA1863: 'CompositeFormat' を使用してください
+dotnet_diagnostic.CA1863.severity = suggestion
+
 # IDE0031: null 値の反映を使用します
 dotnet_diagnostic.IDE0031.severity = warning
 
@@ -43,3 +58,6 @@ dotnet_diagnostic.IDE0074.severity = warning
 
 # IDE0083: パターン マッチングを使用します
 dotnet_diagnostic.IDE0083.severity = warning
+
+# IDE0100: 冗長な等値を削除
+dotnet_diagnostic.IDE0100.severity = warning

@@ -791,7 +791,7 @@ namespace WinFormsLegacyControls
             }
 
             _panels.Clear();
-            if (showPanels == true)
+            if (showPanels)
             {
                 ApplyPanelWidths();
                 ForcePanelUpdate();
@@ -1619,7 +1619,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Returns the createParams to create the window.
             /// </summary>
-            private CreateParams CreateParams
+            private static CreateParams CreateParams
             {
                 get
                 {

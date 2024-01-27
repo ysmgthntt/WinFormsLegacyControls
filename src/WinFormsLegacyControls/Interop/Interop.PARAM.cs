@@ -5,7 +5,7 @@
 using System;
 using System.Drawing;
 
-internal partial class Interop
+internal static partial class Interop
 {
     /// <summary>
     ///  Helpers for creating W/LPARAM arguments for messages.

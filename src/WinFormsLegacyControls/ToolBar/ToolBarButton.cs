@@ -783,7 +783,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private void PrefixAmpersands(ref string value)
+        private static void PrefixAmpersands(ref string value)
         {
             // Due to a comctl32 problem, ampersands underline the next letter in the
             // text string, but the accelerators don't work.
