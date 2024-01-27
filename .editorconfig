@@ -29,6 +29,9 @@ dotnet_diagnostic.CA1805.severity = warning
 # IDE0031: null 値の反映を使用します
 dotnet_diagnostic.IDE0031.severity = warning
 
+# IDE0036: 修飾子を順序付けます
+dotnet_diagnostic.IDE0036.severity = warning
+
 # IDE0038: パターン マッチングを使用します
 dotnet_diagnostic.IDE0038.severity = warning
 

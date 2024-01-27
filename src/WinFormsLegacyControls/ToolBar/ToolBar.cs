@@ -201,7 +201,7 @@ namespace WinFormsLegacyControls
 
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        new public event EventHandler AutoSizeChanged
+        public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -221,7 +221,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -241,7 +241,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -261,7 +261,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -596,7 +596,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -672,7 +672,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get
             {
@@ -907,7 +907,7 @@ namespace WinFormsLegacyControls
         }
 
         [DefaultValue(false)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get
             {
@@ -938,7 +938,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged
+        public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;

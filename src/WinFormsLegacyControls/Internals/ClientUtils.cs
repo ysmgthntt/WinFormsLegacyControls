@@ -9,7 +9,7 @@ using System.Numerics;
 
 namespace System.Windows.Forms
 {
-    static internal class ClientUtils
+    internal static class ClientUtils
     {
         // Sequential version
         // assumes sequential enum members 0,1,2,3,4 -etc.

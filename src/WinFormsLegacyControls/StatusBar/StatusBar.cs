@@ -142,7 +142,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackColorChanged
+        public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -167,7 +167,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageChanged
+        public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -187,7 +187,7 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -325,14 +325,14 @@ namespace WinFormsLegacyControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ForeColorChanged
+        public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public ImeMode ImeMode
+        public new ImeMode ImeMode
         {
             get
             {
@@ -492,7 +492,7 @@ namespace WinFormsLegacyControls
         ///  <see cref='StatusBar'/> .
         /// </summary>
         [DefaultValue(false)]
-        new public bool TabStop
+        public new bool TabStop
         {
             get
             {
@@ -1166,7 +1166,7 @@ namespace WinFormsLegacyControls
         ///  the preProcessMessage function. Inheriting controls should call base.wndProc
         ///  for any messages that they don't handle.
         /// </summary>
-        protected unsafe override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((uint)m.Msg)
             {
