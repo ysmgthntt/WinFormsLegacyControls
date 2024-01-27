@@ -1214,13 +1214,14 @@ namespace WinFormsLegacyControls
             // real windows ToolBar control
             //
             Insert(index, value);
+            /* Unnecessary because RecreateHandle is called in UpdateButtons
             if (IsHandleCreated)
             {
-                // TODO: UpdateButtons で RecreateHandle されるので、必要ないのでは？
                 NativeMethods.TBBUTTON tbbutton = new NativeMethods.TBBUTTON();
                 value.GetTBBUTTON(index, ref tbbutton);
                 PInvoke.SendMessage(this, PInvoke.TB_INSERTBUTTON, (WPARAM)index, ref tbbutton);
             }
+            */
             UpdateButtons();
         }
 
