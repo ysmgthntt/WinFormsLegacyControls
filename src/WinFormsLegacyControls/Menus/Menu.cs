@@ -894,7 +894,7 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array
             ///  of all the controls that match.
-                    /// </summary>
+            /// </summary>
             public MenuItem[] Find(string key, bool searchAllChildren)
             {
 

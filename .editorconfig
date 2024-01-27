@@ -50,6 +50,9 @@ dotnet_diagnostic.IDE0036.severity = warning
 # IDE0038: パターン マッチングを使用します
 dotnet_diagnostic.IDE0038.severity = warning
 
+# IDE0055: 書式設定を修正
+dotnet_diagnostic.IDE0055.severity = warning
+
 # IDE0059: 値の不必要な代入
 dotnet_diagnostic.IDE0059.severity = warning
 

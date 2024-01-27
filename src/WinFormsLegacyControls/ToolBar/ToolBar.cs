@@ -84,12 +84,14 @@ namespace WinFormsLegacyControls
         private float currentScaleDX = 1.0F;
         private float currentScaleDY = 1.0F;
 
+#pragma warning disable IDE0055 // Fix formatting
         private const int TOOLBARSTATE_wrappable        = 0x00000001;
         private const int TOOLBARSTATE_dropDownArrows   = 0x00000002;
         private const int TOOLBARSTATE_divider          = 0x00000004;
         private const int TOOLBARSTATE_showToolTips     = 0x00000008;
         private const int TOOLBARSTATE_autoSize         = 0x00000010;
         private const int TOOLBARSTATE_rtllayout        = 0x00000020;
+#pragma warning restore IDE0055
 
         // PERF: take all the bools and put them into a state variable
         private System.Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above

@@ -397,7 +397,7 @@ namespace WinFormsLegacyControls
                 {
                     info = new MENUITEMINFOW
                     {
-                        cbSize=(uint)sizeof(MENUITEMINFOW),
+                        cbSize = (uint)sizeof(MENUITEMINFOW),
                         fMask = MENU_ITEM_MASK.MIIM_STATE
                     };
                 }
@@ -767,7 +767,7 @@ namespace WinFormsLegacyControls
                 MENUITEMINFOW info = CreateMenuItemInfo(setRightToLeftBit, out string dwTypeData);
                 unsafe
                 {
-                    fixed(char* ptr = dwTypeData)
+                    fixed (char* ptr = dwTypeData)
                     {
                         info.dwTypeData = ptr;
                         PInvoke.InsertMenuItem(Parent!, unchecked((uint)-1), true, ref info);
@@ -1481,7 +1481,7 @@ namespace WinFormsLegacyControls
                 MENUITEMINFOW info = CreateMenuItemInfo(RenderIsRightToLeft, out string dwTypeData);
                 unsafe
                 {
-                    fixed(char* ptr = dwTypeData)
+                    fixed (char* ptr = dwTypeData)
                     {
                         info.dwTypeData = ptr;
                         PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
@@ -1891,7 +1891,7 @@ namespace WinFormsLegacyControls
                         }
                     }
 
-                    activate:
+                activate:
                     active.Activate();
                     if (active.ActiveControl is not null && !active.ActiveControl.Focused)
                     {
