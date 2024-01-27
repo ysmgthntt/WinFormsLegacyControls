@@ -1123,7 +1123,7 @@ namespace WinFormsLegacyControls
                             ToolBarButton b = _buttons[i];
                             // from ToolBar.RemoveAt
                             b.parent = null;
-                            b.stringIndex = (IntPtr)(-1);
+                            b.stringIndex = -1;
                             b.Dispose();
                         }
                         // from ToolBarButtonCollection.Clear
@@ -1248,7 +1248,7 @@ namespace WinFormsLegacyControls
             //
             ToolBarButton oldButton = _buttons[index];
             oldButton.parent = null;
-            oldButton.stringIndex = (IntPtr)(-1);
+            oldButton.stringIndex = -1;
             _buttons[index] = value;
             value.parent = this;
 
@@ -1402,7 +1402,7 @@ namespace WinFormsLegacyControls
                         }
                         else
                         {
-                            button.stringIndex = (IntPtr)(-1);
+                            button.stringIndex = -1;
                         }
                     }
 
@@ -1456,7 +1456,7 @@ namespace WinFormsLegacyControls
         {
             ToolBarButton oldButton = _buttons[index];
             oldButton.parent = null;
-            oldButton.stringIndex = (IntPtr)(-1);
+            oldButton.stringIndex = -1;
 
             _buttons.RemoveAt(index);
         }
@@ -1749,13 +1749,13 @@ namespace WinFormsLegacyControls
                     {
                         case PInvoke.TTN_NEEDTEXT:
                             WmNotifyNeedText(ref m);
-                            m.Result = (IntPtr)1;
+                            m.Result = 1;
                             return;
                         case PInvoke.TTN_SHOW:
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
                             WINDOWPLACEMENT wndPlacement = default;
-                            int nRet = PInvoke.GetWindowPlacement((HWND)note->hwndFrom, ref wndPlacement);
+                            int nRet = PInvoke.GetWindowPlacement(note->hwndFrom, ref wndPlacement);
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
@@ -1806,8 +1806,8 @@ namespace WinFormsLegacyControls
                                     leftTop.X -= (ButtonSize.Width + tooltipWidth + 2);
                                 }
 
-                                PInvoke.SetWindowPos((HWND)note->hwndFrom, HWND.Null, leftTop.X, leftTop.Y, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-                                m.Result = (IntPtr)1;
+                                PInvoke.SetWindowPos(note->hwndFrom, HWND.Null, leftTop.X, leftTop.Y, 0, 0, SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+                                m.Result = 1;
                                 return;
                             }
                             break;
@@ -1817,7 +1817,7 @@ namespace WinFormsLegacyControls
                             break;
 
                         case PInvoke.TBN_QUERYINSERT:
-                            m.Result = (IntPtr)1;
+                            m.Result = 1;
                             break;
 
                         case PInvoke.TBN_DROPDOWN:

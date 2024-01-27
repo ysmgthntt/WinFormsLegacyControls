@@ -16,7 +16,7 @@ internal unsafe struct ToolInfoWrapper<T>
         Info = new TTTOOLINFOW
         {
             hwnd = (HWND)handle.Handle,
-            uId = (nuint)(IntPtr)handle.Handle,
+            uId = (nuint)handle.Handle,
             uFlags = flags | TOOLTIP_FLAGS.TTF_IDISHWND
         };
         Text = text;

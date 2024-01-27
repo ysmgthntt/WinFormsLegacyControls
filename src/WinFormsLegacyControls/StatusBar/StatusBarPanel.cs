@@ -172,21 +172,25 @@ namespace WinFormsLegacyControls
         ]
         public Icon? Icon
         {
-            get
-            {
-                // unfortunately we have no way of getting the icon from the control.
-                return icon;
-            }
-
+            // unfortunately we have no way of getting the icon from the control.
+            get => icon;
             set
             {
-                if (value is not null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width))
+                if (value is null)
                 {
-                    icon = new Icon(value, SystemInformation.SmallIconSize);
+                    icon = null;
                 }
                 else
                 {
-                    icon = value;
+                    Size smallIconSize = SystemInformation.SmallIconSize;
+                    if (value.Height > smallIconSize.Height || value.Width > smallIconSize.Width)
+                    {
+                        icon = new Icon(value, smallIconSize);
+                    }
+                    else
+                    {
+                        icon = value;
+                    }
                 }
 
                 if (Created)

@@ -96,7 +96,7 @@ namespace WinFormsLegacyControls
                 {
                     if (sourceControl is not null)
                     {
-                        return ((Control)sourceControl).RightToLeft;
+                        return sourceControl.RightToLeft;
                     }
                     else
                     {

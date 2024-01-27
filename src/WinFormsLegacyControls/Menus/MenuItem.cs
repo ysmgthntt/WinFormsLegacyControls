@@ -1528,7 +1528,7 @@ namespace WinFormsLegacyControls
             using Graphics g = Graphics.FromHdcInternal(dis->hDC);
             OnDrawItem(new DrawItemEventArgs(g, SystemInformation.MenuFont, dis->rcItem, Index, (DrawItemState)dis->itemState));
 
-            m.Result = (IntPtr)1;
+            m.Result = 1;
         }
 
         internal void WmMeasureItem(ref Message m)
@@ -1554,7 +1554,7 @@ namespace WinFormsLegacyControls
                 mis->itemWidth = (uint)mie.ItemWidth;
             }
 
-            m.Result = (IntPtr)1;
+            m.Result = 1;
         }
 
         private void CheckIfDisposed()

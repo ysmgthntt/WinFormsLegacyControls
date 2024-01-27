@@ -49,7 +49,7 @@ namespace WinFormsLegacyControls
         ///  If this button has a string, what it's index is in the ToolBar's
         ///  internal list of strings.  Needs to be package protected.
         /// </summary>
-        internal IntPtr stringIndex = (IntPtr)(-1);
+        internal IntPtr stringIndex = -1;
 
         /// <summary>
         ///  Our parent ToolBar control.
@@ -687,7 +687,7 @@ namespace WinFormsLegacyControls
 
             }
 
-            button.dwData = (IntPtr)0;
+            button.dwData = 0;
             button.iString = stringIndex;
             this.commandId = commandId;
             button.idCommand = commandId;
