@@ -129,10 +129,7 @@ namespace WinFormsLegacyControls
         ]
         public string Name
         {
-            get
-            {
-                return WindowsFormsUtils.GetComponentName(this, name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this, name);
             set
             {
                 if (value is null || value.Length == 0)
@@ -171,14 +168,8 @@ namespace WinFormsLegacyControls
         ]
         public object? Tag
         {
-            get
-            {
-                return userData;
-            }
-            set
-            {
-                userData = value;
-            }
+            get => userData;
+            set => userData = value;
         }
 
         /// <summary>
@@ -226,9 +217,7 @@ namespace WinFormsLegacyControls
         }
 
         protected virtual IntPtr CreateMenuHandle()
-        {
-            return (IntPtr)PInvoke.CreatePopupMenu();
-        }
+            => (IntPtr)PInvoke.CreatePopupMenu();
 
         private protected void CreateMenuItems()
         {

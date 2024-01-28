@@ -19,13 +19,7 @@ internal sealed class Command : WeakReference
         AssignID(this);
     }
 
-    public /*virtual*/ int ID
-    {
-        get
-        {
-            return _id;
-        }
-    }
+    public /*virtual*/ int ID => _id;
 
     private static void AssignID(Command cmd)
     {

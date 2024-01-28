@@ -1699,10 +1699,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            public void Execute()
-            {
-                baseItem?.OnClick(EventArgs.Empty);
-            }
+            public void Execute() => baseItem?.OnClick(EventArgs.Empty);
 
             internal int GetMenuID()
             {

@@ -70,11 +70,7 @@ namespace WinFormsLegacyControls
         ]
         public HorizontalAlignment Alignment
         {
-            get
-            {
-                return alignment;
-            }
-
+            get => alignment;
             set
             {
                 //valid values are 0x0 to 0x2
@@ -102,11 +98,7 @@ namespace WinFormsLegacyControls
         ]
         public StatusBarPanelAutoSize AutoSize
         {
-            get
-            {
-                return autoSize;
-            }
-
+            get => autoSize;
             set
             {
                 //valid values are 0x1 to 0x3
@@ -152,13 +144,7 @@ namespace WinFormsLegacyControls
         }
 
         [MemberNotNullWhen(true, nameof(parent))]
-        private bool Created
-        {
-            get
-            {
-                return parent is not null && parent.ArePanelsRealized();
-            }
-        }
+        private bool Created => parent is not null && parent.ArePanelsRealized();
 
         /// <summary>
         ///  Gets or sets the <see cref='Icon'/>
@@ -211,14 +197,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal int Index
         {
-            get
-            {
-                return index;
-            }
-            set
-            {
-                index = value;
-            }
+            get => index;
+            set => index = value;
         }
         /// <summary>
         ///  Gets or sets the minimum width the <see cref='StatusBarPanel'/> can be within the <see cref='StatusBar'/>
@@ -233,10 +213,7 @@ namespace WinFormsLegacyControls
         ]
         public int MinWidth
         {
-            get
-            {
-                return minWidth;
-            }
+            get => minWidth;
             set
             {
                 if (value < 0)
@@ -267,10 +244,7 @@ namespace WinFormsLegacyControls
             ]
         public string Name
         {
-            get
-            {
-                return WindowsFormsUtils.GetComponentName(this, name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this, name);
             set
             {
                 name = value;
@@ -287,23 +261,14 @@ namespace WinFormsLegacyControls
         ///  panel.
         /// </summary>
         [Browsable(false)]
-        public StatusBar? Parent
-        {
-            get
-            {
-                return parent;
-            }
-        }
+        public StatusBar? Parent => parent;
 
         /// <summary>
         ///  Expose a direct setter for parent internally
         /// </summary>
         internal StatusBar? ParentInternal
         {
-            set
-            {
-                parent = value;
-            }
+            set => parent = value;
         }
 
         /// <summary>
@@ -311,14 +276,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal int Right
         {
-            get
-            {
-                return right;
-            }
-            set
-            {
-                right = value;
-            }
+            get => right;
+            set => right = value;
         }
 
         /// <summary>
@@ -331,7 +290,7 @@ namespace WinFormsLegacyControls
         ]
         public StatusBarPanelStyle Style
         {
-            get { return style; }
+            get => style;
             set
             {
                 //valid values are 0x1 to 0x2
@@ -361,14 +320,8 @@ namespace WinFormsLegacyControls
         ]
         public object? Tag
         {
-            get
-            {
-                return userData;
-            }
-            set
-            {
-                userData = value;
-            }
+            get => userData;
+            set => userData = value;
         }
 
         /// <summary>
@@ -382,17 +335,7 @@ namespace WinFormsLegacyControls
         ]
         public string Text
         {
-            get
-            {
-                if (text is null)
-                {
-                    return "";
-                }
-                else
-                {
-                    return text;
-                }
-            }
+            get => text ?? string.Empty;
             set
             {
                 value ??= string.Empty;
@@ -461,10 +404,7 @@ namespace WinFormsLegacyControls
         ]
         public int Width
         {
-            get
-            {
-                return width;
-            }
+            get => width;
             set
             {
                 if (!initializing && value < minWidth)
@@ -480,10 +420,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Handles tasks required when the control is being initialized.
         /// </summary>
-        public void BeginInit()
-        {
-            initializing = true;
-        }
+        public void BeginInit() => initializing = true;
 
         protected override void Dispose(bool disposing)
         {
@@ -554,10 +491,7 @@ namespace WinFormsLegacyControls
         ///  Returns the index of the panel by making the parent control search
         ///  for it within its list.
         /// </summary>
-        private int GetIndex()
-        {
-            return index;
-        }
+        private int GetIndex() => index;
 
         /// <summary>
         ///  Sets all the properties for this panel.

@@ -9,13 +9,13 @@ internal class ImageListIndexer
 
     public virtual ImageList? ImageList
     {
-        get { return imageList; }
-        set { imageList = value; }
+        get => imageList;
+        set => imageList = value;
     }
 
     public virtual string Key
     {
-        get { return key; }
+        get => key;
         set
         {
             index = -1;
@@ -26,7 +26,7 @@ internal class ImageListIndexer
 
     public virtual int Index
     {
-        get { return index; }
+        get => index;
         set
         {
             key = string.Empty;

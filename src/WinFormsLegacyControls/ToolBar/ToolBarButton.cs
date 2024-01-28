@@ -95,7 +95,7 @@ namespace WinFormsLegacyControls
                     }
                     return null;
                 }
-                set { Debug.Assert(false, "We should never set the image list"); }
+                set => Debug.Assert(false, "We should never set the image list");
             }
         }
 
@@ -115,8 +115,7 @@ namespace WinFormsLegacyControls
         public Menu? DropDownMenu
         {
             get => dropDownMenu;
-            set
-            {
+            set =>
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
                 //
                 dropDownMenu = value switch
@@ -125,7 +124,6 @@ namespace WinFormsLegacyControls
                     ContextMenu contextMenu => contextMenu,
                     _ => throw new ArgumentException(SR.ToolBarButtonInvalidDropDownMenuType),
                 };
-            }
         }
 
         internal ContextMenu? DropDownMenuInternal => dropDownMenu;
@@ -140,11 +138,7 @@ namespace WinFormsLegacyControls
         ]
         public bool Enabled
         {
-            get
-            {
-                return enabled;
-            }
-
+            get => enabled;
             set
             {
                 if (enabled != value)
@@ -174,10 +168,7 @@ namespace WinFormsLegacyControls
         ]
         public int ImageIndex
         {
-            get
-            {
-                return ImageIndexer.Index;
-            }
+            get => ImageIndexer.Index;
             set
             {
                 if (ImageIndexer.Index != value)
@@ -207,10 +198,7 @@ namespace WinFormsLegacyControls
         ]
         public string ImageKey
         {
-            get
-            {
-                return ImageIndexer.Key;
-            }
+            get => ImageIndexer.Key;
             set
             {
                 if (ImageIndexer.Key != value)
@@ -228,10 +216,7 @@ namespace WinFormsLegacyControls
         [Browsable(false)]
         public string Name
         {
-            get
-            {
-                return WindowsFormsUtils.GetComponentName(this, name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this, name);
             set
             {
                 if (value is null || value.Length == 0)
@@ -256,13 +241,7 @@ namespace WinFormsLegacyControls
         [
             Browsable(false),
         ]
-        public ToolBar? Parent
-        {
-            get
-            {
-                return parent;
-            }
-        }
+        public ToolBar? Parent => parent;
 
         /// <summary>
         ///
@@ -364,10 +343,7 @@ namespace WinFormsLegacyControls
         ]
         public ToolBarButtonStyle Style
         {
-            get
-            {
-                return style;
-            }
+            get => style;
             set
             {
                 //valid values are 0x1 to 0x4
@@ -395,14 +371,8 @@ namespace WinFormsLegacyControls
         ]
         public object? Tag
         {
-            get
-            {
-                return userData;
-            }
-            set
-            {
-                userData = value;
-            }
+            get => userData;
+            set => userData = value;
         }
 
         /// <summary>
@@ -416,10 +386,7 @@ namespace WinFormsLegacyControls
         [AllowNull]
         public string Text
         {
-            get
-            {
-                return text ?? "";
-            }
+            get => text ?? string.Empty;
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -449,14 +416,8 @@ namespace WinFormsLegacyControls
         ]
         public string ToolTipText
         {
-            get
-            {
-                return tooltipText ?? "";
-            }
-            set
-            {
-                tooltipText = value;
-            }
+            get => tooltipText ?? string.Empty;
+            set => tooltipText = value;
         }
 
         /// <summary>
@@ -471,10 +432,7 @@ namespace WinFormsLegacyControls
         ]
         public bool Visible
         {
-            get
-            {
-                return visible;
-            }
+            get => visible;
             set
             {
                 if (visible != value)
@@ -837,10 +795,7 @@ namespace WinFormsLegacyControls
         ///  we need to make sure it gets the new button information.
         ///  If Text was changed, call the next overload.
         /// </summary>
-        private void UpdateButton(bool recreate)
-        {
-            UpdateButton(recreate, false, true);
-        }
+        private void UpdateButton(bool recreate) => UpdateButton(recreate, false, true);
 
         /// <summary>
         ///  When a button property changes and the parent control is created,

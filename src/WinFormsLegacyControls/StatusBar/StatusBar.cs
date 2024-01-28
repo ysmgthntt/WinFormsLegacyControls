@@ -130,15 +130,10 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
-            get
-            {
-                // not supported, always return CONTROL
-                return SystemColors.Control;
-            }
-            set
-            {
-                // no op, not supported.
-            }
+            // not supported, always return CONTROL
+            get => SystemColors.Control;
+            // no op, not supported.
+            set { }
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -156,14 +151,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image? BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -176,14 +165,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -232,25 +215,13 @@ namespace WinFormsLegacyControls
             }
         }
 
-        protected override ImeMode DefaultImeMode
-        {
-            get
-            {
-                return ImeMode.Disable;
-            }
-        }
+        protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(100, 22);
-            }
-        }
+        protected override Size DefaultSize => new Size(100, 22);
 
         /// <summary>
         ///  This property is overridden and hidden from statement completion
@@ -259,14 +230,8 @@ namespace WinFormsLegacyControls
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
         {
-            get
-            {
-                return base.DoubleBuffered;
-            }
-            set
-            {
-                base.DoubleBuffered = value;
-            }
+            get => base.DoubleBuffered;
+            set => base.DoubleBuffered = value;
         }
 
         /// <summary>
@@ -278,14 +243,8 @@ namespace WinFormsLegacyControls
         ]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
-            set
-            {
-                base.Dock = value;
-            }
+            get => base.Dock;
+            set => base.Dock = value;
         }
 
         /// <summary>
@@ -299,7 +258,7 @@ namespace WinFormsLegacyControls
         [AllowNull]
         public override Font Font
         {
-            get { return base.Font; }
+            get => base.Font;
             set
             {
                 base.Font = value;
@@ -314,14 +273,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -334,14 +287,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -395,17 +342,7 @@ namespace WinFormsLegacyControls
         [AllowNull]
         public override string Text
         {
-            get
-            {
-                if (simpleText is null)
-                {
-                    return "";
-                }
-                else
-                {
-                    return simpleText;
-                }
-            }
+            get => simpleText ?? string.Empty;
             set
             {
                 SetSimpleText(value);
@@ -427,10 +364,7 @@ namespace WinFormsLegacyControls
         ]
         public bool ShowPanels
         {
-            get
-            {
-                return showPanels;
-            }
+            get => showPanels;
             set
             {
                 if (showPanels != value)
@@ -473,10 +407,7 @@ namespace WinFormsLegacyControls
         ]
         public bool SizingGrip
         {
-            get
-            {
-                return sizeGrip;
-            }
+            get => sizeGrip;
             set
             {
                 if (value != sizeGrip)
@@ -494,14 +425,8 @@ namespace WinFormsLegacyControls
         [DefaultValue(false)]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         /*
@@ -556,15 +481,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Tells whether the panels have been realized.
         /// </summary>
-        internal bool ArePanelsRealized()
-        {
-            return showPanels && IsHandleCreated;
-        }
+        internal bool ArePanelsRealized() => showPanels && IsHandleCreated;
 
-        internal void DirtyLayout()
-        {
-            layoutDirty = true;
-        }
+        internal void DirtyLayout() => layoutDirty = true;
 
         /// <summary>
         ///  Makes the panel according to the sizes in the panel list.
@@ -725,9 +644,7 @@ namespace WinFormsLegacyControls
         ///  Raises the <see cref='PanelClick'/> event.
         /// </summary>
         protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e)
-        {
-            ((StatusBarPanelClickEventHandler?)Events[EVENT_PANELCLICK])?.Invoke(this, e);
-        }
+            => ((StatusBarPanelClickEventHandler?)Events[EVENT_PANELCLICK])?.Invoke(this, e);
 
         protected override void OnLayout(LayoutEventArgs levent)
         {
@@ -927,9 +844,7 @@ namespace WinFormsLegacyControls
         ///  event.
         /// </summary>
         protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent)
-        {
-            ((StatusBarDrawItemEventHandler?)Events[EVENT_SBDRAWITEM])?.Invoke(this, sbdievent);
-        }
+            => ((StatusBarDrawItemEventHandler?)Events[EVENT_SBDRAWITEM])?.Invoke(this, sbdievent);
 
         /// <summary>
         ///  Raises the <see cref='OnResize'/> event.
@@ -1817,10 +1732,7 @@ namespace WinFormsLegacyControls
             ///  This method removes the component from its container (if the component has a site)
             ///  and triggers the dispose event.
             /// </summary>
-            public void Dispose()
-            {
-                DestroyHandle();
-            }
+            public void Dispose() => DestroyHandle();
 
             /// <summary>
             ///  Returns a new instance of the TOOLINFO_T structure with the minimum

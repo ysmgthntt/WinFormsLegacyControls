@@ -110,12 +110,7 @@ namespace WinFormsLegacyControls
         }
 
         internal override bool RenderIsRightToLeft
-        {
-            get
-            {
-                return (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form is null || !form.IsMirrored));
-            }
-        }
+            => (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form is null || !form.IsMirrored));
 
         /// <summary>
         ///  Creates a new MainMenu object which is a dupliate of this one.
@@ -128,9 +123,7 @@ namespace WinFormsLegacyControls
         }
 
         protected override IntPtr CreateMenuHandle()
-        {
-            return PInvoke.CreateMenu();
-        }
+            => PInvoke.CreateMenu();
 
         /// <summary>
         ///  Clears out this MainMenu object and discards all of it's resources.
@@ -153,10 +146,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates which form in which we are currently residing [if any]
         /// </summary>
-        public Form? GetForm()
-        {
-            return form;
-        }
+        public Form? GetForm() => form;
 
         /*
         internal Form GetFormUnsafe()
@@ -172,29 +162,19 @@ namespace WinFormsLegacyControls
         }
 
         internal void ItemsChanged(MenuChangeKind change, Menu menu)
-        {
-            form?.MenuChanged(change, menu);
-        }
+            => form?.MenuChanged(change, menu);
 
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
-        {
-            ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
-        }
+            => ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeRightToLeft()
-        {
-            if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
-            {
-                return false;
-            }
-            return true;
-        }
+            => System.Windows.Forms.RightToLeft.Inherit != rightToLeft;
 
         /// <summary>
         ///  Returns a string representation for this control.

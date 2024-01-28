@@ -134,11 +134,7 @@ namespace WinFormsLegacyControls
         ]
         public ToolBarAppearance Appearance
         {
-            get
-            {
-                return appearance;
-            }
-
+            get => appearance;
             set
             {
                 //valid values are 0x0 to 0x1
@@ -171,11 +167,7 @@ namespace WinFormsLegacyControls
         ]
         public override bool AutoSize
         {
-            get
-            {
-                return toolBarState[TOOLBARSTATE_autoSize];
-            }
-
+            get => toolBarState[TOOLBARSTATE_autoSize];
             set
             {
                 // Note that we intentionally do not call base.  Toolbars size themselves by
@@ -212,14 +204,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
-            set
-            {
-                base.BackColor = value;
-            }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -232,14 +218,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image? BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -252,14 +232,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -281,11 +255,7 @@ namespace WinFormsLegacyControls
         ]
         public BorderStyle BorderStyle
         {
-            get
-            {
-                return borderStyle;
-            }
-
+            get => borderStyle;
             set
             {
                 //valid values are 0x0 to 0x2
@@ -315,13 +285,7 @@ namespace WinFormsLegacyControls
         SRDescription(nameof(SR.ToolBarButtonsDescr)),
         MergableProperty(false)
         ]
-        public ToolBarButtonCollection Buttons
-        {
-            get
-            {
-                return buttonsCollection;
-            }
-        }
+        public ToolBarButtonCollection Buttons => buttonsCollection;
 
         /// <summary>
         ///  Gets or sets
@@ -454,25 +418,13 @@ namespace WinFormsLegacyControls
             }
         }
 
-        protected override ImeMode DefaultImeMode
-        {
-            get
-            {
-                return ImeMode.Disable;
-            }
-        }
+        protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(100, 22);
-            }
-        }
+        protected override Size DefaultSize => new Size(100, 22);
 
         /// <summary>
         ///  Gets or sets a value indicating
@@ -485,11 +437,7 @@ namespace WinFormsLegacyControls
         ]
         public bool Divider
         {
-            get
-            {
-                return toolBarState[TOOLBARSTATE_divider];
-            }
-
+            get => toolBarState[TOOLBARSTATE_divider];
             set
             {
                 if (Divider != value)
@@ -511,8 +459,7 @@ namespace WinFormsLegacyControls
         ]
         public override DockStyle Dock
         {
-            get { return base.Dock; }
-
+            get => base.Dock;
             set
             {
                 //valid values are 0x0 to 0x5
@@ -546,14 +493,8 @@ namespace WinFormsLegacyControls
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
         {
-            get
-            {
-                return base.DoubleBuffered;
-            }
-            set
-            {
-                base.DoubleBuffered = value;
-            }
+            get => base.DoubleBuffered;
+            set => base.DoubleBuffered = value;
         }
 
         /// <summary>
@@ -568,11 +509,7 @@ namespace WinFormsLegacyControls
         ]
         public bool DropDownArrows
         {
-            get
-            {
-                return toolBarState[TOOLBARSTATE_dropDownArrows];
-            }
-
+            get => toolBarState[TOOLBARSTATE_dropDownArrows];
             set
             {
 
@@ -587,14 +524,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -615,10 +546,7 @@ namespace WinFormsLegacyControls
         ]
         public ImageList? ImageList
         {
-            get
-            {
-                return imageList;
-            }
+            get => imageList;
             set
             {
                 if (value != imageList)
@@ -658,32 +586,13 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ToolBarImageSizeDescr))
         ]
-        public Size ImageSize
-        {
-            get
-            {
-                if (imageList is not null)
-                {
-                    return imageList.ImageSize;
-                }
-                else
-                {
-                    return new Size(0, 0);
-                }
-            }
-        }
+        public Size ImageSize => imageList?.ImageSize ?? new Size(0, 0);
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -820,14 +729,8 @@ namespace WinFormsLegacyControls
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft
         {
-            get
-            {
-                return base.RightToLeft;
-            }
-            set
-            {
-                base.RightToLeft = value;
-            }
+            get => base.RightToLeft;
+            set => base.RightToLeft = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -893,10 +796,7 @@ namespace WinFormsLegacyControls
         ]
         public bool ShowToolTips
         {
-            get
-            {
-                return toolBarState[TOOLBARSTATE_showToolTips];
-            }
+            get => toolBarState[TOOLBARSTATE_showToolTips];
             set
             {
                 if (ShowToolTips != value)
@@ -911,14 +811,8 @@ namespace WinFormsLegacyControls
         [DefaultValue(false)]
         public new bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [
@@ -929,14 +823,8 @@ namespace WinFormsLegacyControls
         [AllowNull]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -959,10 +847,7 @@ namespace WinFormsLegacyControls
         ]
         public ToolBarTextAlign TextAlign
         {
-            get
-            {
-                return textAlign;
-            }
+            get => textAlign;
             set
             {
                 //valid values are 0x0 to 0x1
@@ -996,10 +881,7 @@ namespace WinFormsLegacyControls
         ]
         public bool Wrappable
         {
-            get
-            {
-                return toolBarState[TOOLBARSTATE_wrappable];
-            }
+            get => toolBarState[TOOLBARSTATE_wrappable];
             set
             {
                 if (Wrappable != value)
@@ -1072,10 +954,7 @@ namespace WinFormsLegacyControls
         ///  having each operation wait for the paint to complete.  This must be
         ///  matched up with a call to endUpdate().
         /// </summary>
-        private void BeginUpdate()
-        {
-            BeginUpdateInternal();
-        }
+        private void BeginUpdate() => BeginUpdateInternal();
 
         protected override void CreateHandle()
         {
@@ -1098,10 +977,7 @@ namespace WinFormsLegacyControls
         ///  Resets the imageList to null.  We wire this method up to the imageList's
         ///  Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </summary>
-        private void DetachImageList(object? sender, EventArgs e)
-        {
-            ImageList = null;
-        }
+        private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
 
         protected override void Dispose(bool disposing)
         {
@@ -1142,10 +1018,7 @@ namespace WinFormsLegacyControls
         ///  having each operation wait for the paint to complete.  This must be
         ///  matched up with a call to beginUpdate().
         /// </summary>
-        private void EndUpdate()
-        {
-            EndUpdateInternal();
-        }
+        private void EndUpdate() => EndUpdateInternal();
 
         /// <summary>
         ///  Forces the button sizes based on various different things.  The default
@@ -1281,18 +1154,14 @@ namespace WinFormsLegacyControls
         ///  event.
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
-        {
-            ((ToolBarButtonClickEventHandler?)Events[_buttonClickEvent])?.Invoke(this, e);
-        }
+            => ((ToolBarButtonClickEventHandler?)Events[_buttonClickEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref='ButtonDropDown'/>
         ///  event.
         /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
-        {
-            ((ToolBarButtonClickEventHandler?)Events[_buttonDropDownEvent])?.Invoke(this, e);
-        }
+            => ((ToolBarButtonClickEventHandler?)Events[_buttonDropDownEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Overridden from the control class so we can add all the buttons
@@ -1476,9 +1345,7 @@ namespace WinFormsLegacyControls
 
         ///  Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
         private void SendToolbarButtonSizeMessage()
-        {
-            PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONSIZE, 0, LPARAM.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
-        }
+            => PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONSIZE, 0, LPARAM.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
 
         /// <summary>
         ///  Overrides Control.setBoundsCore to enforce AutoSize.
@@ -1535,10 +1402,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Determines if the <see cref='ButtonSize'/> property needs to be persisted.
         /// </summary>
-        private bool ShouldSerializeButtonSize()
-        {
-            return !buttonSize.IsEmpty;
-        }
+        private bool ShouldSerializeButtonSize() => !buttonSize.IsEmpty;
 
         /*
         /// <summary>

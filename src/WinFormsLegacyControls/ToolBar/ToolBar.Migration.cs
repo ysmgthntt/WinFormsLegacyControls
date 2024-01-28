@@ -26,10 +26,7 @@ namespace WinFormsLegacyControls
             _updateCount++;
         }
 
-        private bool EndUpdateInternal()
-        {
-            return EndUpdateInternal(true);
-        }
+        private bool EndUpdateInternal() => EndUpdateInternal(true);
 
         private bool EndUpdateInternal(bool invalidate)
         {

@@ -51,13 +51,7 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ContextMenuSourceControlDescr))
         ]
-        public Control? SourceControl
-        {
-            get
-            {
-                return sourceControl;
-            }
-        }
+        public Control? SourceControl => sourceControl;
 
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup
@@ -126,27 +120,19 @@ namespace WinFormsLegacyControls
         }
 
         internal override bool RenderIsRightToLeft
-        {
-            get
-            {
-                return (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
-            }
-        }
+            => (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
+
         /// <summary>
         ///  Fires the popup event
         /// </summary>
         protected virtual void OnPopup(EventArgs e)
-        {
-            ((EventHandler?)Events[_popupEvent])?.Invoke(this, e);
-        }
+            => ((EventHandler?)Events[_popupEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
         protected virtual void OnCollapse(EventArgs e)
-        {
-            ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
-        }
+            => ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
 
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control)
         {

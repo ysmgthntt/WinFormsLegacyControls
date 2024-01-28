@@ -41,6 +41,15 @@ dotnet_diagnostic.CA1852.severity = warning
 # CA1863: 'CompositeFormat' を使用してください
 dotnet_diagnostic.CA1863.severity = suggestion
 
+# IDE0025: プロパティに式本体を使用する
+dotnet_diagnostic.IDE0025.severity = warning
+
+# IDE0026: インデクサーに式本体を使用する
+dotnet_diagnostic.IDE0026.severity = warning
+
+# IDE0027: アクセサーに式本体を使用する
+dotnet_diagnostic.IDE0027.severity = warning
+
 # IDE0031: null 値の反映を使用します
 dotnet_diagnostic.IDE0031.severity = warning
 
@@ -49,6 +58,9 @@ dotnet_diagnostic.IDE0036.severity = warning
 
 # IDE0038: パターン マッチングを使用します
 dotnet_diagnostic.IDE0038.severity = warning
+
+# IDE0051: 使用されていないプライベート メンバーを削除する
+dotnet_diagnostic.IDE0051.severity = warning
 
 # IDE0055: 書式設定を修正
 dotnet_diagnostic.IDE0055.severity = warning
