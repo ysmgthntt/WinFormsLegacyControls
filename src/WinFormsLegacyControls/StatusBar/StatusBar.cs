@@ -567,8 +567,7 @@ namespace WinFormsLegacyControls
             {
                 if (panelsCollection is not null)
                 {
-                    StatusBarPanel[] panelCopy = new StatusBarPanel[panelsCollection.Count];
-                    ((ICollection)panelsCollection).CopyTo(panelCopy, 0);
+                    StatusBarPanel[] panelCopy = _panels.ToArray();
                     panelsCollection.Clear();
 
                     foreach (StatusBarPanel p in panelCopy)
