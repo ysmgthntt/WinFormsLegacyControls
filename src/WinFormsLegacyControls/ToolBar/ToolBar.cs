@@ -639,7 +639,8 @@ namespace WinFormsLegacyControls
 
                     // height is the button's height plus some extra goo
                     //
-                    height = rect.bottom - rect.top;
+                    height = rect.Height;
+                    Debug.Assert(height == rect.bottom - rect.top);
                 }
 
                 // if the ToolBar is wrappable, and there is more than one row, make
@@ -707,9 +708,10 @@ namespace WinFormsLegacyControls
                         {
                             // ? 0 -> x ?
                             PInvoke.SendMessage(this, PInvoke.TB_GETRECT, 0, ref rect);
-                            if ((rect.right - rect.left) > maxWidth)
+                            if (rect.Width > maxWidth)
                             {
-                                maxWidth = rect.right - rect.left;
+                                maxWidth = rect.Width;
+                                Debug.Assert(maxWidth == rect.right - rect.left);
                             }
                         }
                     }
@@ -1617,8 +1619,8 @@ namespace WinFormsLegacyControls
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
-                            if (wndPlacement.rcNormalPosition_left == 0 &&
-                                wndPlacement.rcNormalPosition_top == 0 &&
+                            if (wndPlacement.rcNormalPosition.left == 0 &&
+                                wndPlacement.rcNormalPosition.top == 0 &&
                                 hotItem != -1)
                             {
 
@@ -1634,8 +1636,10 @@ namespace WinFormsLegacyControls
                                 }
 
                                 // Where can we place this tooltip so that it will be completely visible on the current display?
-                                int tooltipWidth = wndPlacement.rcNormalPosition_right - wndPlacement.rcNormalPosition_left;
-                                int tooltipHeight = wndPlacement.rcNormalPosition_bottom - wndPlacement.rcNormalPosition_top;
+                                int tooltipWidth = wndPlacement.rcNormalPosition.Width;
+                                int tooltipHeight = wndPlacement.rcNormalPosition.Height;
+                                Debug.Assert(tooltipWidth == wndPlacement.rcNormalPosition.right - wndPlacement.rcNormalPosition.left);
+                                Debug.Assert(tooltipHeight == wndPlacement.rcNormalPosition.bottom - wndPlacement.rcNormalPosition.top);
 
                                 // We'll need screen coordinates of this position for setting the tooltip's position
                                 int x = Location.X + buttonRight + 1;
