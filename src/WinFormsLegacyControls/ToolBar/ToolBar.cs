@@ -1428,16 +1428,7 @@ namespace WinFormsLegacyControls
         ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
-        {
-            string s = base.ToString();
-            s += ", Buttons.Count: " + _buttons.Count.ToString(CultureInfo.CurrentCulture);
-            if (_buttons.Count > 0)
-            {
-                s += ", Buttons[0]: " + _buttons[0].ToString();
-            }
-
-            return s;
-        }
+            => $"{base.ToString()}, Buttons.Count: {_buttons.Count}" + (_buttons.Count > 0 ? ", Buttons[0]: " + _buttons[0].ToString() : "");
 
         /// <summary>
         ///  Updates all the information in the ToolBar.  Tragically, the win32

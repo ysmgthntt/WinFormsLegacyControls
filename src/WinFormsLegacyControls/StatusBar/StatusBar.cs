@@ -859,18 +859,7 @@ namespace WinFormsLegacyControls
         ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
-        {
-            string s = base.ToString();
-            if (Panels is not null)
-            {
-                s += ", Panels.Count: " + Panels.Count.ToString(CultureInfo.CurrentCulture);
-                if (Panels.Count > 0)
-                {
-                    s += ", Panels[0]: " + Panels[0].ToString();
-                }
-            }
-            return s;
-        }
+            => $"{base.ToString()}, Panels.Count: {Panels.Count}" + (Panels.Count > 0 ? ", Panels[0]: " + Panels[0].ToString() : "");
 
         // call this when System.Windows.forms.toolTip is Associated with Statusbar....
         /*

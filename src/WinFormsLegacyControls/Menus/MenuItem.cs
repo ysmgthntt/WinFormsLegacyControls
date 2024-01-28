@@ -1431,12 +1431,7 @@ namespace WinFormsLegacyControls
         }
 
         public override string ToString()
-        {
-            string s = base.ToString();
-            string menuItemText = _data?._caption ?? string.Empty;
-            ;
-            return s + ", Text: " + menuItemText;
-        }
+            => $"{base.ToString()}, Text: {_data?._caption}";
 
         internal unsafe void UpdateItemRtl(bool setRightToLeftBit)
         {

@@ -786,9 +786,7 @@ namespace WinFormsLegacyControls
         }
 
         public override string ToString()
-        {
-            return "ToolBarButton: " + Text + ", Style: " + Style.ToString("G");
-        }
+            => $"{nameof(ToolBarButton)}: {Text}, Style: {Style:G}";
 
         /// <summary>
         ///  When a button property changes and the parent control is created,

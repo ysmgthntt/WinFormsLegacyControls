@@ -627,8 +627,6 @@ namespace WinFormsLegacyControls
         ///  panel.
         /// </summary>
         public override string ToString()
-        {
-            return "StatusBarPanel: {" + Text + "}";
-        }
+            => $"{nameof(StatusBarPanel)}: {{{Text}}}";
     }
 }

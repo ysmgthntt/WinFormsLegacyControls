@@ -176,6 +176,7 @@ namespace WinFormsLegacyControls
         private bool ShouldSerializeRightToLeft()
             => RightToLeft.Inherit != rightToLeft;
 
+        /*
         /// <summary>
         ///  Returns a string representation for this control.
         /// </summary>
@@ -184,5 +185,6 @@ namespace WinFormsLegacyControls
             // Removing GetForm information
             return base.ToString();
         }
+        */
     }
 }

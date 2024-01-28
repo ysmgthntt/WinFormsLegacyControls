@@ -606,10 +606,7 @@ namespace WinFormsLegacyControls
         ///  Returns a string representation for this control.
         /// </summary>
         public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ", Items.Count: " + ItemCount.ToString(CultureInfo.CurrentCulture);
-        }
+            => $"{base.ToString()}, Items.Count: {ItemCount}";
 
         /// <summary>
         ///  Handles the WM_MENUCHAR message, forwarding it to the intended Menu
