@@ -159,15 +159,7 @@ namespace WinFormsLegacyControls
         public MenuItemCollection MenuItems
             => itemsCollection ??= new MenuItemCollection(this);
 
-        internal virtual bool RenderIsRightToLeft
-        {
-            get
-            {
-                Debug.Assert(true, "Should never get called");
-                return false;
-
-            }
-        }
+        internal abstract bool RenderIsRightToLeft { get; }
 
         [
         SRCategory(nameof(SR.CatData)),
