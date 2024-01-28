@@ -497,7 +497,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             {
                 if (menu is not null)
                 {
-                    IntPtr createHandle = menu.Handle;
+                    _ = menu.Handle;    // CreateHandle
                     BOOL result = PInvoke.SetMenu(_form, menu);
                     Debug.Assert(result);
                 }

@@ -420,6 +420,7 @@ namespace WinFormsLegacyControls
                     return -1;
                 }
 
+                _ = Parent.Handle;  // CreateHandle
                 int count = PInvoke.GetMenuItemCount(Parent);
                 int id = MenuID;
                 MENUITEMINFOW info;
