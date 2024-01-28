@@ -261,14 +261,11 @@ namespace WinFormsLegacyControls
         ///  panel.
         /// </summary>
         [Browsable(false)]
-        public StatusBar? Parent => parent;
-
-        /// <summary>
-        ///  Expose a direct setter for parent internally
-        /// </summary>
-        internal StatusBar? ParentInternal
+        public StatusBar? Parent
         {
-            set => parent = value;
+            get => parent;
+            // Expose a direct setter for parent internally
+            internal set => parent = value;
         }
 
         /// <summary>

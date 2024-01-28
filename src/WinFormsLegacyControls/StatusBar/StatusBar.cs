@@ -704,7 +704,7 @@ namespace WinFormsLegacyControls
             for (int i = 0; i < size; i++)
             {
                 StatusBarPanel sbp = _panels[i];
-                sbp.ParentInternal = null;
+                sbp.Parent = null;
             }
 
             _panels.Clear();
@@ -1151,8 +1151,8 @@ namespace WinFormsLegacyControls
                     }
 
                     StatusBarPanel oldPanel = owner._panels[index];
-                    oldPanel.ParentInternal = null;
-                    value.ParentInternal = owner;
+                    oldPanel.Parent = null;
+                    value.Parent = owner;
                     if (value.AutoSize == StatusBarPanelAutoSize.Contents)
                     {
                         value.Width = value.GetContentsWidth(true);
@@ -1371,7 +1371,7 @@ namespace WinFormsLegacyControls
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                value.ParentInternal = owner;
+                value.Parent = owner;
 
                 switch (value.AutoSize)
                 {
@@ -1456,7 +1456,7 @@ namespace WinFormsLegacyControls
                 StatusBarPanel panel = owner._panels[index];
 
                 owner._panels.RemoveAt(index);
-                panel.ParentInternal = null;
+                panel.Parent = null;
 
                 // this will cause the panels tooltip to be removed since it's no longer a child
                 // of this StatusBar.
