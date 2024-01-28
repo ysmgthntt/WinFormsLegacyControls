@@ -1670,12 +1670,12 @@ namespace WinFormsLegacyControls
 
             internal bool Visible
             {
-                get => (_state & MenuItem.StateHidden) == 0;
+                get => (_state & StateHidden) == 0;
                 set
                 {
-                    if (((_state & MenuItem.StateHidden) == 0) != value)
+                    if (((_state & StateHidden) == 0) != value)
                     {
-                        _state = value ? _state & ~MenuItem.StateHidden : _state | MenuItem.StateHidden;
+                        _state = value ? _state & ~StateHidden : _state | StateHidden;
                         ItemsChanged(MenuChangeKind.CHANGE_VISIBLE);
                     }
                 }

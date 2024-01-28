@@ -33,7 +33,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The size of a button in the ToolBar
         /// </summary>
-        internal Size buttonSize = System.Drawing.Size.Empty;
+        internal Size buttonSize = Size.Empty;
 
         /// <summary>
         ///  This is used by our autoSizing support.
@@ -55,7 +55,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates whether or not we have a border
         /// </summary>
-        private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
+        private BorderStyle borderStyle = BorderStyle.None;
 
         /// <summary>
         ///  The array of buttons we're working with.

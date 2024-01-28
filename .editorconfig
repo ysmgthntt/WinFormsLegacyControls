@@ -41,6 +41,9 @@ dotnet_diagnostic.CA1852.severity = warning
 # CA1863: 'CompositeFormat' を使用してください
 dotnet_diagnostic.CA1863.severity = suggestion
 
+# IDE0002: メンバー アクセスを単純化します
+dotnet_diagnostic.IDE0002.severity = suggestion
+
 # IDE0025: プロパティに式本体を使用する
 dotnet_diagnostic.IDE0025.severity = warning
 

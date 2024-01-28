@@ -24,7 +24,7 @@ namespace WinFormsLegacyControls
         private static readonly object _collapseEvent = new();
         private Control? sourceControl;
 
-        private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
+        private RightToLeft rightToLeft = RightToLeft.Inherit;
 
         /// <summary>
         ///  Creates a new ContextMenu object with no items in it by default.
@@ -86,7 +86,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
+                if (RightToLeft.Inherit == rightToLeft)
                 {
                     if (sourceControl is not null)
                     {
@@ -113,14 +113,14 @@ namespace WinFormsLegacyControls
                 if (RightToLeft != value)
                 {
                     rightToLeft = value;
-                    UpdateRtl((value == System.Windows.Forms.RightToLeft.Yes));
+                    UpdateRtl((value == RightToLeft.Yes));
                 }
 
             }
         }
 
         internal override bool RenderIsRightToLeft
-            => (rightToLeft == System.Windows.Forms.RightToLeft.Yes);
+            => (rightToLeft == RightToLeft.Yes);
 
         /// <summary>
         ///  Fires the popup event

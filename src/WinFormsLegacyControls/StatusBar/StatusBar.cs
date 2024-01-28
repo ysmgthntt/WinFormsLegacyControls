@@ -55,7 +55,7 @@ namespace WinFormsLegacyControls
         public StatusBar()
         : base()
         {
-            base.SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable, false);
+            SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable, false);
 
             Dock = DockStyle.Bottom;
             TabStop = false;

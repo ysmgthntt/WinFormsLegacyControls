@@ -18,7 +18,7 @@ namespace WinFormsLegacyControls
     {
         internal Form? form;
         internal Form? ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
-        private RightToLeft rightToLeft = System.Windows.Forms.RightToLeft.Inherit;
+        private RightToLeft rightToLeft = RightToLeft.Inherit;
         private static readonly object _collapseEvent = new();
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace WinFormsLegacyControls
                 if (DesignMode) // add
                     return rightToLeft;
 
-                if (System.Windows.Forms.RightToLeft.Inherit == rightToLeft)
+                if (RightToLeft.Inherit == rightToLeft)
                 {
                     if (form is not null)
                     {
@@ -100,7 +100,7 @@ namespace WinFormsLegacyControls
                 if (rightToLeft != value)
                 {
                     rightToLeft = value;
-                    UpdateRtl((value == System.Windows.Forms.RightToLeft.Yes));
+                    UpdateRtl((value == RightToLeft.Yes));
                     // [fixed]
                     if (form is not null)
                         PInvoke.DrawMenuBar(form);
@@ -110,7 +110,7 @@ namespace WinFormsLegacyControls
         }
 
         internal override bool RenderIsRightToLeft
-            => (RightToLeft == System.Windows.Forms.RightToLeft.Yes && (form is null || !form.IsMirrored));
+            => (RightToLeft == RightToLeft.Yes && (form is null || !form.IsMirrored));
 
         /// <summary>
         ///  Creates a new MainMenu object which is a dupliate of this one.
@@ -174,7 +174,7 @@ namespace WinFormsLegacyControls
         ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeRightToLeft()
-            => System.Windows.Forms.RightToLeft.Inherit != rightToLeft;
+            => RightToLeft.Inherit != rightToLeft;
 
         /// <summary>
         ///  Returns a string representation for this control.

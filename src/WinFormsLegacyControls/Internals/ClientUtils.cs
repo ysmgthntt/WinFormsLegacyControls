@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             if (minVal != sequentialEnumInfo.MinValue)
             {
                 // put string allocation in the IF block so the common case doesnt build up the string.
-                System.Diagnostics.Debug.Fail("Minimum passed in is not the actual minimum for the enum.  Consider changing the parameters or using a different function.");
+                Debug.Fail("Minimum passed in is not the actual minimum for the enum.  Consider changing the parameters or using a different function.");
             }
             if (maxVal != sequentialEnumInfo.MaxValue)
             {
