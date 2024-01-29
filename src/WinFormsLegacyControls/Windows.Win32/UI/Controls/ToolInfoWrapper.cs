@@ -13,25 +13,19 @@ internal unsafe struct ToolInfoWrapper<T>
 
     public ToolInfoWrapper(T handle, TOOLTIP_FLAGS flags = default, string? text = null)
     {
-        Info = new TTTOOLINFOW
-        {
-            hwnd = (HWND)handle.Handle,
-            uId = (nuint)handle.Handle,
-            uFlags = flags | TOOLTIP_FLAGS.TTF_IDISHWND
-        };
+        Info.hwnd = (HWND)handle.Handle;
+        Info.uId = (nuint)handle.Handle;
+        Info.uFlags = flags | TOOLTIP_FLAGS.TTF_IDISHWND;
         Text = text;
         _handle = handle;
     }
 
     public ToolInfoWrapper(T handle, IntPtr id, TOOLTIP_FLAGS flags = default, string? text = null, RECT rect = default)
     {
-        Info = new TTTOOLINFOW
-        {
-            hwnd = (HWND)handle.Handle,
-            uId = (nuint)id,
-            uFlags = flags,
-            rect = rect
-        };
+        Info.hwnd = (HWND)handle.Handle;
+        Info.uId = (nuint)id;
+        Info.uFlags = flags;
+        Info.rect = rect;
         Text = text;
         _handle = handle;
     }

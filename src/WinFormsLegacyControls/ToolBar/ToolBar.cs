@@ -1040,15 +1040,12 @@ namespace WinFormsLegacyControls
                 for (int x = 0; x < _buttons.Count; x++)
                 {
 
-                    TBBUTTONINFOW tbbi;
+                    TBBUTTONINFOW tbbi = default;
                     unsafe
                     {
-                        tbbi = new TBBUTTONINFOW
-                        {
-                            cbSize = (uint)sizeof(TBBUTTONINFOW),
-                            cx = (ushort)_buttons[x].Width
-                        };
+                        tbbi.cbSize = (uint)sizeof(TBBUTTONINFOW);
                     }
+                    tbbi.cx = (ushort)_buttons[x].Width;
 
                     if (tbbi.cx > maxWidth)
                     {

@@ -392,15 +392,12 @@ namespace WinFormsLegacyControls
                     return false;
                 }
 
-                MENUITEMINFOW info;
+                MENUITEMINFOW info = default;
                 unsafe
                 {
-                    info = new MENUITEMINFOW
-                    {
-                        cbSize = (uint)sizeof(MENUITEMINFOW),
-                        fMask = MENU_ITEM_MASK.MIIM_STATE
-                    };
+                    info.cbSize = (uint)sizeof(MENUITEMINFOW);
                 }
+                info.fMask = MENU_ITEM_MASK.MIIM_STATE;
                 PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
 
                 return (info.fState & MENU_ITEM_STATE.MFS_HILITE) != 0;
@@ -423,15 +420,12 @@ namespace WinFormsLegacyControls
                 _ = Parent.Handle;  // CreateHandle
                 int count = PInvoke.GetMenuItemCount(Parent);
                 int id = MenuID;
-                MENUITEMINFOW info;
+                MENUITEMINFOW info = default;
                 unsafe
                 {
-                    info = new MENUITEMINFOW
-                    {
-                        cbSize = (uint)sizeof(MENUITEMINFOW),
-                        fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_SUBMENU
-                    };
+                    info.cbSize = (uint)sizeof(MENUITEMINFOW);
                 }
+                info.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_SUBMENU;
 
                 for (int i = 0; i < count; i++)
                 {
@@ -792,16 +786,13 @@ namespace WinFormsLegacyControls
                 */
 
 #if DEBUG
-                MENUITEMINFOW infoVerify;
+                MENUITEMINFOW infoVerify = default;
                 unsafe
                 {
-                    infoVerify = new MENUITEMINFOW
-                    {
-                        cbSize = (uint)sizeof(MENUITEMINFOW),
-                        fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
-                                MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
-                    };
+                    infoVerify.cbSize = (uint)sizeof(MENUITEMINFOW);
                 }
+                infoVerify.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                                   MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE;
                 PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref infoVerify);
 #endif
             }
@@ -809,17 +800,14 @@ namespace WinFormsLegacyControls
 
         private MENUITEMINFOW CreateMenuItemInfo(bool setRightToLeftBit, out string dwTypeData)
         {
-            MENUITEMINFOW info;
+            MENUITEMINFOW info = default;
             unsafe
             {
-                info = new MENUITEMINFOW
-                {
-                    cbSize = (uint)sizeof(MENUITEMINFOW),
-                    fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
-                            MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_DATA,
-                    fType = (MENU_ITEM_TYPE)(_data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw))
-                };
+                info.cbSize = (uint)sizeof(MENUITEMINFOW);
             }
+            info.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                         MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_DATA;
+            info.fType = (MENU_ITEM_TYPE)(_data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw));
 
             // Top level menu items shouldn't have barbreak or break bits set on them.
             bool isTopLevel = Parent == GetMainMenu();
@@ -1441,11 +1429,9 @@ namespace WinFormsLegacyControls
                 return;
             }
 
-            MENUITEMINFOW info = new MENUITEMINFOW
-            {
-                fMask = MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_STATE | MENU_ITEM_MASK.MIIM_SUBMENU,
-                cbSize = (uint)sizeof(MENUITEMINFOW)
-            };
+            MENUITEMINFOW info = default;
+            info.cbSize = (uint)sizeof(MENUITEMINFOW);
+            info.fMask = MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_STATE | MENU_ITEM_MASK.MIIM_SUBMENU;
             // [fixed]
             // Get text length containing shortcut
             PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
@@ -1484,16 +1470,13 @@ namespace WinFormsLegacyControls
                     }
                 }
 #if DEBUG
-                MENUITEMINFOW infoVerify;
+                MENUITEMINFOW infoVerify = default;
                 unsafe
                 {
-                    infoVerify = new MENUITEMINFOW
-                    {
-                        cbSize = (uint)sizeof(MENUITEMINFOW),
-                        fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
-                                MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE
-                    };
+                    infoVerify.cbSize = (uint)sizeof(MENUITEMINFOW);
                 }
+                infoVerify.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                                   MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE;
                 PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
 #endif
 

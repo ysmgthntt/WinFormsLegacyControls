@@ -562,15 +562,12 @@ namespace WinFormsLegacyControls
             // Assume that this button is the same width as the parent's ButtonSize's Width
             int buttonWidth = Parent!.ButtonSize.Width;
 
-            TBBUTTONINFOW button;
+            TBBUTTONINFOW button = default;
             unsafe
             {
-                button = new TBBUTTONINFOW
-                {
-                    cbSize = (uint)sizeof(TBBUTTONINFOW),
-                    dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE
-                };
+                button.cbSize = (uint)sizeof(TBBUTTONINFOW);
             }
+            button.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
 
             int buttonID = (int)PInvoke.SendMessage(Parent, PInvoke.TB_GETBUTTONINFO, (WPARAM)commandId, ref button);
             if (buttonID != -1)
@@ -656,16 +653,13 @@ namespace WinFormsLegacyControls
         /// </summary>
         private TBBUTTONINFOW GetTBBUTTONINFO(bool updateText, int newCommandId)
         {
-            TBBUTTONINFOW button;
+            TBBUTTONINFOW button = default;
             unsafe
             {
-                button = new TBBUTTONINFOW
-                {
-                    cbSize = (uint)sizeof(TBBUTTONINFOW),
-                    dwMask = TBBUTTONINFOW_MASK.TBIF_IMAGE
-                           | TBBUTTONINFOW_MASK.TBIF_STATE | TBBUTTONINFOW_MASK.TBIF_STYLE
-                };
+                button.cbSize = (uint)sizeof(TBBUTTONINFOW);
             }
+            button.dwMask = TBBUTTONINFOW_MASK.TBIF_IMAGE
+                          | TBBUTTONINFOW_MASK.TBIF_STATE | TBBUTTONINFOW_MASK.TBIF_STYLE;
 
             // Older platforms interpret null strings as empty, which forces the button to
             // leave space for text.
