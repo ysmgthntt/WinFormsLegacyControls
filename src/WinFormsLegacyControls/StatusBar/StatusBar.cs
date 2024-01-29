@@ -1526,6 +1526,10 @@ namespace WinFormsLegacyControls
             {
                 get
                 {
+                    // 親コントロールの StatusBar.CreateHandle() にて、
+                    // ICC_BAR_CLASSES で InitCommonControlsEx されている。
+                    // ICC_BAR_CLASSES は ToolTip も含んでいるため、本処理は不要。
+                    /*
                     unsafe
                     {
                         PInvoke.InitCommonControlsEx(new INITCOMMONCONTROLSEX
@@ -1534,6 +1538,7 @@ namespace WinFormsLegacyControls
                             dwICC = INITCOMMONCONTROLSEX_ICC.ICC_TAB_CLASSES
                         });
                     }
+                    */
 
                     var cp = new CreateParams
                     {
