@@ -80,9 +80,10 @@ namespace WinFormsLegacyControls
 
         public static void SetMenu(this Form form, MainMenu? menu)
         {
-            if (menu is null && form.IsMdiContainer)
-                return;
-            Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.SetValue(form, menu);
+            if (menu is null && form.IsMdiContainer && form.TryGetMainMenuSupportFormNativeWindow(out var window))
+                window.Menu = menu;
+            else
+                Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.SetValue(form, menu);
         }
 
         internal static MainMenuSupportFormNativeWindow? GetMainMenuSupportFormNativeWindow(this Form form)

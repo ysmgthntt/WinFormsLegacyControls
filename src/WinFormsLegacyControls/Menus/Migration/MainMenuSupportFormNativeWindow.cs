@@ -520,7 +520,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                 // when both MainMenuStrip and Menu are set, we honor the win32 menu over
                 // the MainMenuStrip as the place to store the system menu controls for the maximized MDI child.
 
-                if (menu is not null)
+                if (_form.MainMenuStrip is null || menu is not null)
                 {  // We are dealing with a Win32 Menu; MenuStrip doesn't have control buttons.
 
                     // We have a MainMenu and we're going to use it
