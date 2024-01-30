@@ -1165,9 +1165,11 @@ namespace WinFormsLegacyControls
 
                     //Form activeMdiChild = GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
 
+                    Type thisType = GetType();
+
                     if (senderMenu.MenuItems.Count > 0)
                     {
-                        MenuItem sep = CreateSameTypeInstance();
+                        MenuItem sep = CreateSameTypeInstance(thisType);
                         sep._data.UserData = new MdiListUserData();
                         sep.Text = "-";
                         senderMenu.MenuItems.Add(sep);
@@ -1196,7 +1198,7 @@ namespace WinFormsLegacyControls
                                 (forms[i].Equals(activeMdiChild))))
                             {
                                 // there's always room for activeMdiChild
-                                MenuItem windowItem = CreateSameTypeInstance();
+                                MenuItem windowItem = CreateSameTypeInstance(thisType);
                                 windowItem._data.UserData = new MdiListFormData(this, i);
 
                                 if (forms[i].Equals(activeMdiChild))
@@ -1205,7 +1207,7 @@ namespace WinFormsLegacyControls
                                     activeFormAdded = true;
                                 }
 
-                                windowItem.Text = string.Format(CultureInfo.CurrentUICulture, "&{0} {1}", accel, forms[i].Text);
+                                windowItem.Text = string.Create(CultureInfo.CurrentUICulture, $"&{accel} {forms[i].Text}");
                                 accel++;
                                 formsAddedToMenu++;
                                 senderMenu.MenuItems.Add(windowItem);
@@ -1218,7 +1220,7 @@ namespace WinFormsLegacyControls
                     // MDI lists, rather than letting Windows do this for us.
                     if (visibleChildren > MaxMenuForms)
                     {
-                        MenuItem moreWindows = CreateSameTypeInstance();
+                        MenuItem moreWindows = CreateSameTypeInstance(thisType);
                         moreWindows._data.UserData = new MdiListMoreWindowsData(this);
                         moreWindows.Text = SR.MDIMenuMoreWindows;
                         senderMenu.MenuItems.Add(moreWindows);
@@ -1231,9 +1233,8 @@ namespace WinFormsLegacyControls
             }
         }
 
-        private MenuItem CreateSameTypeInstance()
+        private static MenuItem CreateSameTypeInstance(Type thisType)
         {
-            Type thisType = GetType();
             if (thisType == typeof(MenuItem))
                 return new MenuItem();
             else
@@ -1248,7 +1249,7 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            MenuItem newItem = CreateSameTypeInstance();
+            MenuItem newItem = CreateSameTypeInstance(GetType());
             _data.AddItem(newItem);
             newItem.MergeMenu(this);
             return newItem;
@@ -1360,6 +1361,18 @@ namespace WinFormsLegacyControls
 
             if (MdiList)
             {
+                if (_data.baseItem == this)
+                {
+                    // If inherited, does not change original behavior
+                    if (GetType() == typeof(MenuItem) && GetMainMenu() is { } mainMenu && mainMenu.GetForm() is { } form)
+                    {
+                        if (form.TryGetMainMenuSupportFormNativeWindow(out var window) && window.CurrentMenu != mainMenu)
+                        {
+                            return;
+                        }
+                    }
+                }
+
                 PopulateMdiList();
             }
         }
@@ -1490,7 +1503,7 @@ namespace WinFormsLegacyControls
                 if (Parent is MainMenu mainMenu)
                 {
                     Form? f = mainMenu./*GetFormUnsafe()*/form;
-                    if (f is not null)
+                    if (f is not null && ((_data.State & StateInMdiPopup) == 0))
                     {
                         PInvoke.DrawMenuBar(f);
                     }
@@ -1762,7 +1775,10 @@ namespace WinFormsLegacyControls
                 if (((_state & flag) != 0) != value)
                 {
                     _state = value ? _state | flag : _state & ~flag;
-                    UpdateMenuItems();
+                    if (flag != StateInMdiPopup)
+                    {
+                        UpdateMenuItems();
+                    }
                 }
             }
 

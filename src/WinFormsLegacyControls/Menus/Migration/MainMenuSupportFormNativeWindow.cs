@@ -135,6 +135,9 @@ namespace WinFormsLegacyControls.Menus.Migration
                             value.form.SetMenu(null);
                         }
                         value.form = _form;
+#if DEBUG
+                        value._debugText = nameof(mainMenu);
+#endif
                     }
 
                     if (/*formState[FormStateSetClientSize] == 1 &&*/ !_form.IsHandleCreated)
@@ -193,9 +196,14 @@ namespace WinFormsLegacyControls.Menus.Migration
                 mergedMenu.MergeMenu(parentMenu);
                 mergedMenu.MergeMenu(mainMenu);
                 _mergedMenu = mergedMenu;
+#if DEBUG
+                mergedMenu._debugText = nameof(mergedMenu);
+#endif
                 return mergedMenu;
             }
         }
+
+        internal MainMenu? CurrentMenu => _curMenu;
 
         //protected override void SetVisibleCore(bool value)
         private void Form_VisibleChanged(object? sender, EventArgs e)
@@ -530,6 +538,9 @@ namespace WinFormsLegacyControls.Menus.Migration
                             ownerForm = _form
                         };
                         _dummyMenu = dummyMenu;
+#if DEBUG
+                        dummyMenu._debugText = nameof(dummyMenu);
+#endif
                     }
                     PInvoke.SendMessage(ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Handle);
 

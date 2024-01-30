@@ -21,6 +21,10 @@ namespace WinFormsLegacyControls
         private RightToLeft rightToLeft = RightToLeft.Inherit;
         private static readonly object _collapseEvent = new();
 
+#if DEBUG
+        internal string? _debugText;
+#endif
+
         /// <summary>
         ///  Creates a new MainMenu control.
         /// </summary>

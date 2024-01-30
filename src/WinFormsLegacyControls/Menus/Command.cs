@@ -17,6 +17,7 @@ internal sealed class Command : WeakReference
         : base(target, false)
     {
         AssignID(this);
+        //Debug.WriteLine($"CommandId: {_id}");
     }
 
     public /*virtual*/ int ID => _id;
