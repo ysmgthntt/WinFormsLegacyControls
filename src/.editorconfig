@@ -1,0 +1,93 @@
+﻿# root = true
+
+[*.cs]
+
+# CSIsNull001: Use `is null` for null checks
+dotnet_diagnostic.CSIsNull001.severity = error
+
+# CSIsNull002: Use `is object` for non-null checks
+dotnet_diagnostic.CSIsNull002.severity = error
+
+# CA1052: スタティック ホルダー型は Static または NotInheritable でなければなりません
+dotnet_diagnostic.CA1052.severity = warning
+
+# CA1507: nameof を使用してシンボル名を表現します
+dotnet_diagnostic.CA1507.severity = warning
+
+# CA1510: ArgumentNullException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1510.severity = warning
+
+# CA1511: ArgumentException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1511.severity = warning
+
+# CA1512: ArgumentOutOfRangeException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1512.severity = warning
+
+# CA1513: ObjectDisposedException スロー ヘルパーを使用する
+dotnet_diagnostic.CA1513.severity = warning
+
+# CA1805: 不必要に初期化しません
+dotnet_diagnostic.CA1805.severity = warning
+
+# CA1822: メンバーを static に設定します
+dotnet_diagnostic.CA1822.severity = warning
+
+# CA1823: 使用されていないプライベート フィールドを使用しません
+dotnet_diagnostic.CA1823.severity = warning
+
+# CA1852: 内部型のシール
+dotnet_diagnostic.CA1852.severity = warning
+
+# CA1863: 'CompositeFormat' を使用してください
+dotnet_diagnostic.CA1863.severity = suggestion
+
+# IDE0002: メンバー アクセスを単純化します
+dotnet_diagnostic.IDE0002.severity = suggestion
+
+# IDE0005: Using ディレクティブは必要ありません。
+dotnet_diagnostic.IDE0005.severity = suggestion
+
+# IDE0025: プロパティに式本体を使用する
+dotnet_diagnostic.IDE0025.severity = warning
+
+# IDE0026: インデクサーに式本体を使用する
+dotnet_diagnostic.IDE0026.severity = warning
+
+# IDE0027: アクセサーに式本体を使用する
+dotnet_diagnostic.IDE0027.severity = warning
+
+# IDE0031: null 値の反映を使用します
+dotnet_diagnostic.IDE0031.severity = warning
+
+# IDE0036: 修飾子を順序付けます
+dotnet_diagnostic.IDE0036.severity = warning
+
+# IDE0038: パターン マッチングを使用します
+dotnet_diagnostic.IDE0038.severity = warning
+
+# IDE0044: 読み取り専用修飾子を追加します
+dotnet_diagnostic.IDE0044.severity = warning
+
+# IDE0051: 使用されていないプライベート メンバーを削除する
+dotnet_diagnostic.IDE0051.severity = warning
+
+# IDE0055: 書式設定を修正
+dotnet_diagnostic.IDE0055.severity = warning
+
+# IDE0059: 値の不必要な代入
+dotnet_diagnostic.IDE0059.severity = warning
+
+# IDE0073: ファイル ヘッダーが、必要なテキストと一致しません
+dotnet_diagnostic.IDE0073.severity = silent
+
+# IDE0074: 複合代入を使用
+dotnet_diagnostic.IDE0074.severity = warning
+
+# IDE0083: パターン マッチングを使用します
+dotnet_diagnostic.IDE0083.severity = warning
+
+# IDE0100: 冗長な等値を削除
+dotnet_diagnostic.IDE0100.severity = warning
+
+# IDE1006: 命名スタイル
+dotnet_diagnostic.IDE1006.severity = warning

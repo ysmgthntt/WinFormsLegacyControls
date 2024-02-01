@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{28D89F01-2506-4300-83F2-229414772941}"
+	ProjectSection(SolutionItems) = preProject
+		src\.editorconfig = src\.editorconfig
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsLegacyControls", "src\WinFormsLegacyControls\WinFormsLegacyControls.csproj", "{AD00473E-9831-4F88-A33A-F6EBEE66ABC4}"
 EndProject
@@ -12,11 +15,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp1", "sandbox\WinFormsApp1\WinFormsApp1.csproj", "{F61CFF8A-A550-4D56-AB30-5E5F29F8D3C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsApp1", "sandbox\WindowsFormsApp1\WindowsFormsApp1.csproj", "{0F2622F9-EAA6-428F-BA08-38CFBD22589C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{434C7CAE-4C7E-4AFC-A42B-BC07B737F223}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
