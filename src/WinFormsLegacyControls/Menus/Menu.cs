@@ -614,11 +614,18 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal void WmMenuChar(ref Message m)
         {
-            Menu? menu = (m.LParam == handle) ? this : FindMenuItem(FindHandle, m.LParam);
-
-            if (menu is null)
+            Menu? menu;
+            if (m.LParam == handle)
             {
-                return;
+                menu = this;
+            }
+            else
+            {
+                menu = FindMenuItem(FindHandle, m.LParam);
+                if (menu is null)
+                {
+                    return;
+                }
             }
 
             char menuKey = char.ToUpper((char)Interop.PARAM.LOWORD(m.WParam), CultureInfo.CurrentCulture);
