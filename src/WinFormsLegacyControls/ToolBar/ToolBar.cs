@@ -409,6 +409,7 @@ namespace WinFormsLegacyControls
                         break;
                 }
 
+                // [spec]
                 if (RightToLeftLayout && (cp.ExStyle & (int)WINDOW_EX_STYLE.WS_EX_RTLREADING) == (int)WINDOW_EX_STYLE.WS_EX_RTLREADING)
                 {
                     cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
@@ -1002,6 +1003,7 @@ namespace WinFormsLegacyControls
                         for (int i = 0; i < _buttons.Count; i++)
                         {
                             ToolBarButton b = _buttons[i];
+                            // Since ToolBar is being disposed, there is no need to do TB_DELETEBUTTON
                             // from ToolBar.RemoveAt
                             b._parent = null;
                             b._stringIndex = -1;

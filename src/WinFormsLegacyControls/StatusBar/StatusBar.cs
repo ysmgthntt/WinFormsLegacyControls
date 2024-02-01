@@ -203,6 +203,7 @@ namespace WinFormsLegacyControls
                 {
                     if (RightToLeftLayout)
                     {
+                        // [spec]
                         cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
                         cp.ExStyle &= ~(int)(WINDOW_EX_STYLE.WS_EX_RTLREADING | WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_LEFTSCROLLBAR);
                     }
@@ -935,6 +936,7 @@ namespace WinFormsLegacyControls
 
             if (RightToLeftLayout && IsMirrored)
             {
+                // [spec]
                 // RTL to LTR Coordinate transformation for GDI+
                 int left = Width - dis->rcItem.right;
                 RECT rect = new RECT(left, dis->rcItem.top, left + dis->rcItem.Width, dis->rcItem.bottom);

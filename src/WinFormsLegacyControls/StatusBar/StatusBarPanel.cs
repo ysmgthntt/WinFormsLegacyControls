@@ -474,6 +474,7 @@ namespace WinFormsLegacyControls
             using (Graphics g = _parent!.CreateGraphics/*Internal*/())
             {
                 sz = Size.Ceiling(g.MeasureString(text, _parent.Font));
+                //sz = TextRenderer.MeasureText(text, _parent.Font);
             }
             if (_icon is not null)
             {
