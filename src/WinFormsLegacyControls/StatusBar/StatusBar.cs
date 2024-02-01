@@ -1665,7 +1665,7 @@ namespace WinFormsLegacyControls
 
             private void AddTool(Tool tool)
             {
-                if (tool is not null && tool.text is not null && tool.text.Length > 0)
+                if (tool is { text.Length: > 0 })
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     if (SendMessage(info, PInvoke.TTM_ADDTOOLW) == 0)
@@ -1677,7 +1677,7 @@ namespace WinFormsLegacyControls
 
             private void RemoveTool(Tool tool)
             {
-                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool._id >= 0)
+                if (tool is { text.Length: > 0, _id: >= 0 })
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     SendMessage(info, PInvoke.TTM_DELTOOLW);
@@ -1686,7 +1686,7 @@ namespace WinFormsLegacyControls
 
             private void UpdateTool(Tool tool)
             {
-                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool._id >= 0)
+                if (tool is { text.Length: > 0, _id: >= 0 })
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     SendMessage(info, PInvoke.TTM_SETTOOLINFOW);
