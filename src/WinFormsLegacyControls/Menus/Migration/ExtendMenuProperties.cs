@@ -8,7 +8,7 @@ namespace WinFormsLegacyControls
 {
     public static class ExtendMenuProperties
     {
-        private static bool _messageFilterInstalled;
+        private static bool s_messageFilterInstalled;
 
         private static void Key_Disposed<K, V>(this Dictionary<K, V> dictionary, object? sender, EventArgs e)
             where K : notnull
@@ -21,13 +21,13 @@ namespace WinFormsLegacyControls
             where K : notnull, Component
             where V : ISupportNativeWindow<K, P, V>
         {
-            private static readonly Dictionary<K, V> _property = new();
+            private static readonly Dictionary<K, V> s_property = new();
 
             public static P? GetValue(K key)
             {
                 ArgumentNullException.ThrowIfNull(key);
 
-                if (_property.TryGetValue(key, out var window))
+                if (s_property.TryGetValue(key, out var window))
                     return window.Property;
                 return default;
             }
@@ -37,14 +37,14 @@ namespace WinFormsLegacyControls
                 ArgumentNullException.ThrowIfNull(key);
                 ObjectDisposedException.ThrowIf(key is Control { IsDisposed: true }, key);
 
-                if (_property.TryGetValue(key, out var window))
+                if (s_property.TryGetValue(key, out var window))
                 {
                     window.Property = value;
                     if (value is null)
                     {
                         window.Detach();
-                        key.Disposed -= _property.Key_Disposed;
-                        _property.Remove(key);
+                        key.Disposed -= s_property.Key_Disposed;
+                        s_property.Remove(key);
                         return default;
                     }
                 }
@@ -58,19 +58,19 @@ namespace WinFormsLegacyControls
 
             public static V CreateWindow(K key)
             {
-                if (!_messageFilterInstalled)
+                if (!s_messageFilterInstalled)
                 {
                     Application.AddMessageFilter(new MenuShortcutProcessMessageFilter());
-                    _messageFilterInstalled = true;
+                    s_messageFilterInstalled = true;
                 }
                 V window = V.Create(key);
-                _property[key] = window;
-                key.Disposed += _property.Key_Disposed;
+                s_property[key] = window;
+                key.Disposed += s_property.Key_Disposed;
                 return window;
             }
 
             public static bool TryGetWindow(K key, [NotNullWhen(true)] out V? window)
-                => _property.TryGetValue(key, out window);
+                => s_property.TryGetValue(key, out window);
         }
 
         // Form.Menu Property
@@ -189,25 +189,25 @@ namespace WinFormsLegacyControls
 
         // TreeNode.ContextMenu Property
 
-        private static ConditionalWeakTable<TreeNode, ContextMenu?>? _treeNodeContextMenus;
+        private static ConditionalWeakTable<TreeNode, ContextMenu?>? s_treeNodeContextMenus;
 
         public static ContextMenu? GetContextMenu(this TreeNode treeNode)
         {
-            if (_treeNodeContextMenus is null)
+            if (s_treeNodeContextMenus is null)
                 return null;
-            _treeNodeContextMenus.TryGetValue(treeNode, out var contextMenu);
+            s_treeNodeContextMenus.TryGetValue(treeNode, out var contextMenu);
             return contextMenu;
         }
 
         public static void SetContextMenu(this TreeNode treeNode, ContextMenu? contextMenu)
         {
-            if (_treeNodeContextMenus is null)
+            if (s_treeNodeContextMenus is null)
             {
                 if (contextMenu is null)
                     return;
-                _treeNodeContextMenus = new();
+                s_treeNodeContextMenus = new();
             }
-            _treeNodeContextMenus.AddOrUpdate(treeNode, contextMenu);
+            s_treeNodeContextMenus.AddOrUpdate(treeNode, contextMenu);
         }
     }
 }

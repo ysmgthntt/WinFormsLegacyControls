@@ -9,7 +9,7 @@ namespace Windows.Win32
             BOOL result;
             unsafe
             {
-                result = TrackPopupMenuEx((HMENU)menu.handle, (uint)uFlags, x, y, (HWND)hwnd.Handle, (TPMPARAMS*)lptpm);
+                result = TrackPopupMenuEx((HMENU)menu._handle, (uint)uFlags, x, y, (HWND)hwnd.Handle, (TPMPARAMS*)lptpm);
             }
             GC.KeepAlive(menu);
             GC.KeepAlive(hwnd);
@@ -23,7 +23,7 @@ namespace Windows.Win32
             {
                 fixed (TPMPARAMS* lptpm = &tpm)
                 {
-                    result = TrackPopupMenuEx((HMENU)menu.handle, (uint)uFlags, x, y, (HWND)hwnd.Handle, lptpm);
+                    result = TrackPopupMenuEx((HMENU)menu._handle, (uint)uFlags, x, y, (HWND)hwnd.Handle, lptpm);
                 }
             }
             GC.KeepAlive(menu);

@@ -20,11 +20,11 @@ namespace WinFormsLegacyControls
     [DefaultEvent(nameof(Popup))]
     public partial class ContextMenu : Menu
     {
-        private static readonly object _popupEvent = new();
-        private static readonly object _collapseEvent = new();
-        private Control? sourceControl;
+        private static readonly object s_popupEvent = new();
+        private static readonly object s_collapseEvent = new();
+        private Control? _sourceControl;
 
-        private RightToLeft rightToLeft = RightToLeft.Inherit;
+        private RightToLeft _rightToLeft = RightToLeft.Inherit;
 
         /// <summary>
         ///  Creates a new ContextMenu object with no items in it by default.
@@ -51,13 +51,13 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ContextMenuSourceControlDescr))
         ]
-        public Control? SourceControl => sourceControl;
+        public Control? SourceControl => _sourceControl;
 
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup
         {
-            add => Events.AddHandler(_popupEvent, value);
-            remove => Events.RemoveHandler(_popupEvent, value);
+            add => Events.AddHandler(s_popupEvent, value);
+            remove => Events.RemoveHandler(s_popupEvent, value);
         }
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace WinFormsLegacyControls
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse
         {
-            add => Events.AddHandler(_collapseEvent, value);
-            remove => Events.RemoveHandler(_collapseEvent, value);
+            add => Events.AddHandler(s_collapseEvent, value);
+            remove => Events.RemoveHandler(s_collapseEvent, value);
         }
 
         /// <summary>
@@ -86,11 +86,11 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (RightToLeft.Inherit == rightToLeft)
+                if (RightToLeft.Inherit == _rightToLeft)
                 {
-                    if (sourceControl is not null)
+                    if (_sourceControl is not null)
                     {
-                        return sourceControl.RightToLeft;
+                        return _sourceControl.RightToLeft;
                     }
                     else
                     {
@@ -99,7 +99,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    return rightToLeft;
+                    return _rightToLeft;
                 }
             }
             set
@@ -112,7 +112,7 @@ namespace WinFormsLegacyControls
                 }
                 if (RightToLeft != value)
                 {
-                    rightToLeft = value;
+                    _rightToLeft = value;
                     UpdateRtl((value == RightToLeft.Yes));
                 }
 
@@ -120,23 +120,23 @@ namespace WinFormsLegacyControls
         }
 
         internal override bool RenderIsRightToLeft
-            => (rightToLeft == RightToLeft.Yes);
+            => (_rightToLeft == RightToLeft.Yes);
 
         /// <summary>
         ///  Fires the popup event
         /// </summary>
         protected virtual void OnPopup(EventArgs e)
-            => ((EventHandler?)Events[_popupEvent])?.Invoke(this, e);
+            => ((EventHandler?)Events[s_popupEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
         protected virtual void OnCollapse(EventArgs e)
-            => ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
+            => ((EventHandler?)Events[s_collapseEvent])?.Invoke(this, e);
 
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control)
         {
-            sourceControl = control;
+            _sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);
         }
 
@@ -197,7 +197,7 @@ namespace WinFormsLegacyControls
                 throw new ArgumentException(SR.ContextMenuInvalidParent, nameof(control));
             }
 
-            sourceControl = control;
+            _sourceControl = control;
 
             //OnPopup(EventArgs.Empty);
             RaisePopup();
@@ -209,19 +209,19 @@ namespace WinFormsLegacyControls
 
         //
 
-        private static nint _lastPopupHandle = -1;
+        private static nint s_lastPopupHandle = -1;
 
         private void RaisePopup()
         {
-            _lastPopupHandle = this.Handle;
+            s_lastPopupHandle = this.Handle;
             OnPopup(EventArgs.Empty);
         }
 
         internal void RaiseCollapse()
         {
-            if (_lastPopupHandle == handle)
+            if (s_lastPopupHandle == _handle)
             {
-                _lastPopupHandle = -1;
+                s_lastPopupHandle = -1;
                 OnCollapse(EventArgs.Empty);
             }
         }
@@ -229,7 +229,7 @@ namespace WinFormsLegacyControls
         internal void ShowAtCursorPos(IWin32Window hWnd, Control? control, TRACK_POPUP_MENU_FLAGS flags)
         {
             // [spec]
-            sourceControl = control;
+            _sourceControl = control;
 
             PInvoke.GetCursorPos(out Point pt);
 

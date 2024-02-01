@@ -2,36 +2,36 @@
 
 internal class ImageListIndexer
 {
-    private string key = string.Empty;
-    private int index = -1;
-    private bool useIntegerIndex = true;
-    private ImageList? imageList;
+    private string _key = string.Empty;
+    private int _index = -1;
+    private bool _useIntegerIndex = true;
+    private ImageList? _imageList;
 
     public virtual ImageList? ImageList
     {
-        get => imageList;
-        set => imageList = value;
+        get => _imageList;
+        set => _imageList = value;
     }
 
     public virtual string Key
     {
-        get => key;
+        get => _key;
         set
         {
-            index = -1;
-            key = (value ?? string.Empty);
-            useIntegerIndex = false;
+            _index = -1;
+            _key = (value ?? string.Empty);
+            _useIntegerIndex = false;
         }
     }
 
     public virtual int Index
     {
-        get => index;
+        get => _index;
         set
         {
-            key = string.Empty;
-            index = value;
-            useIntegerIndex = true;
+            _key = string.Empty;
+            _index = value;
+            _useIntegerIndex = true;
         }
 
     }
@@ -40,7 +40,7 @@ internal class ImageListIndexer
     {
         get
         {
-            if (useIntegerIndex)
+            if (_useIntegerIndex)
             {
                 return Index;
             }

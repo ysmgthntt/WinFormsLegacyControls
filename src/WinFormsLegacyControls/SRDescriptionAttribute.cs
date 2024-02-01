@@ -9,15 +9,15 @@ namespace System.Windows.Forms
     [AttributeUsage(AttributeTargets.All)]
     internal sealed class SRDescriptionAttribute : DescriptionAttribute
     {
-        private bool replaced;
+        private bool _replaced;
 
         public override string Description
         {
             get
             {
-                if (!replaced)
+                if (!_replaced)
                 {
-                    replaced = true;
+                    _replaced = true;
                     base.DescriptionValue = SR.GetResourceString(base.Description);
                 }
                 return base.Description;

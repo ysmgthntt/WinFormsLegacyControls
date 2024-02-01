@@ -3,12 +3,12 @@ using System.Windows.Forms;
 
 internal static class SR
 {
-    private static ResourceManager? _resourceManager;
+    private static ResourceManager? s_resourceManager;
 
     internal static string GetResourceString(string value)
     {
-        _resourceManager ??= new ResourceManager("System.SR", typeof(Control).Assembly);
-        return _resourceManager.GetString(value) ?? value;
+        s_resourceManager ??= new ResourceManager("System.SR", typeof(Control).Assembly);
+        return s_resourceManager.GetString(value) ?? value;
     }
 
     //

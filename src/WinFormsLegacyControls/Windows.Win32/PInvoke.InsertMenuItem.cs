@@ -9,7 +9,7 @@ namespace Windows.Win32
             BOOL result;
             fixed (MENUITEMINFOW* lpmi = &mi)
             {
-                result = InsertMenuItem((HMENU)menu.handle, item, fByPosition, lpmi);
+                result = InsertMenuItem((HMENU)menu._handle, item, fByPosition, lpmi);
             }
             GC.KeepAlive(menu);
             return result;

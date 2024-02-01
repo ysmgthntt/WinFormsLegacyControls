@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -28,17 +29,17 @@ namespace WinFormsLegacyControls
     ]
     public partial class ToolBar : Control
     {
-        private readonly ToolBarButtonCollection buttonsCollection;
+        private readonly ToolBarButtonCollection _buttonsCollection;
 
         /// <summary>
         ///  The size of a button in the ToolBar
         /// </summary>
-        internal Size buttonSize = Size.Empty;
+        internal Size _buttonSize = Size.Empty;
 
         /// <summary>
         ///  This is used by our autoSizing support.
         /// </summary>
-        private int requestedSize;
+        private int _requestedSize;
         /// <summary>
         ///  This represents the width of the drop down arrow we have if the
         ///  DropDownArrows property is true.  this value is used by the ToolBarButton
@@ -50,12 +51,12 @@ namespace WinFormsLegacyControls
         ///  Indicates what our appearance will be.  This will either be normal
         ///  or flat.
         /// </summary>
-        private ToolBarAppearance appearance = ToolBarAppearance.Normal;
+        private ToolBarAppearance _appearance = ToolBarAppearance.Normal;
 
         /// <summary>
         ///  Indicates whether or not we have a border
         /// </summary>
-        private BorderStyle borderStyle = BorderStyle.None;
+        private BorderStyle _borderStyle = BorderStyle.None;
 
         /// <summary>
         ///  The array of buttons we're working with.
@@ -66,23 +67,23 @@ namespace WinFormsLegacyControls
         ///  Indicates if text captions should go underneath images in buttons or
         ///  to the right of them
         /// </summary>
-        private ToolBarTextAlign textAlign = ToolBarTextAlign.Underneath;
+        private ToolBarTextAlign _textAlign = ToolBarTextAlign.Underneath;
 
         /// <summary>
         ///  The ImageList object that contains the main images for our control.
         /// </summary>
-        private ImageList? imageList;
+        private ImageList? _imageList;
 
         /// <summary>
         ///  The maximum width of buttons currently being displayed.  This is needed
         ///  by our autoSizing code.  If this value is -1, it needs to be recomputed.
         /// </summary>
-        private int maxWidth = -1;
-        private int hotItem = -1;
+        private int _maxWidth = -1;
+        private int _hotItem = -1;
 
         // Track the current scale factor so we can scale our buttons
-        private float currentScaleDX = 1.0F;
-        private float currentScaleDY = 1.0F;
+        private float _currentScaleDX = 1.0F;
+        private float _currentScaleDY = 1.0F;
 
 #pragma warning disable IDE0055 // Fix formatting
         private const int TOOLBARSTATE_wrappable        = 0x00000001;
@@ -94,12 +95,12 @@ namespace WinFormsLegacyControls
 #pragma warning restore IDE0055
 
         // PERF: take all the bools and put them into a state variable
-        private System.Collections.Specialized.BitVector32 toolBarState; // see TOOLBARSTATE_ consts above
+        private BitVector32 _toolBarState; // see TOOLBARSTATE_ consts above
 
         // event handlers
         //
-        private static readonly object _buttonClickEvent = new();
-        private static readonly object _buttonDropDownEvent = new();
+        private static readonly object s_buttonClickEvent = new();
+        private static readonly object s_buttonDropDownEvent = new();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBar'/> class.
@@ -108,18 +109,18 @@ namespace WinFormsLegacyControls
         : base()
         {
             // Set this BEFORE calling any other methods so that these defaults will be propagated
-            toolBarState = new System.Collections.Specialized.BitVector32(TOOLBARSTATE_autoSize |
-                                                                          TOOLBARSTATE_showToolTips |
-                                                                          TOOLBARSTATE_divider |
-                                                                          TOOLBARSTATE_dropDownArrows |
-                                                                          TOOLBARSTATE_wrappable);
+            _toolBarState = new BitVector32(TOOLBARSTATE_autoSize |
+                                            TOOLBARSTATE_showToolTips |
+                                            TOOLBARSTATE_divider |
+                                            TOOLBARSTATE_dropDownArrows |
+                                            TOOLBARSTATE_wrappable);
 
             SetStyle(ControlStyles.UserPaint, false);
             SetStyle(ControlStyles.FixedHeight, AutoSize);
             SetStyle(ControlStyles.FixedWidth, false);
             TabStop = false;
             Dock = DockStyle.Top;
-            buttonsCollection = new ToolBarButtonCollection(this);
+            _buttonsCollection = new ToolBarButtonCollection(this);
         }
 
         /// <summary>
@@ -134,7 +135,7 @@ namespace WinFormsLegacyControls
         ]
         public ToolBarAppearance Appearance
         {
-            get => appearance;
+            get => _appearance;
             set
             {
                 //valid values are 0x0 to 0x1
@@ -143,9 +144,9 @@ namespace WinFormsLegacyControls
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarAppearance));
                 }
 
-                if (value != appearance)
+                if (value != _appearance)
                 {
-                    appearance = value;
+                    _appearance = value;
                     RecreateHandle();
                 }
             }
@@ -167,7 +168,7 @@ namespace WinFormsLegacyControls
         ]
         public override bool AutoSize
         {
-            get => toolBarState[TOOLBARSTATE_autoSize];
+            get => _toolBarState[TOOLBARSTATE_autoSize];
             set
             {
                 // Note that we intentionally do not call base.  Toolbars size themselves by
@@ -176,7 +177,7 @@ namespace WinFormsLegacyControls
                 // This is done for backwards compatibility since the new AutoSize behavior differs.
                 if (AutoSize != value)
                 {
-                    toolBarState[TOOLBARSTATE_autoSize] = value;
+                    _toolBarState[TOOLBARSTATE_autoSize] = value;
                     if (Dock is DockStyle.Left or DockStyle.Right)
                     {
                         SetStyle(ControlStyles.FixedWidth, AutoSize);
@@ -255,7 +256,7 @@ namespace WinFormsLegacyControls
         ]
         public BorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
                 //valid values are 0x0 to 0x2
@@ -264,9 +265,9 @@ namespace WinFormsLegacyControls
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
 
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
 
                     //UpdateStyles();
                     RecreateHandle();   // Looks like we need to recreate the handle to avoid painting glitches
@@ -285,7 +286,7 @@ namespace WinFormsLegacyControls
         SRDescription(nameof(SR.ToolBarButtonsDescr)),
         MergableProperty(false)
         ]
-        public ToolBarButtonCollection Buttons => buttonsCollection;
+        public ToolBarButtonCollection Buttons => _buttonsCollection;
 
         /// <summary>
         ///  Gets or sets
@@ -301,7 +302,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (buttonSize.IsEmpty)
+                if (_buttonSize.IsEmpty)
                 {
 
                     // Obtain the current buttonsize of the first button from the winctl control
@@ -323,7 +324,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    return buttonSize;
+                    return _buttonSize;
                 }
             }
 
@@ -335,10 +336,10 @@ namespace WinFormsLegacyControls
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ButtonSize), value));
                 }
 
-                if (buttonSize != value)
+                if (_buttonSize != value)
                 {
-                    buttonSize = value;
-                    maxWidth = -1; // Force recompute of maxWidth
+                    _buttonSize = value;
+                    _maxWidth = -1; // Force recompute of maxWidth
                     RecreateHandle();
                     AdjustSize(Dock);
                 }
@@ -380,7 +381,7 @@ namespace WinFormsLegacyControls
 
                 cp.ExStyle &= (~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE);
                 cp.Style &= (~(int)WINDOW_STYLE.WS_BORDER);
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.Fixed3D:
                         cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
@@ -390,7 +391,7 @@ namespace WinFormsLegacyControls
                         break;
                 }
 
-                switch (appearance)
+                switch (_appearance)
                 {
                     case ToolBarAppearance.Normal:
                         break;
@@ -399,7 +400,7 @@ namespace WinFormsLegacyControls
                         break;
                 }
 
-                switch (textAlign)
+                switch (_textAlign)
                 {
                     case ToolBarTextAlign.Underneath:
                         break;
@@ -437,13 +438,13 @@ namespace WinFormsLegacyControls
         ]
         public bool Divider
         {
-            get => toolBarState[TOOLBARSTATE_divider];
+            get => _toolBarState[TOOLBARSTATE_divider];
             set
             {
                 if (Divider != value)
                 {
 
-                    toolBarState[TOOLBARSTATE_divider] = value;
+                    _toolBarState[TOOLBARSTATE_divider] = value;
                     RecreateHandle();
                 }
             }
@@ -509,13 +510,13 @@ namespace WinFormsLegacyControls
         ]
         public bool DropDownArrows
         {
-            get => toolBarState[TOOLBARSTATE_dropDownArrows];
+            get => _toolBarState[TOOLBARSTATE_dropDownArrows];
             set
             {
 
                 if (DropDownArrows != value)
                 {
-                    toolBarState[TOOLBARSTATE_dropDownArrows] = value;
+                    _toolBarState[TOOLBARSTATE_dropDownArrows] = value;
                     RecreateHandle();
                 }
             }
@@ -546,21 +547,21 @@ namespace WinFormsLegacyControls
         ]
         public ImageList? ImageList
         {
-            get => imageList;
+            get => _imageList;
             set
             {
-                if (value != imageList)
+                if (value != _imageList)
                 {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
-                    if (imageList is not null)
+                    if (_imageList is not null)
                     {
-                        imageList.Disposed -= disposedHandler;
-                        imageList.RecreateHandle -= recreateHandler;
+                        _imageList.Disposed -= disposedHandler;
+                        _imageList.RecreateHandle -= recreateHandler;
                     }
 
-                    imageList = value;
+                    _imageList = value;
 
                     if (value is not null)
                     {
@@ -586,7 +587,7 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.ToolBarImageSizeDescr))
         ]
-        public Size ImageSize => imageList?.ImageSize ?? new Size(0, 0);
+        public Size ImageSize => _imageList?.ImageSize ?? new Size(0, 0);
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ImeMode ImeMode
@@ -653,7 +654,7 @@ namespace WinFormsLegacyControls
 
                 height = (height > 0) ? height : 1;
 
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case BorderStyle.FixedSingle:
                         height += SystemInformation.BorderSize.Height;
@@ -691,13 +692,13 @@ namespace WinFormsLegacyControls
                 // fortunately, we compute this value sometimes, so we can just
                 // use it if we have it.
                 //
-                if (maxWidth == -1)
+                if (_maxWidth == -1)
                 {
                     // don't have it, have to recompute
                     //
                     if (!IsHandleCreated || _buttons.Count == 0)
                     {
-                        maxWidth = ButtonSize.Width;
+                        _maxWidth = ButtonSize.Width;
                     }
                     else
                     {
@@ -708,18 +709,18 @@ namespace WinFormsLegacyControls
                         {
                             // ? 0 -> x ?
                             PInvoke.SendMessage(this, PInvoke.TB_GETRECT, 0, ref rect);
-                            if (rect.Width > maxWidth)
+                            if (rect.Width > _maxWidth)
                             {
-                                maxWidth = rect.Width;
-                                Debug.Assert(maxWidth == rect.right - rect.left);
+                                _maxWidth = rect.Width;
+                                Debug.Assert(_maxWidth == rect.right - rect.left);
                             }
                         }
                     }
                 }
 
-                width = maxWidth;
+                width = _maxWidth;
 
-                if (borderStyle != BorderStyle.None)
+                if (_borderStyle != BorderStyle.None)
                 {
                     width += SystemInformation.BorderSize.Height * 4 + 3;
                 }
@@ -748,12 +749,12 @@ namespace WinFormsLegacyControls
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool RightToLeftLayout
         {
-            get => toolBarState[TOOLBARSTATE_rtllayout];
+            get => _toolBarState[TOOLBARSTATE_rtllayout];
             set
             {
                 if (RightToLeftLayout != value)
                 {
-                    toolBarState[TOOLBARSTATE_rtllayout] = value;
+                    _toolBarState[TOOLBARSTATE_rtllayout] = value;
                     if (RightToLeft == RightToLeft.Yes)
                     {
                         RecreateHandle();
@@ -769,8 +770,8 @@ namespace WinFormsLegacyControls
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy)
         {
-            currentScaleDX = dx;
-            currentScaleDY = dy;
+            _currentScaleDX = dx;
+            _currentScaleDY = dy;
             base.ScaleCore(dx, dy);
             UpdateButtons();
         }
@@ -781,8 +782,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
-            currentScaleDX = factor.Width;
-            currentScaleDY = factor.Height;
+            _currentScaleDX = factor.Width;
+            _currentScaleDY = factor.Height;
             base.ScaleControl(factor, specified);
         }
 
@@ -798,13 +799,13 @@ namespace WinFormsLegacyControls
         ]
         public bool ShowToolTips
         {
-            get => toolBarState[TOOLBARSTATE_showToolTips];
+            get => _toolBarState[TOOLBARSTATE_showToolTips];
             set
             {
                 if (ShowToolTips != value)
                 {
 
-                    toolBarState[TOOLBARSTATE_showToolTips] = value;
+                    _toolBarState[TOOLBARSTATE_showToolTips] = value;
                     RecreateHandle();
                 }
             }
@@ -849,7 +850,7 @@ namespace WinFormsLegacyControls
         ]
         public ToolBarTextAlign TextAlign
         {
-            get => textAlign;
+            get => _textAlign;
             set
             {
                 //valid values are 0x0 to 0x1
@@ -858,12 +859,12 @@ namespace WinFormsLegacyControls
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarTextAlign));
                 }
 
-                if (textAlign == value)
+                if (_textAlign == value)
                 {
                     return;
                 }
 
-                textAlign = value;
+                _textAlign = value;
                 RecreateHandle();
             }
         }
@@ -883,12 +884,12 @@ namespace WinFormsLegacyControls
         ]
         public bool Wrappable
         {
-            get => toolBarState[TOOLBARSTATE_wrappable];
+            get => _toolBarState[TOOLBARSTATE_wrappable];
             set
             {
                 if (Wrappable != value)
                 {
-                    toolBarState[TOOLBARSTATE_wrappable] = value;
+                    _toolBarState[TOOLBARSTATE_wrappable] = value;
                     RecreateHandle();
                 }
             }
@@ -900,8 +901,8 @@ namespace WinFormsLegacyControls
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick
         {
-            add => Events.AddHandler(_buttonClickEvent, value);
-            remove => Events.RemoveHandler(_buttonClickEvent, value);
+            add => Events.AddHandler(s_buttonClickEvent, value);
+            remove => Events.RemoveHandler(s_buttonClickEvent, value);
         }
 
         /// <summary>
@@ -910,8 +911,8 @@ namespace WinFormsLegacyControls
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown
         {
-            add => Events.AddHandler(_buttonDropDownEvent, value);
-            remove => Events.RemoveHandler(_buttonDropDownEvent, value);
+            add => Events.AddHandler(s_buttonDropDownEvent, value);
+            remove => Events.RemoveHandler(s_buttonDropDownEvent, value);
         }
 
         /// <summary>
@@ -933,7 +934,7 @@ namespace WinFormsLegacyControls
         // because we can't change Dock until the size has been properly adjusted.
         private void AdjustSize(DockStyle dock)
         {
-            int saveSize = requestedSize;
+            int saveSize = _requestedSize;
             try
             {
                 if (dock is DockStyle.Left or DockStyle.Right)
@@ -947,7 +948,7 @@ namespace WinFormsLegacyControls
             }
             finally
             {
-                requestedSize = saveSize;
+                _requestedSize = saveSize;
             }
         }
 
@@ -990,10 +991,10 @@ namespace WinFormsLegacyControls
                 lock (this)
 #endif
                 {
-                    if (imageList is not null)
+                    if (_imageList is not null)
                     {
-                        imageList.Disposed -= new EventHandler(DetachImageList);
-                        imageList = null;
+                        _imageList.Disposed -= new EventHandler(DetachImageList);
+                        _imageList = null;
                     }
 
                     if (_buttons.Count > 0)
@@ -1002,8 +1003,8 @@ namespace WinFormsLegacyControls
                         {
                             ToolBarButton b = _buttons[i];
                             // from ToolBar.RemoveAt
-                            b.parent = null;
-                            b.stringIndex = -1;
+                            b._parent = null;
+                            b._stringIndex = -1;
                             b.Dispose();
                         }
                         // from ToolBarButtonCollection.Clear
@@ -1030,12 +1031,12 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void ForceButtonWidths()
         {
-            if (_buttons.Count > 0 && buttonSize.IsEmpty && IsHandleCreated)
+            if (_buttons.Count > 0 && _buttonSize.IsEmpty && IsHandleCreated)
             {
 
                 // force ourselves to re-compute this each time
                 //
-                maxWidth = -1;
+                _maxWidth = -1;
 
                 for (int x = 0; x < _buttons.Count; x++)
                 {
@@ -1047,9 +1048,9 @@ namespace WinFormsLegacyControls
                     }
                     tbbi.cx = (ushort)_buttons[x].Width;
 
-                    if (tbbi.cx > maxWidth)
+                    if (tbbi.cx > _maxWidth)
                     {
-                        maxWidth = tbbi.cx;
+                        _maxWidth = tbbi.cx;
                     }
 
                     tbbi.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
@@ -1068,7 +1069,7 @@ namespace WinFormsLegacyControls
 
         private void Insert(int index, ToolBarButton button)
         {
-            button.parent = this;
+            button._parent = this;
             _buttons.Insert(index, button);
         }
 
@@ -1122,10 +1123,10 @@ namespace WinFormsLegacyControls
             // it in there.
             //
             ToolBarButton oldButton = _buttons[index];
-            oldButton.parent = null;
-            oldButton.stringIndex = -1;
+            oldButton._parent = null;
+            oldButton._stringIndex = -1;
             _buttons[index] = value;
-            value.parent = this;
+            value._parent = this;
 
             if (IsHandleCreated)
             {
@@ -1153,14 +1154,14 @@ namespace WinFormsLegacyControls
         ///  event.
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
-            => ((ToolBarButtonClickEventHandler?)Events[_buttonClickEvent])?.Invoke(this, e);
+            => ((ToolBarButtonClickEventHandler?)Events[s_buttonClickEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Raises the <see cref='ButtonDropDown'/>
         ///  event.
         /// </summary>
         protected virtual void OnButtonDropDown(ToolBarButtonClickEventArgs e)
-            => ((ToolBarButtonClickEventHandler?)Events[_buttonDropDownEvent])?.Invoke(this, e);
+            => ((ToolBarButtonClickEventHandler?)Events[s_buttonDropDownEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Overridden from the control class so we can add all the buttons
@@ -1194,9 +1195,9 @@ namespace WinFormsLegacyControls
 
             // if we have an imagelist, add it in now.
             //
-            if (imageList is not null)
+            if (_imageList is not null)
             {
-                PInvoke.SendMessage(this, PInvoke.TB_SETIMAGELIST, 0, imageList.Handle);
+                PInvoke.SendMessage(this, PInvoke.TB_SETIMAGELIST, 0, _imageList.Handle);
             }
 
             RealizeButtons();
@@ -1238,7 +1239,7 @@ namespace WinFormsLegacyControls
             base.OnFontChanged(e);
             if (IsHandleCreated)
             {
-                if (!buttonSize.IsEmpty)
+                if (!_buttonSize.IsEmpty)
                 {
                     SendToolbarButtonSizeMessage();
                 }
@@ -1269,11 +1270,11 @@ namespace WinFormsLegacyControls
                         if (button.Text.Length > 0)
                         {
                             string addString = button.Text + '\0'.ToString();
-                            button.stringIndex = PInvoke.SendMessage(this, PInvoke.TB_ADDSTRING, 0, addString);
+                            button._stringIndex = PInvoke.SendMessage(this, PInvoke.TB_ADDSTRING, 0, addString);
                         }
                         else
                         {
-                            button.stringIndex = -1;
+                            button._stringIndex = -1;
                         }
                     }
 
@@ -1285,7 +1286,7 @@ namespace WinFormsLegacyControls
                     {
                         ToolBarButton button = _buttons[x];
                         button.GetTBBUTTON(x, ref ptbbuttons[x]);
-                        button.parent = this;
+                        button._parent = this;
                     }
 
                     unsafe
@@ -1306,7 +1307,7 @@ namespace WinFormsLegacyControls
                     // buttons.  Otherwise, we need to manually set the width of all
                     // the buttons so they look reasonable
                     //
-                    if (!buttonSize.IsEmpty)
+                    if (!_buttonSize.IsEmpty)
                     {
                         SendToolbarButtonSizeMessage();
                     }
@@ -1326,8 +1327,8 @@ namespace WinFormsLegacyControls
         private void RemoveAt(int index)
         {
             ToolBarButton oldButton = _buttons[index];
-            oldButton.parent = null;
-            oldButton.stringIndex = -1;
+            oldButton._parent = null;
+            oldButton._stringIndex = -1;
 
             _buttons.RemoveAt(index);
         }
@@ -1338,13 +1339,13 @@ namespace WinFormsLegacyControls
         /// </summary>
         private void ResetButtonSize()
         {
-            buttonSize = Size.Empty;
+            _buttonSize = Size.Empty;
             RecreateHandle();
         }
 
         ///  Sends a TB_SETBUTTONSIZE message to the unmanaged control, with size arguments properly scaled.
         private void SendToolbarButtonSizeMessage()
-            => PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONSIZE, 0, LPARAM.MAKELPARAM((int)(buttonSize.Width * currentScaleDX), (int)(buttonSize.Height * currentScaleDY)));
+            => PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONSIZE, 0, LPARAM.MAKELPARAM((int)(_buttonSize.Width * _currentScaleDX), (int)(_buttonSize.Height * _currentScaleDY)));
 
         /// <summary>
         ///  Overrides Control.setBoundsCore to enforce AutoSize.
@@ -1360,7 +1361,7 @@ namespace WinFormsLegacyControls
             {
                 if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
                 {
-                    requestedSize = width;
+                    _requestedSize = width;
                 }
 
                 if (AutoSize)
@@ -1379,7 +1380,7 @@ namespace WinFormsLegacyControls
             {
                 if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
                 {
-                    requestedSize = height;
+                    _requestedSize = height;
                 }
 
                 if (AutoSize)
@@ -1401,7 +1402,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Determines if the <see cref='ButtonSize'/> property needs to be persisted.
         /// </summary>
-        private bool ShouldSerializeButtonSize() => !buttonSize.IsEmpty;
+        private bool ShouldSerializeButtonSize() => !_buttonSize.IsEmpty;
 
         /*
         /// <summary>
@@ -1538,39 +1539,39 @@ namespace WinFormsLegacyControls
                 NMTBHOTITEM* nmTbHotItem = (NMTBHOTITEM*)m.LParam;
                 if (NMTBHOTITEM_FLAGS.HICF_ENTERING == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_ENTERING))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_LEAVING == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_LEAVING))
                 {
-                    hotItem = -1;
+                    _hotItem = -1;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_MOUSE == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_MOUSE))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_ARROWKEYS == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_ARROWKEYS))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_ACCELERATOR == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_ACCELERATOR))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_DUPACCEL == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_DUPACCEL))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_RESELECT == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_RESELECT))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_LMOUSE == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_LMOUSE))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
                 else if (NMTBHOTITEM_FLAGS.HICF_TOGGLEDROPDOWN == (nmTbHotItem->dwFlags & NMTBHOTITEM_FLAGS.HICF_TOGGLEDROPDOWN))
                 {
-                    hotItem = nmTbHotItem->idNew;
+                    _hotItem = nmTbHotItem->idNew;
                 }
             }
         }
@@ -1618,7 +1619,7 @@ namespace WinFormsLegacyControls
                             // but nowhere near the toolbar button?
                             if (wndPlacement.rcNormalPosition.left == 0 &&
                                 wndPlacement.rcNormalPosition.top == 0 &&
-                                hotItem != -1)
+                                _hotItem != -1)
                             {
 
                                 // Assume that we're going to vertically center the tooltip on the right edge of the current
@@ -1626,10 +1627,10 @@ namespace WinFormsLegacyControls
 
                                 // Where is the right edge of the current hot item?
                                 int buttonRight = 0;
-                                for (int idx = 0; idx <= hotItem; idx++)
+                                for (int idx = 0; idx <= _hotItem; idx++)
                                 {
                                     // How wide is the item at this index? (It could be a separator, and therefore a different width.)
-                                    buttonRight += buttonsCollection[idx].GetButtonWidth();
+                                    buttonRight += _buttonsCollection[idx].GetButtonWidth();
                                 }
 
                                 // Where can we place this tooltip so that it will be completely visible on the current display?
@@ -1744,12 +1745,12 @@ namespace WinFormsLegacyControls
         /// </summary>
         public class ToolBarButtonCollection : IList
         {
-            private readonly ToolBar owner;
-            private bool suspendUpdate;
+            private readonly ToolBar _owner;
+            private bool _suspendUpdate;
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
+            private int _lastAccessedIndex = -1;
 
             /// <summary>
             ///  Initializes a new instance of the <see cref='ToolBarButtonCollection'/> class and assigns it to the specified toolbar.
@@ -1757,7 +1758,7 @@ namespace WinFormsLegacyControls
             public ToolBarButtonCollection(ToolBar owner)
             {
                 ArgumentNullException.ThrowIfNull(owner);
-                this.owner = owner;
+                _owner = owner;
             }
 
             /// <summary>
@@ -1768,25 +1769,25 @@ namespace WinFormsLegacyControls
             {
                 get
                 {
-                    if (index < 0 || index >= owner._buttons.Count)
+                    if (index < 0 || index >= _owner._buttons.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return owner._buttons[index];
+                    return _owner._buttons[index];
                 }
                 set
                 {
 
                     // Sanity check parameters
                     //
-                    if (index < 0 || index >= owner._buttons.Count)
+                    if (index < 0 || index >= _owner._buttons.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     ArgumentNullException.ThrowIfNull(value);
 
-                    owner.InternalSetButton(index, value, true, true);
+                    _owner.InternalSetButton(index, value, true, true);
                 }
             }
 
@@ -1835,7 +1836,7 @@ namespace WinFormsLegacyControls
             ///  Gets the number of buttons in the toolbar button collection.
             /// </summary>
             [Browsable(false)]
-            public int Count => owner._buttons.Count;
+            public int Count => _owner._buttons.Count;
 
             object ICollection.SyncRoot => this;
 
@@ -1852,11 +1853,11 @@ namespace WinFormsLegacyControls
             public int Add(ToolBarButton button)
             {
 
-                int index = owner.InternalAddButton(button);
+                int index = _owner.InternalAddButton(button);
 
-                if (!suspendUpdate)
+                if (!_suspendUpdate)
                 {
-                    owner.UpdateButtons();
+                    _owner.UpdateButtons();
                 }
 
                 return index;
@@ -1885,7 +1886,7 @@ namespace WinFormsLegacyControls
                 ArgumentNullException.ThrowIfNull(buttons);
                 try
                 {
-                    suspendUpdate = true;
+                    _suspendUpdate = true;
                     foreach (ToolBarButton button in buttons)
                     {
                         Add(button);
@@ -1893,8 +1894,8 @@ namespace WinFormsLegacyControls
                 }
                 finally
                 {
-                    suspendUpdate = false;
-                    owner.UpdateButtons();
+                    _suspendUpdate = false;
+                    _owner.UpdateButtons();
                 }
             }
 
@@ -1905,25 +1906,25 @@ namespace WinFormsLegacyControls
             public void Clear()
             {
 
-                if (owner._buttons.Count == 0)
+                if (_owner._buttons.Count == 0)
                 {
                     return;
                 }
 
-                for (int x = owner._buttons.Count; x > 0; x--)
+                for (int x = _owner._buttons.Count; x > 0; x--)
                 {
-                    if (owner.IsHandleCreated)
+                    if (_owner.IsHandleCreated)
                     {
-                        PInvoke.SendMessage(owner, PInvoke.TB_DELETEBUTTON, (WPARAM)(x - 1), 0);
+                        PInvoke.SendMessage(_owner, PInvoke.TB_DELETEBUTTON, (WPARAM)(x - 1), 0);
                     }
-                    owner.RemoveAt(x - 1);
+                    _owner.RemoveAt(x - 1);
                 }
 
-                owner._buttons.Clear();
+                _owner._buttons.Clear();
 
-                if (!owner.Disposing)
+                if (!_owner.Disposing)
                 {
-                    owner.UpdateButtons();
+                    _owner.UpdateButtons();
                 }
             }
 
@@ -1949,7 +1950,7 @@ namespace WinFormsLegacyControls
                 => IsValidIndex(IndexOfKey(key));
 
             void ICollection.CopyTo(Array dest, int index)
-                => ((ICollection)owner._buttons).CopyTo(dest, index);
+                => ((ICollection)_owner._buttons).CopyTo(dest, index);
 
             public int IndexOf(ToolBarButton button)
             {
@@ -1987,11 +1988,11 @@ namespace WinFormsLegacyControls
                 }
 
                 // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
+                if (IsValidIndex(_lastAccessedIndex))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                     {
-                        return lastAccessedIndex;
+                        return _lastAccessedIndex;
                     }
                 }
 
@@ -2000,18 +2001,18 @@ namespace WinFormsLegacyControls
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
-                        lastAccessedIndex = i;
+                        _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
                 // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
+                _lastAccessedIndex = -1;
                 return -1;
             }
 
             public void Insert(int index, ToolBarButton button)
-                => owner.InsertButton(index, button);
+                => _owner.InsertButton(index, button);
 
             void IList.Insert(int index, object? button)
             {
@@ -2037,18 +2038,18 @@ namespace WinFormsLegacyControls
             /// </summary>
             public void RemoveAt(int index)
             {
-                if (index < 0 || index >= owner._buttons.Count)
+                if (index < 0 || index >= _owner._buttons.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
                 }
 
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    PInvoke.SendMessage(owner, PInvoke.TB_DELETEBUTTON, (WPARAM)index, 0);
+                    PInvoke.SendMessage(_owner, PInvoke.TB_DELETEBUTTON, (WPARAM)index, 0);
                 }
 
-                owner.RemoveAt(index);
-                owner.UpdateButtons();
+                _owner.RemoveAt(index);
+                _owner.UpdateButtons();
 
             }
 
@@ -2085,8 +2086,7 @@ namespace WinFormsLegacyControls
             ///  Returns an enumerator that can be used to iterate
             ///  through the toolbar button collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
-                => owner._buttons.GetEnumerator();
+            public IEnumerator GetEnumerator() => _owner._buttons.GetEnumerator();
         }
 
     }

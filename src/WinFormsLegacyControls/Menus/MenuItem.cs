@@ -58,7 +58,7 @@ namespace WinFormsLegacyControls
 #if DEBUG
         private string? _debugText;
         private readonly int _creationNumber;
-        private static int CreateCount;
+        private static int s_createCount;
 #endif
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace WinFormsLegacyControls
 
 #if DEBUG
             _debugText = text;
-            _creationNumber = CreateCount++;
+            _creationNumber = s_createCount++;
 #endif
         }
 
@@ -906,10 +906,10 @@ namespace WinFormsLegacyControls
             return info;
         }
 
-        private static KeysConverter? _keysConverter;
+        private static KeysConverter? s_keysConverter;
 
         private static string? ShortcutToText(Keys key)
-            => (_keysConverter ??= new KeysConverter()).ConvertToString(null, CultureInfo.CurrentUICulture, key);
+            => (s_keysConverter ??= new KeysConverter()).ConvertToString(null, CultureInfo.CurrentUICulture, key);
 
         /// <summary>
         ///  Disposes the <see cref='MenuItem'/>.
@@ -1068,8 +1068,8 @@ namespace WinFormsLegacyControls
             if (change == MenuChangeKind.CHANGE_ITEMS)
             {
                 // when the menu collection changes deal with it locally
-                Debug.Assert(!created, "base.ItemsChanged should have wiped out our handles");
-                if (Parent is not null && Parent.created)
+                Debug.Assert(!_created, "base.ItemsChanged should have wiped out our handles");
+                if (Parent is not null && Parent._created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
@@ -1094,20 +1094,20 @@ namespace WinFormsLegacyControls
         {
             if (change == MenuChangeKind.CHANGE_ITEMADDED &&
                 _data is not null &&
-                _data.baseItem is not null &&
-                _data.baseItem.MenuItems.Contains(item))
+                _data._baseItem is not null &&
+                _data._baseItem.MenuItems.Contains(item))
             {
-                if (Parent is not null && Parent.created)
+                if (Parent is not null && Parent._created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
                 }
                 else if (_data is not null)
                 {
-                    MenuItem? currentMenuItem = _data.firstItem;
+                    MenuItem? currentMenuItem = _data._firstItem;
                     while (currentMenuItem is not null)
                     {
-                        if (currentMenuItem.created)
+                        if (currentMenuItem._created)
                         {
                             MenuItem newItem = item.CloneMenu();
                             item._data.AddItem(newItem);
@@ -1127,7 +1127,7 @@ namespace WinFormsLegacyControls
             activeMdiChild = null;
             if (GetMainMenu() is { } main)
             {
-                menuForm = main./*GetFormUnsafe()*/form;
+                menuForm = main./*GetFormUnsafe()*/_form;
             }
             // [spec]
             else if (GetContextMenu()?.SourceControl?.FindForm() is { } form)
@@ -1275,9 +1275,9 @@ namespace WinFormsLegacyControls
             {
                 mdiList.OnClick(e);
             }
-            else if (_data.baseItem != this)
+            else if (_data._baseItem != this)
             {
-                _data.baseItem.OnClick(e);
+                _data._baseItem.OnClick(e);
             }
             else
             {
@@ -1292,9 +1292,9 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            if (_data.baseItem != this)
+            if (_data._baseItem != this)
             {
-                _data.baseItem.OnDrawItem(e);
+                _data._baseItem.OnDrawItem(e);
             }
             else
             {
@@ -1309,9 +1309,9 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            if (_data.baseItem != this)
+            if (_data._baseItem != this)
             {
-                _data.baseItem.OnMeasureItem(e);
+                _data._baseItem.OnMeasureItem(e);
             }
             else
             {
@@ -1340,9 +1340,9 @@ namespace WinFormsLegacyControls
                 UpdateMenuItem(force: true);
             }
 
-            if (_data.baseItem != this)
+            if (_data._baseItem != this)
             {
-                _data.baseItem.OnPopup(e);
+                _data._baseItem.OnPopup(e);
             }
             else
             {
@@ -1361,7 +1361,7 @@ namespace WinFormsLegacyControls
 
             if (MdiList)
             {
-                if (_data.baseItem == this)
+                if (_data._baseItem == this)
                 {
                     // If inherited, does not change original behavior
                     if (GetType() == typeof(MenuItem) && GetMainMenu() is { } mainMenu && mainMenu.GetForm() is { } form)
@@ -1384,9 +1384,9 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            if (_data.baseItem != this)
+            if (_data._baseItem != this)
             {
-                _data.baseItem.OnSelect(e);
+                _data._baseItem.OnSelect(e);
             }
             else
             {
@@ -1466,7 +1466,7 @@ namespace WinFormsLegacyControls
 
         internal void UpdateMenuItem(bool force)
         {
-            if (Parent is null || !Parent.created)
+            if (Parent is null || !Parent._created)
             {
                 return;
             }
@@ -1502,7 +1502,7 @@ namespace WinFormsLegacyControls
                 _dataVersion = _data._version;
                 if (Parent is MainMenu mainMenu)
                 {
-                    Form? f = mainMenu./*GetFormUnsafe()*/form;
+                    Form? f = mainMenu./*GetFormUnsafe()*/_form;
                     if (f is not null && ((_data.State & StateInMdiPopup) == 0))
                     {
                         PInvoke.DrawMenuBar(f);
@@ -1559,8 +1559,8 @@ namespace WinFormsLegacyControls
 
         internal sealed class MenuItemData : ICommandExecutor
         {
-            internal MenuItem baseItem = null!;
-            internal MenuItem? firstItem;
+            internal MenuItem _baseItem = null!;
+            internal MenuItem? _firstItem;
 
             private int _state;
             internal int _version;
@@ -1611,7 +1611,7 @@ namespace WinFormsLegacyControls
                     if (((_state & StateMdiList) != 0) != value)
                     {
                         SetState(StateMdiList, value);
-                        for (MenuItem? item = firstItem; item is not null; item = item._nextLinkedItem)
+                        for (MenuItem? item = _firstItem; item is not null; item = item._nextLinkedItem)
                         {
                             item.ItemsChanged(MenuChangeKind.CHANGE_MDI);
                         }
@@ -1681,9 +1681,9 @@ namespace WinFormsLegacyControls
                 {
                     item._data?.RemoveItem(item);
 
-                    item._nextLinkedItem = firstItem;
-                    firstItem = item;
-                    baseItem ??= item;
+                    item._nextLinkedItem = _firstItem;
+                    _firstItem = item;
+                    _baseItem ??= item;
 
                     item._data = this;
                     item._dataVersion = 0;
@@ -1691,7 +1691,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            public void Execute() => baseItem?.OnClick(EventArgs.Empty);
+            public void Execute() => _baseItem?.OnClick(EventArgs.Empty);
 
             internal int GetMenuID()
             {
@@ -1702,7 +1702,7 @@ namespace WinFormsLegacyControls
 
             private void ItemsChanged(MenuChangeKind change)
             {
-                for (MenuItem? item = firstItem; item is not null; item = item._nextLinkedItem)
+                for (MenuItem? item = _firstItem; item is not null; item = item._nextLinkedItem)
                 {
                     item.Parent?.ItemsChanged(change);
                 }
@@ -1712,14 +1712,14 @@ namespace WinFormsLegacyControls
             {
                 Debug.Assert(item._data == this, "bad item passed to MenuItemData.removeItem");
 
-                if (item == firstItem)
+                if (item == _firstItem)
                 {
-                    firstItem = item._nextLinkedItem;
+                    _firstItem = item._nextLinkedItem;
                 }
                 else
                 {
                     MenuItem? itemT;
-                    for (itemT = firstItem; item != itemT!._nextLinkedItem;)
+                    for (itemT = _firstItem; item != itemT!._nextLinkedItem;)
                     {
                         itemT = itemT._nextLinkedItem;
                     }
@@ -1730,15 +1730,15 @@ namespace WinFormsLegacyControls
                 item._data = null!;
                 item._dataVersion = 0;
 
-                if (item == baseItem)
+                if (item == _baseItem)
                 {
-                    baseItem = firstItem!;
+                    _baseItem = _firstItem!;
                 }
 
-                if (firstItem is null)
+                if (_firstItem is null)
                 {
                     // No longer needed. Toss all references and the Command object.
-                    Debug.Assert(baseItem is null, "why isn't baseItem null?");
+                    Debug.Assert(_baseItem is null, "why isn't baseItem null?");
                     _onClick = null;
                     _onPopup = null;
                     _onSelect = null;
@@ -1765,7 +1765,7 @@ namespace WinFormsLegacyControls
 #if DEBUG
                 if (value.Length > 0)
                 {
-                    baseItem._debugText = value;
+                    _baseItem._debugText = value;
                 }
 #endif
             }
@@ -1785,7 +1785,7 @@ namespace WinFormsLegacyControls
             private void UpdateMenuItems()
             {
                 _version++;
-                for (MenuItem? item = firstItem; item is not null; item = item._nextLinkedItem)
+                for (MenuItem? item = _firstItem; item is not null; item = item._nextLinkedItem)
                 {
                     item.UpdateMenuItem(force: true);
                 }

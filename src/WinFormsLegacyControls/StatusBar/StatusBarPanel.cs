@@ -29,27 +29,27 @@ namespace WinFormsLegacyControls
         private const int PANELTEXTINSET = 3;
         private const int PANELGAP = 2;
 
-        private string? text = string.Empty;
-        private string name = string.Empty;
-        private string? toolTipText = string.Empty;
-        private Icon? icon;
+        private string? _text = string.Empty;
+        private string _name = string.Empty;
+        private string? _toolTipText = string.Empty;
+        private Icon? _icon;
 
-        private HorizontalAlignment alignment = HorizontalAlignment.Left;
-        private StatusBarPanelBorderStyle borderStyle = StatusBarPanelBorderStyle.Sunken;
-        private StatusBarPanelStyle style = StatusBarPanelStyle.Text;
+        private HorizontalAlignment _alignment = HorizontalAlignment.Left;
+        private StatusBarPanelBorderStyle _borderStyle = StatusBarPanelBorderStyle.Sunken;
+        private StatusBarPanelStyle _style = StatusBarPanelStyle.Text;
 
         // these are package scope so the parent can get at them.
         //
-        private StatusBar? parent;
-        private int width = DEFAULTWIDTH;
-        private int right;
-        private int minWidth = DEFAULTMINWIDTH;
-        private int index;
-        private StatusBarPanelAutoSize autoSize = StatusBarPanelAutoSize.None;
+        private StatusBar? _parent;
+        private int _width = DEFAULTWIDTH;
+        private int _right;
+        private int _minWidth = DEFAULTMINWIDTH;
+        private int _index;
+        private StatusBarPanelAutoSize _autoSize = StatusBarPanelAutoSize.None;
 
-        private bool initializing;
+        private bool _initializing;
 
-        private object? userData;
+        private object? _userData;
 
         /// <summary>
         ///  Initializes a new default instance of the <see cref='StatusBarPanel'/> class.
@@ -70,7 +70,7 @@ namespace WinFormsLegacyControls
         ]
         public HorizontalAlignment Alignment
         {
-            get => alignment;
+            get => _alignment;
             set
             {
                 //valid values are 0x0 to 0x2
@@ -78,9 +78,9 @@ namespace WinFormsLegacyControls
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
-                if (alignment != value)
+                if (_alignment != value)
                 {
-                    alignment = value;
+                    _alignment = value;
                     Realize();
                 }
             }
@@ -98,7 +98,7 @@ namespace WinFormsLegacyControls
         ]
         public StatusBarPanelAutoSize AutoSize
         {
-            get => autoSize;
+            get => _autoSize;
             set
             {
                 //valid values are 0x1 to 0x3
@@ -106,9 +106,9 @@ namespace WinFormsLegacyControls
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelAutoSize));
                 }
-                if (autoSize != value)
+                if (_autoSize != value)
                 {
-                    autoSize = value;
+                    _autoSize = value;
                     UpdateSize();
                 }
             }
@@ -123,7 +123,7 @@ namespace WinFormsLegacyControls
         [SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))]
         public StatusBarPanelBorderStyle BorderStyle
         {
-            get => borderStyle;
+            get => _borderStyle;
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelBorderStyle.None, (int)StatusBarPanelBorderStyle.Sunken))
@@ -131,20 +131,20 @@ namespace WinFormsLegacyControls
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelBorderStyle));
                 }
 
-                if (borderStyle != value)
+                if (_borderStyle != value)
                 {
-                    borderStyle = value;
+                    _borderStyle = value;
                     Realize();
                     if (Created)
                     {
-                        parent.Invalidate();
+                        _parent.Invalidate();
                     }
                 }
             }
         }
 
-        [MemberNotNullWhen(true, nameof(parent))]
-        private bool Created => parent is not null && parent.ArePanelsRealized();
+        [MemberNotNullWhen(true, nameof(_parent))]
+        private bool Created => _parent is not null && _parent.ArePanelsRealized();
 
         /// <summary>
         ///  Gets or sets the <see cref='Icon'/>
@@ -159,35 +159,35 @@ namespace WinFormsLegacyControls
         public Icon? Icon
         {
             // unfortunately we have no way of getting the icon from the control.
-            get => icon;
+            get => _icon;
             set
             {
                 if (value is null)
                 {
-                    icon = null;
+                    _icon = null;
                 }
                 else
                 {
                     Size smallIconSize = SystemInformation.SmallIconSize;
                     if (value.Height > smallIconSize.Height || value.Width > smallIconSize.Width)
                     {
-                        icon = new Icon(value, smallIconSize);
+                        _icon = new Icon(value, smallIconSize);
                     }
                     else
                     {
-                        icon = value;
+                        _icon = value;
                     }
                 }
 
                 if (Created)
                 {
-                    IntPtr handle = (icon is null) ? IntPtr.Zero : icon.Handle;
-                    PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
+                    IntPtr handle = (_icon is null) ? IntPtr.Zero : _icon.Handle;
+                    PInvoke.SendMessage(_parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), handle);
                 }
                 UpdateSize();
                 if (Created)
                 {
-                    parent.Invalidate();
+                    _parent.Invalidate();
                 }
             }
         }
@@ -197,8 +197,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal int Index
         {
-            get => index;
-            set => index = value;
+            get => _index;
+            set => _index = value;
         }
         /// <summary>
         ///  Gets or sets the minimum width the <see cref='StatusBarPanel'/> can be within the <see cref='StatusBar'/>
@@ -213,7 +213,7 @@ namespace WinFormsLegacyControls
         ]
         public int MinWidth
         {
-            get => minWidth;
+            get => _minWidth;
             set
             {
                 if (value < 0)
@@ -221,12 +221,12 @@ namespace WinFormsLegacyControls
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinWidth), value, 0));
                 }
 
-                if (value != minWidth)
+                if (value != _minWidth)
                 {
-                    minWidth = value;
+                    _minWidth = value;
 
                     UpdateSize();
-                    if (minWidth > Width)
+                    if (_minWidth > Width)
                     {
                         Width = value;
                     }
@@ -244,13 +244,13 @@ namespace WinFormsLegacyControls
             ]
         public string Name
         {
-            get => WindowsFormsUtils.GetComponentName(this, name);
+            get => WindowsFormsUtils.GetComponentName(this, _name);
             set
             {
-                name = value;
+                _name = value;
                 if (Site is not null)
                 {
-                    Site.Name = name;
+                    Site.Name = _name;
                 }
             }
         }
@@ -263,9 +263,9 @@ namespace WinFormsLegacyControls
         [Browsable(false)]
         public StatusBar? Parent
         {
-            get => parent;
+            get => _parent;
             // Expose a direct setter for parent internally
-            internal set => parent = value;
+            internal set => _parent = value;
         }
 
         /// <summary>
@@ -273,8 +273,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal int Right
         {
-            get => right;
-            set => right = value;
+            get => _right;
+            set => _right = value;
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace WinFormsLegacyControls
         ]
         public StatusBarPanelStyle Style
         {
-            get => style;
+            get => _style;
             set
             {
                 //valid values are 0x1 to 0x2
@@ -295,13 +295,13 @@ namespace WinFormsLegacyControls
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelStyle));
                 }
-                if (style != value)
+                if (_style != value)
                 {
-                    style = value;
+                    _style = value;
                     Realize();
                     if (Created)
                     {
-                        parent.Invalidate();
+                        _parent.Invalidate();
                     }
                 }
             }
@@ -317,8 +317,8 @@ namespace WinFormsLegacyControls
         ]
         public object? Tag
         {
-            get => userData;
-            set => userData = value;
+            get => _userData;
+            set => _userData = value;
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace WinFormsLegacyControls
         ]
         public string Text
         {
-            get => text ?? string.Empty;
+            get => _text ?? string.Empty;
             set
             {
                 value ??= string.Empty;
@@ -341,11 +341,11 @@ namespace WinFormsLegacyControls
                 {
                     if (value.Length == 0)
                     {
-                        text = null;
+                        _text = null;
                     }
                     else
                     {
-                        text = value;
+                        _text = value;
                     }
                     Realize();
                     UpdateSize();
@@ -365,7 +365,7 @@ namespace WinFormsLegacyControls
         ]
         public string ToolTipText
         {
-            get => toolTipText ?? string.Empty;
+            get => _toolTipText ?? string.Empty;
             set
             {
                 value ??= string.Empty;
@@ -374,16 +374,16 @@ namespace WinFormsLegacyControls
                 {
                     if (value.Length == 0)
                     {
-                        toolTipText = null;
+                        _toolTipText = null;
                     }
                     else
                     {
-                        toolTipText = value;
+                        _toolTipText = value;
                     }
 
                     if (Created)
                     {
-                        parent.UpdateTooltip(this);
+                        _parent.UpdateTooltip(this);
                     }
                 }
             }
@@ -401,15 +401,15 @@ namespace WinFormsLegacyControls
         ]
         public int Width
         {
-            get => width;
+            get => _width;
             set
             {
-                if (!initializing && value < minWidth)
+                if (!_initializing && value < _minWidth)
                 {
                     throw new ArgumentOutOfRangeException(nameof(Width), SR.WidthGreaterThanMinWidth);
                 }
 
-                width = value;
+                _width = value;
                 UpdateSize();
             }
         }
@@ -417,18 +417,18 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Handles tasks required when the control is being initialized.
         /// </summary>
-        public void BeginInit() => initializing = true;
+        public void BeginInit() => _initializing = true;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (parent is not null)
+                if (_parent is not null)
                 {
                     int index = GetIndex();
                     if (index != -1)
                     {
-                        parent.Panels.RemoveAt(index);
+                        _parent.Panels.RemoveAt(index);
                     }
                 }
             }
@@ -440,7 +440,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         public void EndInit()
         {
-            initializing = false;
+            _initializing = false;
 
             if (Width < MinWidth)
             {
@@ -456,13 +456,13 @@ namespace WinFormsLegacyControls
             string text;
             if (newPanel)
             {
-                if (this.text is null)
+                if (_text is null)
                 {
                     text = string.Empty;
                 }
                 else
                 {
-                    text = this.text;
+                    text = _text;
                 }
             }
             else
@@ -471,24 +471,24 @@ namespace WinFormsLegacyControls
             }
 
             Size sz;
-            using (Graphics g = parent!.CreateGraphics/*Internal*/())
+            using (Graphics g = _parent!.CreateGraphics/*Internal*/())
             {
-                sz = Size.Ceiling(g.MeasureString(text, parent.Font));
+                sz = Size.Ceiling(g.MeasureString(text, _parent.Font));
             }
-            if (icon is not null)
+            if (_icon is not null)
             {
-                sz.Width += icon.Size.Width + 5;
+                sz.Width += _icon.Size.Width + 5;
             }
 
             int width = sz.Width + SystemInformation.BorderSize.Width * 2 + PANELTEXTINSET * 2 + PANELGAP;
-            return Math.Max(width, minWidth);
+            return Math.Max(width, _minWidth);
         }
 
         /// <summary>
         ///  Returns the index of the panel by making the parent control search
         ///  for it within its list.
         /// </summary>
-        private int GetIndex() => index;
+        private int GetIndex() => _index;
 
         /// <summary>
         ///  Sets all the properties for this panel.
@@ -500,12 +500,12 @@ namespace WinFormsLegacyControls
                 string sendText;
                 uint border = 0;
 
-                string text = this.text ?? string.Empty;
+                string text = _text ?? string.Empty;
 
-                HorizontalAlignment align = alignment;
+                HorizontalAlignment align = _alignment;
                 // Translate the alignment for Rtl apps
                 //
-                if (!parent.RightToLeftLayout && parent.RightToLeft == RightToLeft.Yes)
+                if (!_parent.RightToLeftLayout && _parent.RightToLeft == RightToLeft.Yes)
                 {
                     switch (align)
                     {
@@ -530,7 +530,7 @@ namespace WinFormsLegacyControls
                         sendText = text;
                         break;
                 }
-                switch (borderStyle)
+                switch (_borderStyle)
                 {
                     case StatusBarPanelBorderStyle.None:
                         border |= PInvoke.SBT_NOBORDERS;
@@ -541,7 +541,7 @@ namespace WinFormsLegacyControls
                         border |= PInvoke.SBT_POPOUT;
                         break;
                 }
-                switch (style)
+                switch (_style)
                 {
                     case StatusBarPanelStyle.Text:
                         break;
@@ -551,35 +551,35 @@ namespace WinFormsLegacyControls
                 }
 
                 int wparam = GetIndex() | (int)border;
-                if (parent.RightToLeft == RightToLeft.Yes)
+                if (_parent.RightToLeft == RightToLeft.Yes)
                 {
                     wparam |= (int)PInvoke.SBT_RTLREADING;
                 }
 
-                int result = (int)PInvoke.SendMessage(parent, PInvoke.SB_SETTEXT, (WPARAM)wparam, sendText);
+                int result = (int)PInvoke.SendMessage(_parent, PInvoke.SB_SETTEXT, (WPARAM)wparam, sendText);
 
                 if (result == 0)
                 {
                     throw new InvalidOperationException(SR.UnableToSetPanelText);
                 }
 
-                if (icon is not null && style != StatusBarPanelStyle.OwnerDraw)
+                if (_icon is not null && _style != StatusBarPanelStyle.OwnerDraw)
                 {
-                    PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), icon.Handle);
+                    PInvoke.SendMessage(_parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), _icon.Handle);
                 }
                 else
                 {
-                    PInvoke.SendMessage(parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), 0);
+                    PInvoke.SendMessage(_parent, PInvoke.SB_SETICON, (WPARAM)GetIndex(), 0);
                 }
 
-                if (style == StatusBarPanelStyle.OwnerDraw)
+                if (_style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
-                    result = (int)PInvoke.SendMessage(parent, PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
+                    result = (int)PInvoke.SendMessage(_parent, PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
 
                     if (result != 0)
                     {
-                        parent.Invalidate(Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom));
+                        _parent.Invalidate(Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom));
                     }
                 }
             }
@@ -587,7 +587,7 @@ namespace WinFormsLegacyControls
 
         private void UpdateSize()
         {
-            if (autoSize == StatusBarPanelAutoSize.Contents)
+            if (_autoSize == StatusBarPanelAutoSize.Contents)
             {
                 ApplyContentSizing();
             }
@@ -595,16 +595,16 @@ namespace WinFormsLegacyControls
             {
                 if (Created)
                 {
-                    parent.DirtyLayout();
-                    parent.PerformLayout();
+                    _parent.DirtyLayout();
+                    _parent.PerformLayout();
                 }
             }
         }
 
         private void ApplyContentSizing()
         {
-            if (autoSize == StatusBarPanelAutoSize.Contents &&
-                parent is not null)
+            if (_autoSize == StatusBarPanelAutoSize.Contents &&
+                _parent is not null)
             {
                 int newWidth = GetContentsWidth(false);
                 if (newWidth != Width)
@@ -612,8 +612,8 @@ namespace WinFormsLegacyControls
                     Width = newWidth;
                     if (Created)
                     {
-                        parent.DirtyLayout();
-                        parent.PerformLayout();
+                        _parent.DirtyLayout();
+                        _parent.PerformLayout();
                     }
                 }
             }

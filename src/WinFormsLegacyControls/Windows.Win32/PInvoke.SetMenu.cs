@@ -6,7 +6,7 @@ namespace Windows.Win32
     {
         public static BOOL SetMenu(IWin32Window hWnd, Menu menu)
         {
-            BOOL result = SetMenu((HWND)hWnd.Handle, (HMENU)menu.handle);
+            BOOL result = SetMenu((HWND)hWnd.Handle, (HMENU)menu._handle);
             GC.KeepAlive(hWnd);
             GC.KeepAlive(menu);
             return result;

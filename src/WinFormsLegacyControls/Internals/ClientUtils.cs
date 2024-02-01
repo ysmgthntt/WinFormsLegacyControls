@@ -25,7 +25,9 @@ namespace System.Windows.Forms
 
 #if DEBUG
         [ThreadStatic]
-        private static Hashtable? enumValueInfo;
+#pragma warning disable IDE1006 // Naming styles
+        private static Hashtable? t_enumValueInfo;
+#pragma warning restore IDE1006 // Naming styles
         public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
 
         private sealed class SequentialEnumInfo
@@ -58,25 +60,25 @@ namespace System.Windows.Forms
         {
             Type t = value.GetType();
 
-            enumValueInfo ??= new Hashtable();
+            t_enumValueInfo ??= new Hashtable();
 
             SequentialEnumInfo? sequentialEnumInfo = null;
 
-            if (enumValueInfo.ContainsKey(t))
+            if (t_enumValueInfo.ContainsKey(t))
             {
-                sequentialEnumInfo = enumValueInfo[t] as SequentialEnumInfo;
+                sequentialEnumInfo = t_enumValueInfo[t] as SequentialEnumInfo;
             }
             if (sequentialEnumInfo is null)
             {
                 sequentialEnumInfo = new SequentialEnumInfo(t);
 
-                if (enumValueInfo.Count > MAXCACHE)
+                if (t_enumValueInfo.Count > MAXCACHE)
                 {
                     // see comment next to MAXCACHE declaration.
                     Debug.Fail("cache is too bloated, clearing out, we need to revisit this.");
-                    enumValueInfo.Clear();
+                    t_enumValueInfo.Clear();
                 }
-                enumValueInfo[t] = sequentialEnumInfo;
+                t_enumValueInfo[t] = sequentialEnumInfo;
             }
             if (minVal != sequentialEnumInfo.MinValue)
             {

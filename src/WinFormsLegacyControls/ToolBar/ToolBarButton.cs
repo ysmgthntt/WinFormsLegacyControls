@@ -28,19 +28,19 @@ namespace WinFormsLegacyControls
     ]
     public class ToolBarButton : Component
     {
-        string? text;
-        string? name;
-        string? tooltipText;
-        bool enabled = true;
-        bool visible = true;
-        bool pushed;
-        bool partialPush;
-        private int commandId = -1; // the cached command id of the button.
-        private ToolBarButtonImageIndexer? imageIndexer;
+        string? _text;
+        string? _name;
+        string? _tooltipText;
+        bool _enabled = true;
+        bool _visible = true;
+        bool _pushed;
+        bool _partialPush;
+        private int _commandId = -1; // the cached command id of the button.
+        private ToolBarButtonImageIndexer? _imageIndexer;
 
-        ToolBarButtonStyle style = ToolBarButtonStyle.PushButton;
+        ToolBarButtonStyle _style = ToolBarButtonStyle.PushButton;
 
-        object? userData;
+        object? _userData;
 
         // These variables below are used by the ToolBar control to help
         // it manage some information about us.
@@ -49,18 +49,18 @@ namespace WinFormsLegacyControls
         ///  If this button has a string, what it's index is in the ToolBar's
         ///  internal list of strings.  Needs to be package protected.
         /// </summary>
-        internal IntPtr stringIndex = -1;
+        internal IntPtr _stringIndex = -1;
 
         /// <summary>
         ///  Our parent ToolBar control.
         /// </summary>
-        internal ToolBar? parent;
+        internal ToolBar? _parent;
 
         /// <summary>
         ///  For DropDown buttons, we can optionally show a
         ///  context menu when the button is dropped down.
         /// </summary>
-        private ContextMenu? dropDownMenu;
+        private ContextMenu? _dropDownMenu;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ToolBarButton'/> class.
@@ -78,20 +78,20 @@ namespace WinFormsLegacyControls
         // list for indexing purposes.
         private sealed class ToolBarButtonImageIndexer : /*ImageList.Indexer*/ImageListIndexer
         {
-            private readonly ToolBarButton owner;
+            private readonly ToolBarButton _owner;
 
             public ToolBarButtonImageIndexer(ToolBarButton button)
             {
-                owner = button;
+                _owner = button;
             }
 
             public override ImageList? ImageList
             {
                 get
                 {
-                    if ((owner is not null) && (owner.parent is not null))
+                    if ((_owner is not null) && (_owner._parent is not null))
                     {
-                        return owner.parent.ImageList;
+                        return _owner._parent.ImageList;
                     }
                     return null;
                 }
@@ -100,7 +100,7 @@ namespace WinFormsLegacyControls
         }
 
         private ToolBarButtonImageIndexer ImageIndexer
-            => imageIndexer ??= new ToolBarButtonImageIndexer(this);
+            => _imageIndexer ??= new ToolBarButtonImageIndexer(this);
 
         /// <summary>
         ///
@@ -114,11 +114,11 @@ namespace WinFormsLegacyControls
         ]
         public Menu? DropDownMenu
         {
-            get => dropDownMenu;
+            get => _dropDownMenu;
             set =>
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
                 //
-                dropDownMenu = value switch
+                _dropDownMenu = value switch
                 {
                     null => null,
                     ContextMenu contextMenu => contextMenu,
@@ -126,7 +126,7 @@ namespace WinFormsLegacyControls
                 };
         }
 
-        internal ContextMenu? DropDownMenuInternal => dropDownMenu;
+        internal ContextMenu? DropDownMenuInternal => _dropDownMenu;
 
         /// <summary>
         ///  Indicates whether the button is enabled or not.
@@ -138,17 +138,17 @@ namespace WinFormsLegacyControls
         ]
         public bool Enabled
         {
-            get => enabled;
+            get => _enabled;
             set
             {
-                if (enabled != value)
+                if (_enabled != value)
                 {
 
-                    enabled = value;
+                    _enabled = value;
 
-                    if (parent is not null && parent.IsHandleCreated)
+                    if (_parent is not null && _parent.IsHandleCreated)
                     {
-                        PInvoke.SendMessage(parent, PInvoke.TB_ENABLEBUTTON, (WPARAM)FindButtonIndex(), enabled ? 1 : 0);
+                        PInvoke.SendMessage(_parent, PInvoke.TB_ENABLEBUTTON, (WPARAM)FindButtonIndex(), _enabled ? 1 : 0);
                     }
                 }
             }
@@ -216,20 +216,20 @@ namespace WinFormsLegacyControls
         [Browsable(false)]
         public string Name
         {
-            get => WindowsFormsUtils.GetComponentName(this, name);
+            get => WindowsFormsUtils.GetComponentName(this, _name);
             set
             {
                 if (value is null || value.Length == 0)
                 {
-                    name = null;
+                    _name = null;
                 }
                 else
                 {
-                    name = value;
+                    _name = value;
                 }
                 if (Site is not null)
                 {
-                    Site.Name = name;
+                    Site.Name = _name;
                 }
             }
         }
@@ -241,7 +241,7 @@ namespace WinFormsLegacyControls
         [
             Browsable(false),
         ]
-        public ToolBar? Parent => parent;
+        public ToolBar? Parent => _parent;
 
         /// <summary>
         ///
@@ -256,29 +256,29 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (parent is null || !parent.IsHandleCreated)
+                if (_parent is null || !_parent.IsHandleCreated)
                 {
-                    return partialPush;
+                    return _partialPush;
                 }
                 else
                 {
-                    if (PInvoke.SendMessage(parent, PInvoke.TB_ISBUTTONINDETERMINATE, (WPARAM)FindButtonIndex()) != 0)
+                    if (PInvoke.SendMessage(_parent, PInvoke.TB_ISBUTTONINDETERMINATE, (WPARAM)FindButtonIndex()) != 0)
                     {
-                        partialPush = true;
+                        _partialPush = true;
                     }
                     else
                     {
-                        partialPush = false;
+                        _partialPush = false;
                     }
 
-                    return partialPush;
+                    return _partialPush;
                 }
             }
             set
             {
-                if (partialPush != value)
+                if (_partialPush != value)
                 {
-                    partialPush = value;
+                    _partialPush = value;
                     UpdateButton(false);
                 }
             }
@@ -295,9 +295,9 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (parent is null || !parent.IsHandleCreated)
+                if (_parent is null || !_parent.IsHandleCreated)
                 {
-                    return pushed;
+                    return _pushed;
                 }
                 else
                 {
@@ -308,7 +308,7 @@ namespace WinFormsLegacyControls
             {
                 if (value != Pushed)
                 { // Getting property Pushed updates pushed member variable
-                    pushed = value;
+                    _pushed = value;
                     UpdateButton(false, false, false);
                 }
             }
@@ -322,10 +322,10 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (parent is not null)
+                if (_parent is not null)
                 {
                     RECT rc = new RECT();
-                    PInvoke.SendMessage(parent, PInvoke.TB_GETRECT, (WPARAM)FindButtonIndex(), ref rc);
+                    PInvoke.SendMessage(_parent, PInvoke.TB_GETRECT, (WPARAM)FindButtonIndex(), ref rc);
                     return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
                 }
                 return Rectangle.Empty;
@@ -343,7 +343,7 @@ namespace WinFormsLegacyControls
         ]
         public ToolBarButtonStyle Style
         {
-            get => style;
+            get => _style;
             set
             {
                 //valid values are 0x1 to 0x4
@@ -351,12 +351,12 @@ namespace WinFormsLegacyControls
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolBarButtonStyle));
                 }
-                if (style == value)
+                if (_style == value)
                 {
                     return;
                 }
 
-                style = value;
+                _style = value;
                 UpdateButton(true);
             }
         }
@@ -371,8 +371,8 @@ namespace WinFormsLegacyControls
         ]
         public object? Tag
         {
-            get => userData;
-            set => userData = value;
+            get => _userData;
+            set => _userData = value;
         }
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace WinFormsLegacyControls
         [AllowNull]
         public string Text
         {
-            get => text ?? string.Empty;
+            get => _text ?? string.Empty;
             set
             {
                 if (string.IsNullOrEmpty(value))
@@ -394,12 +394,12 @@ namespace WinFormsLegacyControls
                     value = null!;
                 }
 
-                if ((value is null && text is not null) ||
-                     (value is not null && (text is null || !text.Equals(value))))
+                if ((value is null && _text is not null) ||
+                     (value is not null && (_text is null || !_text.Equals(value))))
                 {
-                    text = value;
+                    _text = value;
                     // Adding a mnemonic requires a handle recreate.
-                    UpdateButton(WindowsFormsUtils.ContainsMnemonic(text), true, true);
+                    UpdateButton(WindowsFormsUtils.ContainsMnemonic(_text), true, true);
                 }
             }
         }
@@ -416,8 +416,8 @@ namespace WinFormsLegacyControls
         ]
         public string ToolTipText
         {
-            get => tooltipText ?? string.Empty;
-            set => tooltipText = value;
+            get => _tooltipText ?? string.Empty;
+            set => _tooltipText = value;
         }
 
         /// <summary>
@@ -432,12 +432,12 @@ namespace WinFormsLegacyControls
         ]
         public bool Visible
         {
-            get => visible;
+            get => _visible;
             set
             {
-                if (visible != value)
+                if (_visible != value)
                 {
-                    visible = value;
+                    _visible = value;
                     UpdateButton(false);
                 }
             }
@@ -453,7 +453,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                Debug.Assert(parent is not null, "Parent should be non-null when button width is requested");
+                Debug.Assert(_parent is not null, "Parent should be non-null when button width is requested");
 
                 int width = 0;
                 ToolBarButtonStyle style = Style;
@@ -464,21 +464,21 @@ namespace WinFormsLegacyControls
 
                     // COMPAT: this will force handle creation.
                     // we could use the measurement graphics, but it looks like this has been like this since Everett.
-                    using (Graphics g = parent.CreateGraphics/*Internal*/())
+                    using (Graphics g = _parent.CreateGraphics/*Internal*/())
                     {
 
-                        Size buttonSize = parent.buttonSize;
+                        Size buttonSize = _parent._buttonSize;
                         if (!(buttonSize.IsEmpty))
                         {
                             width = buttonSize.Width;
                         }
                         else
                         {
-                            if (parent.ImageList is not null || !string.IsNullOrEmpty(Text))
+                            if (_parent.ImageList is not null || !string.IsNullOrEmpty(Text))
                             {
-                                Size imageSize = parent.ImageSize;
-                                Size textSize = Size.Ceiling(g.MeasureString(Text, parent.Font));
-                                if (parent.TextAlign == ToolBarTextAlign.Right)
+                                Size imageSize = _parent.ImageSize;
+                                Size textSize = Size.Ceiling(g.MeasureString(Text, _parent.Font));
+                                if (_parent.TextAlign == ToolBarTextAlign.Right)
                                 {
                                     if (textSize.Width == 0)
                                     {
@@ -500,15 +500,15 @@ namespace WinFormsLegacyControls
                                         width = textSize.Width + edge.Width * 4;
                                     }
                                 }
-                                if (style == ToolBarButtonStyle.DropDownButton && parent.DropDownArrows)
+                                if (style == ToolBarButtonStyle.DropDownButton && _parent.DropDownArrows)
                                 {
                                     // [fixed] [DPI]
-                                    width += parent.LogicalToDeviceUnits(ToolBar.DDARROW_WIDTH);
+                                    width += _parent.LogicalToDeviceUnits(ToolBar.DDARROW_WIDTH);
                                 }
                             }
                             else
                             {
-                                width = parent.ButtonSize.Width;
+                                width = _parent.ButtonSize.Width;
                             }
                         }
                     }
@@ -527,12 +527,12 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (parent is not null)
+                if (_parent is not null)
                 {
                     int index = FindButtonIndex();
                     if (index != -1)
                     {
-                        parent.Buttons.RemoveAt(index);
+                        _parent.Buttons.RemoveAt(index);
                     }
                 }
             }
@@ -544,9 +544,9 @@ namespace WinFormsLegacyControls
         /// </summary>
         private int FindButtonIndex()
         {
-            for (int x = 0; x < parent!.Buttons.Count; x++)
+            for (int x = 0; x < _parent!.Buttons.Count; x++)
             {
-                if (parent.Buttons[x] == this)
+                if (_parent.Buttons[x] == this)
                 {
                     return x;
                 }
@@ -569,7 +569,7 @@ namespace WinFormsLegacyControls
             }
             button.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
 
-            int buttonID = (int)PInvoke.SendMessage(Parent, PInvoke.TB_GETBUTTONINFO, (WPARAM)commandId, ref button);
+            int buttonID = (int)PInvoke.SendMessage(Parent, PInvoke.TB_GETBUTTONINFO, (WPARAM)_commandId, ref button);
             if (buttonID != -1)
             {
                 buttonWidth = button.cx;
@@ -580,16 +580,16 @@ namespace WinFormsLegacyControls
 
         private bool GetPushedState()
         {
-            if (PInvoke.SendMessage(parent!, PInvoke.TB_ISBUTTONCHECKED, (WPARAM)FindButtonIndex()) != 0)
+            if (PInvoke.SendMessage(_parent!, PInvoke.TB_ISBUTTONCHECKED, (WPARAM)FindButtonIndex()) != 0)
             {
-                pushed = true;
+                _pushed = true;
             }
             else
             {
-                pushed = false;
+                _pushed = false;
             }
 
-            return pushed;
+            return _pushed;
         }
 
         /// <summary>
@@ -603,29 +603,29 @@ namespace WinFormsLegacyControls
             //
             button.fsState = 0;
 
-            if (enabled)
+            if (_enabled)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_ENABLED;
             }
 
-            if (partialPush && style == ToolBarButtonStyle.ToggleButton)
+            if (_partialPush && _style == ToolBarButtonStyle.ToggleButton)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_INDETERMINATE;
             }
 
-            if (pushed)
+            if (_pushed)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_CHECKED;
             }
 
-            if (!visible)
+            if (!_visible)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_HIDDEN;
             }
 
             // set the button style
             //
-            switch (style)
+            switch (_style)
             {
                 case ToolBarButtonStyle.PushButton:
                     button.fsStyle = (byte)PInvoke.TBSTYLE_BUTTON;
@@ -643,8 +643,8 @@ namespace WinFormsLegacyControls
             }
 
             button.dwData = 0;
-            button.iString = stringIndex;
-            this.commandId = commandId;
+            button.iString = _stringIndex;
+            _commandId = commandId;
             button.idCommand = commandId;
         }
 
@@ -671,9 +671,9 @@ namespace WinFormsLegacyControls
 
             button.iImage = ImageIndexer.ActualIndex;
 
-            if (newCommandId != commandId)
+            if (newCommandId != _commandId)
             {
-                commandId = newCommandId;
+                _commandId = newCommandId;
                 button.idCommand = newCommandId;
                 button.dwMask |= TBBUTTONINFOW_MASK.TBIF_COMMAND;
             }
@@ -681,29 +681,29 @@ namespace WinFormsLegacyControls
             // set up the state of the button
             //
             button.fsState = 0;
-            if (enabled)
+            if (_enabled)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_ENABLED;
             }
 
-            if (partialPush && style == ToolBarButtonStyle.ToggleButton)
+            if (_partialPush && _style == ToolBarButtonStyle.ToggleButton)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_INDETERMINATE;
             }
 
-            if (pushed)
+            if (_pushed)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_CHECKED;
             }
 
-            if (!visible)
+            if (!_visible)
             {
                 button.fsState |= (byte)PInvoke.TBSTATE_HIDDEN;
             }
 
             // set the button style
             //
-            switch (style)
+            switch (_style)
             {
                 case ToolBarButtonStyle.PushButton:
                     button.fsStyle = (byte)PInvoke.TBSTYLE_BUTTON;
@@ -723,7 +723,7 @@ namespace WinFormsLegacyControls
         internal unsafe void SetButtonInfo(bool updateText, int index)
         {
             TBBUTTONINFOW tbbi = GetTBBUTTONINFO(updateText, index);
-            string? textValue = text;
+            string? textValue = _text;
             if (textValue is null)
                 textValue = "\0\0";
             else
@@ -731,7 +731,7 @@ namespace WinFormsLegacyControls
             fixed (char* pszText = textValue)
             {
                 tbbi.pszText = pszText;
-                PInvoke.SendMessage(parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, ref tbbi);
+                PInvoke.SendMessage(_parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, ref tbbi);
             }
         }
 
@@ -799,7 +799,7 @@ namespace WinFormsLegacyControls
             // lose the DropDownButton very easily - so we need to recreate
             // the button each time it changes just to be sure.
             //
-            if (style == ToolBarButtonStyle.DropDownButton && parent is not null && parent.DropDownArrows)
+            if (_style == ToolBarButtonStyle.DropDownButton && _parent is not null && _parent.DropDownArrows)
             {
                 recreate = true;
             }
@@ -811,16 +811,16 @@ namespace WinFormsLegacyControls
             // the GetButtonInfo method uses the "pushed" variable..
 
             //rather than setting it ourselves .... we asks the button to set it for us..
-            if (updatePushedState && parent is not null && parent.IsHandleCreated)
+            if (updatePushedState && _parent is not null && _parent.IsHandleCreated)
             {
                 GetPushedState();
             }
-            if (parent is not null)
+            if (_parent is not null)
             {
                 int index = FindButtonIndex();
                 if (index != -1)
                 {
-                    parent.InternalSetButton(index, this, recreate, updateText);
+                    _parent.InternalSetButton(index, this, recreate, updateText);
                 }
             }
         }

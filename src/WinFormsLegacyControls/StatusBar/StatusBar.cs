@@ -29,23 +29,25 @@ namespace WinFormsLegacyControls
     ]
     public class StatusBar : Control
     {
-        private int sizeGripWidth;
+        private int _sizeGripWidth;
         private const int SIMPLE_INDEX = 0xFF;
 
+#pragma warning disable IDE1006 // Naming styles
         private static readonly object EVENT_PANELCLICK = new object();
         private static readonly object EVENT_SBDRAWITEM = new object();
+#pragma warning restore IDE1006 // Naming styles
 
-        private bool showPanels;
-        private bool layoutDirty;
-        private int panelsRealized;
-        private bool sizeGrip = true;
-        private string? simpleText;
-        private Point lastClick = new Point(0, 0);
+        private bool _showPanels;
+        private bool _layoutDirty;
+        private int _panelsRealized;
+        private bool _sizeGrip = true;
+        private string? _simpleText;
+        private Point _lastClick = new Point(0, 0);
         private readonly List<StatusBarPanel> _panels = new();
-        private StatusBarPanelCollection? panelsCollection;
-        private ControlToolTip? tooltips;
+        private StatusBarPanelCollection? _panelsCollection;
+        private ControlToolTip? _tooltips;
 
-        private ToolTip? mainToolTip;
+        private ToolTip? _mainToolTip;
         //private bool toolTipSet = false;
         private bool _rightToLeftLayout;
 
@@ -61,7 +63,7 @@ namespace WinFormsLegacyControls
             TabStop = false;
         }
 
-        private static VisualStyleRenderer? renderer;
+        private static VisualStyleRenderer? s_renderer;
 
         /// <summary>
         ///  A VisualStyleRenderer we can use to get information about the current UI theme
@@ -72,13 +74,13 @@ namespace WinFormsLegacyControls
             {
                 if (VisualStyleRenderer.IsSupported)
                 {
-                    renderer ??= new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
+                    s_renderer ??= new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
                 }
                 else
                 {
-                    renderer = null;
+                    s_renderer = null;
                 }
-                return renderer;
+                return s_renderer;
             }
         }
 
@@ -86,7 +88,7 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (sizeGripWidth == 0)
+                if (_sizeGripWidth == 0)
                 {
                     if (Application.RenderWithVisualStyles && VisualStyleRenderer is not null)
                     {
@@ -101,25 +103,25 @@ namespace WinFormsLegacyControls
                         thisElement = VisualStyleElement.Status.GripperPane.Normal;
                         vsRenderer.SetParameters(thisElement);
                         elementSize = vsRenderer.GetPartSize(graphics, ThemeSizeType.True);
-                        sizeGripWidth = elementSize.Width;
+                        _sizeGripWidth = elementSize.Width;
 
                         // ...plus gripper width
                         thisElement = VisualStyleElement.Status.Gripper.Normal;
                         vsRenderer.SetParameters(thisElement);
                         elementSize = vsRenderer.GetPartSize(graphics, ThemeSizeType.True);
-                        sizeGripWidth += elementSize.Width;
+                        _sizeGripWidth += elementSize.Width;
 
                         // Either GetPartSize could have returned a width of zero, so make sure we have a reasonable number:
                         // [fixed] [DPI]
-                        sizeGripWidth = Math.Max(sizeGripWidth, LogicalToDeviceUnits(16));
+                        _sizeGripWidth = Math.Max(_sizeGripWidth, LogicalToDeviceUnits(16));
                     }
                     else
                     {
                         // [fixed] [DPI]
-                        sizeGripWidth = LogicalToDeviceUnits(/*16*/18);
+                        _sizeGripWidth = LogicalToDeviceUnits(/*16*/18);
                     }
                 }
-                return sizeGripWidth;
+                return _sizeGripWidth;
             }
         }
 
@@ -187,7 +189,7 @@ namespace WinFormsLegacyControls
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = PInvoke.STATUSCLASSNAME;
 
-                if (sizeGrip)
+                if (_sizeGrip)
                 {
                     cp.Style |= (int)PInvoke.SBARS_SIZEGRIP;
                 }
@@ -311,7 +313,7 @@ namespace WinFormsLegacyControls
         MergableProperty(false)
         ]
         public StatusBarPanelCollection Panels
-            => panelsCollection ??= new StatusBarPanelCollection(this);
+            => _panelsCollection ??= new StatusBarPanelCollection(this);
 
         // [spec]
         [Browsable(false)]
@@ -342,13 +344,13 @@ namespace WinFormsLegacyControls
         [AllowNull]
         public override string Text
         {
-            get => simpleText ?? string.Empty;
+            get => _simpleText ?? string.Empty;
             set
             {
                 SetSimpleText(value);
-                if (simpleText != value)
+                if (_simpleText != value)
                 {
-                    simpleText = value;
+                    _simpleText = value;
                     OnTextChanged(EventArgs.Empty);
                 }
             }
@@ -364,32 +366,32 @@ namespace WinFormsLegacyControls
         ]
         public bool ShowPanels
         {
-            get => showPanels;
+            get => _showPanels;
             set
             {
-                if (showPanels != value)
+                if (_showPanels != value)
                 {
-                    showPanels = value;
+                    _showPanels = value;
 
-                    layoutDirty = true;
+                    _layoutDirty = true;
                     if (IsHandleCreated)
                     {
-                        PInvoke.SendMessage(this, PInvoke.SB_SIMPLE, (WPARAM)(BOOL)(!showPanels));
+                        PInvoke.SendMessage(this, PInvoke.SB_SIMPLE, (WPARAM)(BOOL)(!_showPanels));
 
-                        if (showPanels)
+                        if (_showPanels)
                         {
                             PerformLayout();
                             RealizePanels();
                         }
-                        else if (tooltips is not null)
+                        else if (_tooltips is not null)
                         {
                             for (int i = 0; i < _panels.Count; i++)
                             {
-                                tooltips.SetTool(_panels[i], null);
+                                _tooltips.SetTool(_panels[i], null);
                             }
                         }
 
-                        SetSimpleText(simpleText);
+                        SetSimpleText(_simpleText);
                     }
                 }
             }
@@ -407,12 +409,12 @@ namespace WinFormsLegacyControls
         ]
         public bool SizingGrip
         {
-            get => sizeGrip;
+            get => _sizeGrip;
             set
             {
-                if (value != sizeGrip)
+                if (value != _sizeGrip)
                 {
-                    sizeGrip = value;
+                    _sizeGrip = value;
                     RecreateHandle();
                 }
             }
@@ -481,9 +483,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Tells whether the panels have been realized.
         /// </summary>
-        internal bool ArePanelsRealized() => showPanels && IsHandleCreated;
+        internal bool ArePanelsRealized() => _showPanels && IsHandleCreated;
 
-        internal void DirtyLayout() => layoutDirty = true;
+        internal void DirtyLayout() => _layoutDirty = true;
 
         /// <summary>
         ///  Makes the panel according to the sizes in the panel list.
@@ -504,7 +506,7 @@ namespace WinFormsLegacyControls
                 Size sz = Size;
                 Span<int> offsets = stackalloc int[1];
                 offsets[0] = sz.Width;
-                if (sizeGrip)
+                if (_sizeGrip)
                 {
                     offsets[0] -= SizeGripWidth;
                 }
@@ -536,7 +538,7 @@ namespace WinFormsLegacyControls
                 UpdateTooltip(panel);
             }
 
-            layoutDirty = false;
+            _layoutDirty = false;
         }
 
         protected override void CreateHandle()
@@ -565,10 +567,10 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (panelsCollection is not null)
+                if (_panelsCollection is not null)
                 {
                     StatusBarPanel[] panelCopy = _panels.ToArray();
-                    panelsCollection.Clear();
+                    _panelsCollection.Clear();
 
                     foreach (StatusBarPanel p in panelCopy)
                     {
@@ -586,7 +588,7 @@ namespace WinFormsLegacyControls
         {
             if (ArePanelsRealized())
             {
-                layoutDirty = true;
+                _layoutDirty = true;
                 SetPanelContentsWidths(true);
                 PerformLayout();
                 RealizePanels();
@@ -602,13 +604,13 @@ namespace WinFormsLegacyControls
             base.OnHandleCreated(e);
             if (!DesignMode)
             {
-                tooltips = new ControlToolTip(this);
+                _tooltips = new ControlToolTip(this);
             }
 
-            if (!showPanels)
+            if (!_showPanels)
             {
                 PInvoke.SendMessage(this, PInvoke.SB_SIMPLE, (WPARAM)1);
-                SetSimpleText(simpleText);
+                SetSimpleText(_simpleText);
             }
             else
             {
@@ -622,10 +624,10 @@ namespace WinFormsLegacyControls
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
-            if (tooltips is not null)
+            if (_tooltips is not null)
             {
-                tooltips.Dispose();
-                tooltips = null;
+                _tooltips.Dispose();
+                _tooltips = null;
             }
         }
 
@@ -634,8 +636,8 @@ namespace WinFormsLegacyControls
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            lastClick.X = e.X;
-            lastClick.Y = e.Y;
+            _lastClick.X = e.X;
+            _lastClick.Y = e.Y;
             base.OnMouseDown(e);
         }
 
@@ -647,10 +649,10 @@ namespace WinFormsLegacyControls
 
         protected override void OnLayout(LayoutEventArgs levent)
         {
-            if (showPanels)
+            if (_showPanels)
             {
                 LayoutPanels();
-                if (IsHandleCreated && panelsRealized != _panels.Count)
+                if (IsHandleCreated && _panelsRealized != _panels.Count)
                 {
                     RealizePanels();
                 }
@@ -665,9 +667,9 @@ namespace WinFormsLegacyControls
         private void RealizePanels()
         {
             int length = _panels.Count;
-            int old = panelsRealized;
+            int old = _panelsRealized;
 
-            panelsRealized = 0;
+            _panelsRealized = 0;
 
             if (length == 0)
             {
@@ -681,7 +683,7 @@ namespace WinFormsLegacyControls
                 try
                 {
                     panel.Realize();
-                    panelsRealized++;
+                    _panelsRealized++;
                 }
                 catch
                 {
@@ -707,7 +709,7 @@ namespace WinFormsLegacyControls
             }
 
             _panels.Clear();
-            if (showPanels)
+            if (_showPanels)
             {
                 ApplyPanelWidths();
                 ForcePanelUpdate();
@@ -744,7 +746,7 @@ namespace WinFormsLegacyControls
 
         private void SetSimpleText(string? simpleText)
         {
-            if (!showPanels && IsHandleCreated)
+            if (!_showPanels && IsHandleCreated)
             {
                 int wparam = SIMPLE_INDEX + (int)PInvoke.SBT_NOBORDERS;
                 if (RightToLeft == RightToLeft.Yes)
@@ -786,7 +788,7 @@ namespace WinFormsLegacyControls
                 Rectangle rect = Bounds;
                 int springPanelsLeft = springNum;
                 int leftoverWidth = rect.Width - barPanelWidth;
-                if (sizeGrip)
+                if (_sizeGrip)
                 {
                     leftoverWidth -= SizeGripWidth;
                 }
@@ -832,7 +834,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            if (changed || layoutDirty)
+            if (changed || _layoutDirty)
             {
                 ApplyPanelWidths();
             }
@@ -871,20 +873,20 @@ namespace WinFormsLegacyControls
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void SetToolTip(ToolTip t)
         {
-            mainToolTip = t;
+            _mainToolTip = t;
             if (IsHandleCreated)
                 RecreateHandle();
         }
 
         internal void UpdateTooltip(StatusBarPanel panel)
         {
-            if (tooltips is null)
+            if (_tooltips is null)
             {
                 if (IsHandleCreated && !DesignMode)
                 {
                     //This shouldn't happen: tooltips should've already been set.  The best we can
                     //do here is reset it.
-                    tooltips = new ControlToolTip(this);
+                    _tooltips = new ControlToolTip(this);
                 }
                 else
                 {
@@ -895,14 +897,14 @@ namespace WinFormsLegacyControls
             if (panel.Parent == this && panel.ToolTipText.Length > 0)
             {
                 int border = SystemInformation.Border3DSize.Width;
-                ControlToolTip.Tool t = tooltips.GetTool(panel) ?? new();
+                ControlToolTip.Tool t = _tooltips.GetTool(panel) ?? new();
                 t.text = panel.ToolTipText;
                 t.rect = new Rectangle(panel.Right - panel.Width + border, 0, panel.Width - border, Height);
-                tooltips.SetTool(panel, t);
+                _tooltips.SetTool(panel, t);
             }
             else
             {
-                tooltips.SetTool(panel, null);
+                _tooltips.SetTool(panel, null);
             }
         }
 
@@ -956,7 +958,7 @@ namespace WinFormsLegacyControls
 
         private unsafe void WmNotifyNMClick(NMHDR* note)
         {
-            if (!showPanels)
+            if (!_showPanels)
             {
                 return;
             }
@@ -968,7 +970,7 @@ namespace WinFormsLegacyControls
             {
                 StatusBarPanel panel = _panels[i];
                 currentOffset += panel.Width;
-                if (lastClick.X < currentOffset)
+                if (_lastClick.X < currentOffset)
                 {
                     // this is where the mouse was clicked.
                     index = i;
@@ -999,7 +1001,7 @@ namespace WinFormsLegacyControls
                         break;
                 }
 
-                Point pt = lastClick;
+                Point pt = _lastClick;
                 StatusBarPanel panel = _panels[index];
 
                 StatusBarPanelClickEventArgs sbpce = new StatusBarPanelClickEventArgs(panel,
@@ -1109,12 +1111,12 @@ namespace WinFormsLegacyControls
         [ListBindable(false)]
         public class StatusBarPanelCollection : IList
         {
-            private readonly StatusBar owner;
+            private readonly StatusBar _owner;
 
             // A caching mechanism for key accessor
             // We use an index here rather than control so that we don't have lifetime
             // issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
+            private int _lastAccessedIndex = -1;
 
             /// <summary>
             ///  Constructor for the StatusBarPanelCollection class
@@ -1122,7 +1124,7 @@ namespace WinFormsLegacyControls
             public StatusBarPanelCollection(StatusBar owner)
             {
                 ArgumentNullException.ThrowIfNull(owner);
-                this.owner = owner;
+                _owner = owner;
             }
 
             /// <summary>
@@ -1130,38 +1132,38 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual StatusBarPanel this[int index]
             {
-                get => owner._panels[index];
+                get => _owner._panels[index];
                 set
                 {
                     ArgumentNullException.ThrowIfNull(value);
 
-                    owner.layoutDirty = true;
+                    _owner._layoutDirty = true;
 
                     if (value.Parent is not null)
                     {
                         throw new ArgumentException(SR.ObjectHasParent, nameof(value));
                     }
 
-                    int length = owner._panels.Count;
+                    int length = _owner._panels.Count;
 
                     if (index < 0 || index >= length)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    StatusBarPanel oldPanel = owner._panels[index];
+                    StatusBarPanel oldPanel = _owner._panels[index];
                     oldPanel.Parent = null;
-                    value.Parent = owner;
+                    value.Parent = _owner;
                     if (value.AutoSize == StatusBarPanelAutoSize.Contents)
                     {
                         value.Width = value.GetContentsWidth(true);
                     }
-                    owner._panels[index] = value;
+                    _owner._panels[index] = value;
                     value.Index = index;
 
-                    if (owner.ArePanelsRealized())
+                    if (_owner.ArePanelsRealized())
                     {
-                        owner.PerformLayout();
+                        _owner.PerformLayout();
                         value.Realize();
                     }
                 }
@@ -1214,7 +1216,7 @@ namespace WinFormsLegacyControls
             ///  in this collection.
             /// </summary>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-            public int Count => owner._panels.Count;
+            public int Count => _owner._panels.Count;
 
             object ICollection.SyncRoot => this;
 
@@ -1242,7 +1244,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual int Add(StatusBarPanel value)
             {
-                int index = owner._panels.Count;
+                int index = _owner._panels.Count;
                 Insert(index, value);
                 return index;
             }
@@ -1325,11 +1327,11 @@ namespace WinFormsLegacyControls
                 }
 
                 // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
+                if (IsValidIndex(_lastAccessedIndex))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                     {
-                        return lastAccessedIndex;
+                        return _lastAccessedIndex;
                     }
                 }
 
@@ -1338,13 +1340,13 @@ namespace WinFormsLegacyControls
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
-                        lastAccessedIndex = i;
+                        _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
                 // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
+                _lastAccessedIndex = -1;
                 return -1;
             }
 
@@ -1357,20 +1359,20 @@ namespace WinFormsLegacyControls
                 ArgumentNullException.ThrowIfNull(value);
                 //end check
 
-                owner.layoutDirty = true;
-                if (value.Parent != owner && value.Parent is not null)
+                _owner._layoutDirty = true;
+                if (value.Parent != _owner && value.Parent is not null)
                 {
                     throw new ArgumentException(SR.ObjectHasParent, nameof(value));
                 }
 
-                int length = owner._panels.Count;
+                int length = _owner._panels.Count;
 
                 if (index < 0 || index > length)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                value.Parent = owner;
+                value.Parent = _owner;
 
                 switch (value.AutoSize)
                 {
@@ -1382,10 +1384,10 @@ namespace WinFormsLegacyControls
                         break;
                 }
 
-                owner._panels.Insert(index, value);
-                owner.UpdatePanelIndex();
+                _owner._panels.Insert(index, value);
+                _owner.UpdatePanelIndex();
 
-                owner.ForcePanelUpdate();
+                _owner.ForcePanelUpdate();
             }
 
             void IList.Insert(int index, object? value)
@@ -1411,8 +1413,8 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual void Clear()
             {
-                owner.RemoveAllPanelsWithoutUpdate();
-                owner.PerformLayout();
+                _owner.RemoveAllPanelsWithoutUpdate();
+                _owner.PerformLayout();
             }
 
             /// <summary>
@@ -1424,7 +1426,7 @@ namespace WinFormsLegacyControls
                 ArgumentNullException.ThrowIfNull(value);
                 //end check
 
-                if (value.Parent != owner)
+                if (value.Parent != _owner)
                 {
                     return;
                 }
@@ -1452,18 +1454,18 @@ namespace WinFormsLegacyControls
 
                 // clear any tooltip
                 //
-                StatusBarPanel panel = owner._panels[index];
+                StatusBarPanel panel = _owner._panels[index];
 
-                owner._panels.RemoveAt(index);
+                _owner._panels.RemoveAt(index);
                 panel.Parent = null;
 
                 // this will cause the panels tooltip to be removed since it's no longer a child
                 // of this StatusBar.
-                owner.UpdateTooltip(panel);
+                _owner.UpdateTooltip(panel);
 
                 // We must reindex the panels after a removal...
-                owner.UpdatePanelIndex();
-                owner.ForcePanelUpdate();
+                _owner.UpdatePanelIndex();
+                _owner.ForcePanelUpdate();
             }
 
             /// <summary>
@@ -1479,13 +1481,12 @@ namespace WinFormsLegacyControls
             }
 
             void ICollection.CopyTo(Array dest, int index)
-                => ((ICollection)owner._panels).CopyTo(dest, index);
+                => ((ICollection)_owner._panels).CopyTo(dest, index);
 
             /// <summary>
             ///  Returns the Enumerator for this collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
-                => owner._panels.GetEnumerator();
+            public IEnumerator GetEnumerator() => _owner._panels.GetEnumerator();
         }
 
         /// <summary>
@@ -1503,20 +1504,20 @@ namespace WinFormsLegacyControls
             {
                 public Rectangle rect = Rectangle.Empty;
                 public string? text;
-                internal IntPtr id = new IntPtr(-1);
+                internal IntPtr _id = new IntPtr(-1);
             }
 
             private Dictionary<StatusBarPanel, Tool>? _tools;
-            private ToolTipNativeWindow? window;
-            private readonly StatusBar parent;
-            private int nextId;
+            private ToolTipNativeWindow? _window;
+            private readonly StatusBar _parent;
+            private int _nextId;
 
             /// <summary>
             ///  Creates a new ControlToolTip.
             /// </summary>
             public ControlToolTip(StatusBar parent)
             {
-                this.parent = parent;
+                _parent = parent;
             }
 
             /// <summary>
@@ -1560,18 +1561,18 @@ namespace WinFormsLegacyControls
                     {
                         CreateHandle();
                     }
-                    return window.Handle;
+                    return _window.Handle;
                 }
             }
 
-            [MemberNotNullWhen(true, nameof(window))]
+            [MemberNotNullWhen(true, nameof(_window))]
             private bool IsHandleCreated
-                => window is not null && window.Handle != IntPtr.Zero;
+                => _window is not null && _window.Handle != IntPtr.Zero;
 
             private void AssignId(Tool tool)
             {
-                tool.id = (IntPtr)nextId;
-                nextId++;
+                tool._id = (IntPtr)_nextId;
+                _nextId++;
             }
 
             /// <summary>
@@ -1603,7 +1604,7 @@ namespace WinFormsLegacyControls
                     add = true;
                 }
                 if (tool is not null && toRemove is not null
-                    && tool.id == toRemove.id)
+                    && tool._id == toRemove._id)
                 {
                     update = true;
                 }
@@ -1651,7 +1652,7 @@ namespace WinFormsLegacyControls
             // TTM_SETTOOLINFOW, TTM_DELTOOLW も TTM_ADDTOOLW した Handle に送信する必要がある。
             private LRESULT SendMessage(ToolInfoWrapper<Control> info, uint message)
             {
-                ToolTip? t = parent.mainToolTip;
+                ToolTip? t = _parent._mainToolTip;
                 HandleRef handle;
                 if (t is not null)
                     handle = new HandleRef(t, WinFormsLegacyControls.Migration.ToolTipAccessors.GetHandle(t));
@@ -1674,7 +1675,7 @@ namespace WinFormsLegacyControls
 
             private void RemoveTool(Tool tool)
             {
-                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool.id >= 0)
+                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool._id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetMinTOOLINFO(tool);
                     SendMessage(info, PInvoke.TTM_DELTOOLW);
@@ -1683,7 +1684,7 @@ namespace WinFormsLegacyControls
 
             private void UpdateTool(Tool tool)
             {
-                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool.id >= 0)
+                if (tool is not null && tool.text is not null && tool.text.Length > 0 && (int)tool._id >= 0)
                 {
                     ToolInfoWrapper<Control> info = GetTOOLINFO(tool);
                     SendMessage(info, PInvoke.TTM_SETTOOLINFOW);
@@ -1693,11 +1694,11 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Creates the handle for the control.
             /// </summary>
-            [MemberNotNull(nameof(window))]
+            [MemberNotNull(nameof(_window))]
             private void CreateHandle()
             {
-                window ??= new();
-                window.CreateHandle(CreateParams);
+                _window ??= new();
+                _window.CreateHandle(CreateParams);
                 PInvoke.SetWindowPos(
                     this,
                     HWND.HWND_TOPMOST,
@@ -1715,7 +1716,7 @@ namespace WinFormsLegacyControls
             {
                 if (IsHandleCreated)
                 {
-                    window.DestroyHandle();
+                    _window.DestroyHandle();
                     _tools?.Clear();
                 }
             }
@@ -1734,20 +1735,20 @@ namespace WinFormsLegacyControls
             /// </summary>
             private ToolInfoWrapper<Control> GetMinTOOLINFO(Tool tool)
             {
-                if ((int)tool.id < 0)
+                if ((int)tool._id < 0)
                 {
                     AssignId(tool);
                 }
 
                 return new ToolInfoWrapper<Control>(
-                    parent,
+                    _parent,
                     // [fixed]
                     // https://github.com/dotnet/winforms/pull/1612/files#diff-8d43c48c6ec7a62bb08bf0bb5f4669378adcba9417e33f554f9ff8fdab508aef
                     //id: parent is StatusBar sb ? sb.Handle : tool.id);
                     //id: parent is StatusBar sb && sb.mainToolTip is not null ? sb.Handle : tool.id);
                     // 指定した StatusBarPanel の ToolTipText が変更、削除できない。
                     // TTM_SETTOOLINFOW, TTM_DELTOOLW は TTTOOLINFOW.uId を使用して対象を識別する。
-                    id: tool.id);
+                    id: tool._id);
             }
 
             /// <summary>
@@ -1760,7 +1761,7 @@ namespace WinFormsLegacyControls
                 ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS;
 
                 // RightToLeft reading order
-                Control richParent = parent;
+                Control richParent = _parent;
                 if (richParent is not null && richParent.RightToLeft == RightToLeft.Yes)
                 {
                     ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;

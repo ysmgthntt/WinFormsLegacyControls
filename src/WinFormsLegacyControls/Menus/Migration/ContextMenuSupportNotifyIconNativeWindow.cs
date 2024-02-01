@@ -6,7 +6,7 @@ namespace WinFormsLegacyControls.Menus.Migration
         , ISupportNativeWindow<NotifyIcon, ContextMenu, ContextMenuSupportNotifyIconNativeWindow>
     {
         private readonly NotifyIcon _notifyIcon;
-        private ContextMenu? contextMenu;
+        private ContextMenu? _contextMenu;
 
         private ContextMenuSupportNotifyIconNativeWindow(NotifyIcon notifyIcon)
         {
@@ -25,24 +25,24 @@ namespace WinFormsLegacyControls.Menus.Migration
 
         ContextMenu? ISupportNativeWindow<NotifyIcon, ContextMenu, ContextMenuSupportNotifyIconNativeWindow>.Property
         {
-            get => contextMenu;
-            set => contextMenu = value;
+            get => _contextMenu;
+            set => _contextMenu = value;
         }
 
-        private static FieldInfo? _fiWindow;
+        private static FieldInfo? s_fiWindow;
 
         private void NotifyIcon_MouseUp(object? sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right && _notifyIcon.ContextMenuStrip is null && contextMenu is not null)
+            if (e.Button == MouseButtons.Right && _notifyIcon.ContextMenuStrip is null && _contextMenu is not null)
             {
                 if (Handle == 0)
                 {
-                    _fiWindow ??= typeof(NotifyIcon).GetField("_window", BindingFlags.NonPublic | BindingFlags.Instance)!;
-                    NativeWindow window = (NativeWindow)_fiWindow.GetValue(_notifyIcon)!;
+                    s_fiWindow ??= typeof(NotifyIcon).GetField("_window", BindingFlags.NonPublic | BindingFlags.Instance)!;
+                    NativeWindow window = (NativeWindow)s_fiWindow.GetValue(_notifyIcon)!;
                     AssignHandle(window.Handle);
                 }
 
-                contextMenu.ShowAtCursorPos(this, null, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN);
+                _contextMenu.ShowAtCursorPos(this, null, TRACK_POPUP_MENU_FLAGS.TPM_VERTICAL | TRACK_POPUP_MENU_FLAGS.TPM_RIGHTALIGN);
             }
         }
 
@@ -77,13 +77,13 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                 // [spec]
                 case PInvoke.WM_MENUCHAR:
-                    contextMenu?.WmMenuChar(ref m);
+                    _contextMenu?.WmMenuChar(ref m);
                     break;
 
                 // [spec]
                 case PInvoke.WM_EXITMENULOOP:
-                    if (contextMenu is not null && m.WParam != 0)
-                        contextMenu.RaiseCollapse();
+                    if (_contextMenu is not null && m.WParam != 0)
+                        _contextMenu.RaiseCollapse();
                     DefWndProc(ref m);
                     break;
 
@@ -95,9 +95,9 @@ namespace WinFormsLegacyControls.Menus.Migration
 
         private void WmInitMenuPopup(ref Message m)
         {
-            if (contextMenu is not null)
+            if (_contextMenu is not null)
             {
-                if (contextMenu.ProcessInitMenuPopup(m.WParam))
+                if (_contextMenu.ProcessInitMenuPopup(m.WParam))
                 {
                     return;
                 }

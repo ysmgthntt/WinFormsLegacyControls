@@ -6,7 +6,7 @@ namespace Windows.Win32
     {
         public static BOOL DestroyMenu(Menu menu)
         {
-            BOOL result = DestroyMenu((HMENU)menu.handle);
+            BOOL result = DestroyMenu((HMENU)menu._handle);
             GC.KeepAlive(menu);
             return result;
         }

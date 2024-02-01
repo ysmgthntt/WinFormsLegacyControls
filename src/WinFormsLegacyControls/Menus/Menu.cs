@@ -30,12 +30,12 @@ namespace WinFormsLegacyControls
         /// </summary>
         public const int FindShortcut = 1;
 
-        private MenuItemCollection? itemsCollection;
+        private MenuItemCollection? _itemsCollection;
         internal readonly List<MenuItem> _items = new();
-        internal IntPtr handle;
-        internal bool created;
-        private object? userData;
-        private string? name;
+        internal IntPtr _handle;
+        internal bool _created;
+        private object? _userData;
+        private string? _name;
 
         /// <summary>
         ///  This is an abstract class.  Instances cannot be created, so the constructor
@@ -61,13 +61,13 @@ namespace WinFormsLegacyControls
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
-                    handle = CreateMenuHandle();
+                    _handle = CreateMenuHandle();
                 }
 
                 CreateMenuItems();
-                return handle;
+                return _handle;
             }
         }
 
@@ -79,11 +79,9 @@ namespace WinFormsLegacyControls
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         SRDescription(nameof(SR.MenuIsParentDescr))
         ]
-        public virtual bool IsParent
-            => _items.Count > 0;
+        public virtual bool IsParent => _items.Count > 0;
 
-        internal int ItemCount
-            => _items.Count;
+        internal int ItemCount => _items.Count;
 
         /// <summary>
         ///  The MenuItem that contains the list of MDI child windows.
@@ -129,20 +127,20 @@ namespace WinFormsLegacyControls
         ]
         public string Name
         {
-            get => WindowsFormsUtils.GetComponentName(this, name);
+            get => WindowsFormsUtils.GetComponentName(this, _name);
             set
             {
                 if (value is null || value.Length == 0)
                 {
-                    name = null;
+                    _name = null;
                 }
                 else
                 {
-                    name = value;
+                    _name = value;
                 }
                 if (Site is not null)
                 {
-                    Site.Name = name;
+                    Site.Name = _name;
                 }
             }
         }
@@ -154,7 +152,7 @@ namespace WinFormsLegacyControls
         MergableProperty(false)
         ]
         public MenuItemCollection MenuItems
-            => itemsCollection ??= new MenuItemCollection(this);
+            => _itemsCollection ??= new MenuItemCollection(this);
 
         internal abstract bool RenderIsRightToLeft { get; }
 
@@ -168,8 +166,8 @@ namespace WinFormsLegacyControls
         ]
         public object? Tag
         {
-            get => userData;
-            set => userData = value;
+            get => _userData;
+            set => _userData = value;
         }
 
         /// <summary>
@@ -177,18 +175,18 @@ namespace WinFormsLegacyControls
         /// </summary>
         internal void ClearHandles()
         {
-            if (handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
             {
                 PInvoke.DestroyMenu(this);
             }
-            handle = IntPtr.Zero;
-            if (created)
+            _handle = IntPtr.Zero;
+            if (_created)
             {
                 for (int i = 0; i < ItemCount; i++)
                 {
                     _items[i].ClearHandles();
                 }
-                created = false;
+                _created = false;
             }
         }
 
@@ -221,19 +219,19 @@ namespace WinFormsLegacyControls
 
         private protected void CreateMenuItems()
         {
-            if (!created)
+            if (!_created)
             {
                 for (int i = 0; i < ItemCount; i++)
                 {
                     _items[i].CreateMenuItem();
                 }
-                created = true;
+                _created = true;
             }
         }
 
         private void DestroyMenuItems()
         {
-            if (created)
+            if (_created)
             {
                 for (int i = 0; i < ItemCount; i++)
                 {
@@ -243,7 +241,7 @@ namespace WinFormsLegacyControls
                 {
                     PInvoke.RemoveMenu(this, 0, MENU_ITEM_FLAGS.MF_BYPOSITION);
                 }
-                created = false;
+                _created = false;
             }
         }
 
@@ -273,10 +271,10 @@ namespace WinFormsLegacyControls
                 }
                 _items.Clear();
             }
-            if (handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
             {
                 PInvoke.DestroyMenu(this);
-                handle = IntPtr.Zero;
+                _handle = IntPtr.Zero;
                 if (disposing)
                 {
                     ClearHandles();
@@ -293,7 +291,7 @@ namespace WinFormsLegacyControls
                 switch (type)
                 {
                     case FindHandle:
-                        if (item.handle == value)
+                        if (item._handle == value)
                         {
                             return item;
                         }
@@ -615,7 +613,7 @@ namespace WinFormsLegacyControls
         internal void WmMenuChar(ref Message m)
         {
             Menu? menu;
-            if (m.LParam == handle)
+            if (m.LParam == _handle)
             {
                 menu = this;
             }
@@ -661,29 +659,29 @@ namespace WinFormsLegacyControls
         [ListBindable(false)]
         public class MenuItemCollection : IList
         {
-            private readonly Menu owner;
+            private readonly Menu _owner;
 
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
+            private int _lastAccessedIndex = -1;
 
             public MenuItemCollection(Menu owner)
             {
                 ArgumentNullException.ThrowIfNull(owner);
-                this.owner = owner;
+                _owner = owner;
             }
 
             public virtual MenuItem this[int index]
             {
                 get
                 {
-                    if (index < 0 || index >= owner.ItemCount)
+                    if (index < 0 || index >= _owner.ItemCount)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return owner._items[index];
+                    return _owner._items[index];
                 }
                 // set not supported
             }
@@ -721,7 +719,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            public int Count => owner.ItemCount;
+            public int Count => _owner.ItemCount;
 
             object ICollection.SyncRoot => this;
 
@@ -769,7 +767,7 @@ namespace WinFormsLegacyControls
             ///  more than once to the same menu.
             /// </summary>
             public virtual int Add(MenuItem item)
-                => Add(owner.ItemCount, item);
+                => Add(_owner.ItemCount, item);
 
             /// <summary>
             ///  Adds a MenuItem to this menu at the specified index.  The item currently at
@@ -787,7 +785,7 @@ namespace WinFormsLegacyControls
 
                     // First check that we're not adding ourself, i.e. walk
                     // the parent chain for equality
-                    if (owner is MenuItem parent)
+                    if (_owner is MenuItem parent)
                     {
                         while (parent is not null)
                         {
@@ -809,7 +807,7 @@ namespace WinFormsLegacyControls
                     //if we're re-adding an item back to the same collection
                     //the target index needs to be decremented since we're
                     //removing an item from the collection
-                    if (item.Parent.Equals(owner) && index > 0)
+                    if (item.Parent.Equals(_owner) && index > 0)
                     {
                         index--;
                     }
@@ -818,15 +816,15 @@ namespace WinFormsLegacyControls
                 }
 
                 // Validate our index
-                if (index < 0 || index > owner.ItemCount)
+                if (index < 0 || index > _owner.ItemCount)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                owner._items.Insert(index, item);
-                item.Parent = owner;
-                owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
-                if (owner is MenuItem ownerMenuItem)
+                _owner._items.Insert(index, item);
+                item.Parent = _owner;
+                _owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
+                if (_owner is MenuItem ownerMenuItem)
                 {
                     ownerMenuItem.ItemsChanged(MenuChangeKind.CHANGE_ITEMADDED, item);
                 }
@@ -968,11 +966,11 @@ namespace WinFormsLegacyControls
                 }
 
                 // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
+                if (IsValidIndex(_lastAccessedIndex))
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
                     {
-                        return lastAccessedIndex;
+                        return _lastAccessedIndex;
                     }
                 }
 
@@ -981,13 +979,13 @@ namespace WinFormsLegacyControls
                 {
                     if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
                     {
-                        lastAccessedIndex = i;
+                        _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
                 // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
+                _lastAccessedIndex = -1;
                 return -1;
             }
 
@@ -1014,19 +1012,19 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual void Clear()
             {
-                if (owner.ItemCount > 0)
+                if (_owner.ItemCount > 0)
                 {
 
-                    for (int i = 0; i < owner.ItemCount; i++)
+                    for (int i = 0; i < _owner.ItemCount; i++)
                     {
-                        owner._items[i].Parent = null;
+                        _owner._items[i].Parent = null;
                     }
 
-                    owner._items.Clear();
+                    _owner._items.Clear();
 
-                    owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
+                    _owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
-                    if (owner is MenuItem menuItem)
+                    if (_owner is MenuItem menuItem)
                     {
                         menuItem.UpdateMenuItem(true);
                     }
@@ -1034,10 +1032,9 @@ namespace WinFormsLegacyControls
             }
 
             public void CopyTo(Array dest, int index)
-                => ((ICollection)owner._items).CopyTo(dest, index);
+                => ((ICollection)_owner._items).CopyTo(dest, index);
 
-            public IEnumerator GetEnumerator()
-                => owner._items.GetEnumerator();
+            public IEnumerator GetEnumerator() => _owner._items.GetEnumerator();
 
             /// <summary>
             ///  Removes the item at the specified index in this menu.  All subsequent
@@ -1045,19 +1042,19 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual void RemoveAt(int index)
             {
-                if (index < 0 || index >= owner.ItemCount)
+                if (index < 0 || index >= _owner.ItemCount)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                MenuItem item = owner._items[index];
+                MenuItem item = _owner._items[index];
                 item.Parent = null;
-                owner._items.RemoveAt(index);
-                owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
+                _owner._items.RemoveAt(index);
+                _owner.ItemsChanged(MenuChangeKind.CHANGE_ITEMS);
 
                 //if the last item was removed, clear the collection
                 //
-                if (owner.ItemCount == 0)
+                if (_owner.ItemCount == 0)
                 {
                     Clear();
                 }
@@ -1082,7 +1079,7 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual void Remove(MenuItem item)
             {
-                if (item.Parent == owner)
+                if (item.Parent == _owner)
                 {
                     RemoveAt(item.Index);
                 }

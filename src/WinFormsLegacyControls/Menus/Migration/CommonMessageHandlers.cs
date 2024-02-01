@@ -131,7 +131,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             {
                 if (Command.GetCommandFromID(item)?.Target is MenuItem.MenuItemData menuItemData)
                 {
-                    mi = menuItemData.baseItem;
+                    mi = menuItemData._baseItem;
                 }
             }
             else
@@ -163,7 +163,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             {
                 if (Command.GetCommandFromID(id)?.Target is MenuItem.MenuItemData menuItemData)
                 {
-                    return menuItemData.baseItem;
+                    return menuItemData._baseItem;
                 }
             }
             return null;

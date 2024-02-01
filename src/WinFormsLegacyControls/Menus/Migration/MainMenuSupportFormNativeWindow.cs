@@ -121,20 +121,20 @@ namespace WinFormsLegacyControls.Menus.Migration
                 {
                     if (mainMenu is not null)
                     {
-                        mainMenu.form = null;
+                        mainMenu._form = null;
                     }
 
                     _mainMenu = value;
 
                     if (value is not null)
                     {
-                        if (value.form is not null)
+                        if (value._form is not null)
                         {
                             //value.form.Menu = null;
-                            Debug.Assert(value.form != _form);
-                            value.form.SetMenu(null);
+                            Debug.Assert(value._form != _form);
+                            value._form.SetMenu(null);
                         }
-                        value.form = _form;
+                        value._form = _form;
 #if DEBUG
                         value._debugText = nameof(mainMenu);
 #endif
@@ -189,10 +189,8 @@ namespace WinFormsLegacyControls.Menus.Migration
                 }
 
                 // Create a menu that merges the two and save it for next time.
-                mergedMenu = new MainMenu
-                {
-                    ownerForm = _form
-                };
+                mergedMenu = new MainMenu();
+                mergedMenu._ownerForm = _form;
                 mergedMenu.MergeMenu(parentMenu);
                 mergedMenu.MergeMenu(mainMenu);
                 _mergedMenu = mergedMenu;
@@ -268,7 +266,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             MainMenu? mainMenu = Menu;
 
             // We should only dispose this form's menus!
-            if (mainMenu is not null && mainMenu.ownerForm == _form)
+            if (mainMenu is not null && mainMenu._ownerForm == _form)
             {
                 mainMenu.Dispose();
                 _mainMenu = null;
@@ -293,7 +291,7 @@ namespace WinFormsLegacyControls.Menus.Migration
 
             if (mergedMenu is not null)
             {
-                if (mergedMenu.ownerForm == _form || mergedMenu.form is null)
+                if (mergedMenu._ownerForm == _form || mergedMenu._form is null)
                 {
                     mergedMenu.Dispose();
                 }
@@ -311,7 +309,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             // needs to be rebuilt).  Then, we signal the parent to updated its menus.
             if (_mergedMenu is not null)
             {
-                if (_mergedMenu is MainMenu menu && menu.ownerForm == _form)
+                if (_mergedMenu is MainMenu menu && menu._ownerForm == _form)
                 {
                     menu.Dispose();
                 }
@@ -362,7 +360,7 @@ namespace WinFormsLegacyControls.Menus.Migration
                         if (ctl is Form form && form.TryGetMainMenuSupportFormNativeWindow(out var window) && window._mergedMenu is not null)
                         {
                             MainMenu mainMenu = window._mergedMenu;
-                            if (mainMenu.ownerForm == ctl)
+                            if (mainMenu._ownerForm == ctl)
                             {
                                 mainMenu.Dispose();
                             }
@@ -491,7 +489,7 @@ namespace WinFormsLegacyControls.Menus.Migration
             MainMenu? curMenu = menu;
             if (curMenu is not null)
             {
-                curMenu.form = _form;
+                curMenu._form = _form;
             }
 
             if (curMenu is not null || _curMenu is not null)
@@ -533,10 +531,8 @@ namespace WinFormsLegacyControls.Menus.Migration
 
                     if (dummyMenu is null)
                     {
-                        dummyMenu = new MainMenu
-                        {
-                            ownerForm = _form
-                        };
+                        dummyMenu = new MainMenu();
+                        dummyMenu._ownerForm = _form;
                         _dummyMenu = dummyMenu;
 #if DEBUG
                         dummyMenu._debugText = nameof(dummyMenu);

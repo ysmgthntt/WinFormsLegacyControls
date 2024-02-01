@@ -16,10 +16,10 @@ namespace WinFormsLegacyControls
     [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
     public partial class MainMenu : Menu
     {
-        internal Form? form;
-        internal Form? ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
-        private RightToLeft rightToLeft = RightToLeft.Inherit;
-        private static readonly object _collapseEvent = new();
+        internal Form? _form;
+        internal Form? _ownerForm;  // this is the form that created this menu, and is the only form allowed to dispose it.
+        private RightToLeft _rightToLeft = RightToLeft.Inherit;
+        private static readonly object s_collapseEvent = new();
 
 #if DEBUG
         internal string? _debugText;
@@ -55,8 +55,8 @@ namespace WinFormsLegacyControls
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse
         {
-            add => Events.AddHandler(_collapseEvent, value);
-            remove => Events.RemoveHandler(_collapseEvent, value);
+            add => Events.AddHandler(s_collapseEvent, value);
+            remove => Events.RemoveHandler(s_collapseEvent, value);
         }
 
         /// <summary>
@@ -75,13 +75,13 @@ namespace WinFormsLegacyControls
             get
             {
                 if (DesignMode) // add
-                    return rightToLeft;
+                    return _rightToLeft;
 
-                if (RightToLeft.Inherit == rightToLeft)
+                if (RightToLeft.Inherit == _rightToLeft)
                 {
-                    if (form is not null)
+                    if (_form is not null)
                     {
-                        return form.RightToLeft;
+                        return _form.RightToLeft;
                     }
                     else
                     {
@@ -90,7 +90,7 @@ namespace WinFormsLegacyControls
                 }
                 else
                 {
-                    return rightToLeft;
+                    return _rightToLeft;
                 }
             }
             set
@@ -101,20 +101,20 @@ namespace WinFormsLegacyControls
                 {
                     throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
                 }
-                if (rightToLeft != value)
+                if (_rightToLeft != value)
                 {
-                    rightToLeft = value;
+                    _rightToLeft = value;
                     UpdateRtl((value == RightToLeft.Yes));
                     // [fixed]
-                    if (form is not null)
-                        PInvoke.DrawMenuBar(form);
+                    if (_form is not null)
+                        PInvoke.DrawMenuBar(_form);
                 }
 
             }
         }
 
         internal override bool RenderIsRightToLeft
-            => (RightToLeft == RightToLeft.Yes && (form is null || !form.IsMirrored));
+            => (RightToLeft == RightToLeft.Yes && (_form is null || !_form.IsMirrored));
 
         /// <summary>
         ///  Creates a new MainMenu object which is a dupliate of this one.
@@ -138,9 +138,9 @@ namespace WinFormsLegacyControls
         {
             if (disposing)
             {
-                if (form is not null && (ownerForm is null || form == ownerForm))
+                if (_form is not null && (_ownerForm is null || _form == _ownerForm))
                 {
-                    if (form.TryGetMainMenuSupportFormNativeWindow(out var window))
+                    if (_form.TryGetMainMenuSupportFormNativeWindow(out var window))
                         window.Menu = null;
                 }
             }
@@ -150,7 +150,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates which form in which we are currently residing [if any]
         /// </summary>
-        public Form? GetForm() => form;
+        public Form? GetForm() => _form;
 
         /*
         internal Form GetFormUnsafe()
@@ -162,23 +162,23 @@ namespace WinFormsLegacyControls
         internal override void ItemsChanged(MenuChangeKind change)
         {
             base.ItemsChanged(change);
-            form?.MenuChanged(change, this);
+            _form?.MenuChanged(change, this);
         }
 
         internal void ItemsChanged(MenuChangeKind change, Menu menu)
-            => form?.MenuChanged(change, menu);
+            => _form?.MenuChanged(change, menu);
 
         /// <summary>
         ///  Fires the collapse event
         /// </summary>
         protected internal virtual void OnCollapse(EventArgs e)
-            => ((EventHandler?)Events[_collapseEvent])?.Invoke(this, e);
+            => ((EventHandler?)Events[s_collapseEvent])?.Invoke(this, e);
 
         /// <summary>
         ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
         private bool ShouldSerializeRightToLeft()
-            => RightToLeft.Inherit != rightToLeft;
+            => RightToLeft.Inherit != _rightToLeft;
 
         /*
         /// <summary>
