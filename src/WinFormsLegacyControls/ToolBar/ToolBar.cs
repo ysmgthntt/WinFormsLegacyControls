@@ -20,8 +20,8 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  Represents a Windows toolbar.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    //[ComVisible(true)]
+    //[ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(ButtonClick))]
     //[Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultProperty(nameof(Buttons))]

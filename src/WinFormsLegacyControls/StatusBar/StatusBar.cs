@@ -20,8 +20,8 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  Represents a Windows status bar control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    //[ComVisible(true)]
+    //[ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(PanelClick))]
     [DefaultProperty(nameof(Text))]
     //[Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign)]
