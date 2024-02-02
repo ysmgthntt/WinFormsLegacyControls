@@ -20,12 +20,10 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  Represents a Windows toolbar button.
     /// </summary>
-    [
-    //Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign),
-    DefaultProperty(nameof(Text)),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    ]
+    //[Designer("System.Windows.Forms.Design.ToolBarButtonDesigner, " + AssemblyRef.SystemDesign)]
+    [DefaultProperty(nameof(Text))]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
     public class ToolBarButton : Component
     {
         string? _text;
@@ -107,11 +105,9 @@ namespace WinFormsLegacyControls
         ///  Indicates the menu to be displayed in
         ///  the drop-down toolbar button.
         /// </summary>
-        [
-        DefaultValue(null),
-        TypeConverter(typeof(ReferenceConverter)),
-        SRDescription(nameof(SR.ToolBarButtonMenuDescr))
-        ]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(ReferenceConverter))]
+        [SRDescription(nameof(SR.ToolBarButtonMenuDescr))]
         public Menu? DropDownMenu
         {
             get => _dropDownMenu;
@@ -131,11 +127,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates whether the button is enabled or not.
         /// </summary>
-        [
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarButtonEnabledDescr))
-        ]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarButtonEnabledDescr))]
         public bool Enabled
         {
             get => _enabled;
@@ -158,14 +152,12 @@ namespace WinFormsLegacyControls
         ///  Indicates the index
         ///  value of the image assigned to the button.
         /// </summary>
-        [
-        TypeConverter(typeof(ImageIndexConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        DefaultValue(-1),
-        RefreshProperties(RefreshProperties.Repaint),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
-        ]
+        [TypeConverter(typeof(ImageIndexConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [DefaultValue(-1)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))]
         public int ImageIndex
         {
             get => ImageIndexer.Index;
@@ -188,14 +180,12 @@ namespace WinFormsLegacyControls
         ///  Indicates the index
         ///  value of the image assigned to the button.
         /// </summary>
-        [
-        TypeConverter(typeof(ImageKeyConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        DefaultValue(""),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
-        ]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))]
         public string ImageKey
         {
             get => ImageIndexer.Key;
@@ -208,6 +198,7 @@ namespace WinFormsLegacyControls
                 }
             }
         }
+
         /// <summary>
         ///  Name of this control. The designer will set this to the same
         ///  as the programatic Id "(name)" of the control - however this
@@ -238,9 +229,7 @@ namespace WinFormsLegacyControls
         ///  Indicates the toolbar control that the toolbar button is assigned to. This property is
         ///  read-only.
         /// </summary>
-        [
-            Browsable(false),
-        ]
+        [Browsable(false)]
         public ToolBar? Parent => _parent;
 
         /// <summary>
@@ -248,10 +237,8 @@ namespace WinFormsLegacyControls
         ///  Indicates whether a toggle-style toolbar button
         ///  is partially pushed.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolBarButtonPartialPushDescr))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolBarButtonPartialPushDescr))]
         public bool PartialPush
         {
             get
@@ -287,10 +274,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates whether a toggle-style toolbar button is currently in the pushed state.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolBarButtonPushedDescr))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolBarButtonPushedDescr))]
         public bool Pushed
         {
             get
@@ -336,11 +321,9 @@ namespace WinFormsLegacyControls
         ///  Indicates the style of the
         ///  toolbar button.
         /// </summary>
-        [
-        DefaultValue(ToolBarButtonStyle.PushButton),
-        SRDescription(nameof(SR.ToolBarButtonStyleDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [DefaultValue(ToolBarButtonStyle.PushButton)]
+        [SRDescription(nameof(SR.ToolBarButtonStyleDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public ToolBarButtonStyle Style
         {
             get => _style;
@@ -361,14 +344,12 @@ namespace WinFormsLegacyControls
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object? Tag
         {
             get => _userData;
@@ -378,11 +359,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Indicates the text that is displayed on the toolbar button.
         /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.ToolBarButtonTextDescr))
-        ]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.ToolBarButtonTextDescr))]
         [AllowNull]
         public string Text
         {
@@ -409,11 +388,9 @@ namespace WinFormsLegacyControls
         ///  Indicates
         ///  the text that appears as a tool tip for a control.
         /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.ToolBarButtonToolTipTextDescr))
-        ]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.ToolBarButtonToolTipTextDescr))]
         public string ToolTipText
         {
             get => _tooltipText ?? string.Empty;
@@ -425,11 +402,9 @@ namespace WinFormsLegacyControls
         ///  Indicates whether the toolbar button
         ///  is visible.
         /// </summary>
-        [
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarButtonVisibleDescr))
-        ]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarButtonVisibleDescr))]
         public bool Visible
         {
             get => _visible;

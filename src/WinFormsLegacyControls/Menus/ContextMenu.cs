@@ -46,11 +46,9 @@ namespace WinFormsLegacyControls
         ///  The last control that was acted upon that resulted in this context
         ///  menu being displayed.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ContextMenuSourceControlDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ContextMenuSourceControlDescr))]
         public Control? SourceControl => _sourceControl;
 
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
@@ -77,11 +75,9 @@ namespace WinFormsLegacyControls
         /// </summary>
         // Add a DefaultValue attribute so that the Reset context menu becomes
         // available in the Property Grid but the default value remains No.
-        [
-        Localizable(true),
-        DefaultValue(RightToLeft.No),
-        SRDescription(nameof(SR.MenuRightToLeftDescr))
-        ]
+        [Localizable(true)]
+        [DefaultValue(RightToLeft.No)]
+        [SRDescription(nameof(SR.MenuRightToLeftDescr))]
         public virtual RightToLeft RightToLeft
         {
             get

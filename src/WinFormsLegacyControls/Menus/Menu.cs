@@ -17,7 +17,7 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).
     /// </summary>
-    [ToolboxItemFilter("System.Windows.Forms")]
+    //[ToolboxItemFilter("System.Windows.Forms")]
     [ListBindable(false)]
     public abstract class Menu : Component
     {
@@ -52,11 +52,10 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The HMENU handle corresponding to this menu.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHandleDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlHandleDescr))]
         public IntPtr Handle
         {
             get
@@ -74,11 +73,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Specifies whether this menu contains any items.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.MenuIsParentDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.MenuIsParentDescr))]
         public virtual bool IsParent => _items.Count > 0;
 
         internal int ItemCount => _items.Count;
@@ -86,11 +83,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The MenuItem that contains the list of MDI child windows.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.MenuMDIListItemDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.MenuMDIListItemDescr))]
         public MenuItem? MdiListItem
         {
             get
@@ -121,10 +116,8 @@ namespace WinFormsLegacyControls
         ///  as the programatic Id "(name)" of the control - however this
         ///  property has no bearing on the runtime aspects of this control.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public string Name
         {
             get => WindowsFormsUtils.GetComponentName(this, _name);
@@ -145,25 +138,21 @@ namespace WinFormsLegacyControls
             }
         }
 
-        [
-        //Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(nameof(SR.MenuMenuItemsDescr)),
-        MergableProperty(false)
-        ]
+        //[Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRDescription(nameof(SR.MenuMenuItemsDescr))]
+        [MergableProperty(false)]
         public MenuItemCollection MenuItems
             => _itemsCollection ??= new MenuItemCollection(this);
 
         internal abstract bool RenderIsRightToLeft { get; }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object? Tag
         {
             get => _userData;

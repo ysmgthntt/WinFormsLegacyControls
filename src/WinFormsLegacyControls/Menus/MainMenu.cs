@@ -13,7 +13,7 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  Represents a menu structure for a form.
     /// </summary>
-    [ToolboxItemFilter("System.Windows.Forms.MainMenu")]
+    //[ToolboxItemFilter("System.Windows.Forms.MainMenu")]
     public partial class MainMenu : Menu
     {
         internal Form? _form;
@@ -65,11 +65,9 @@ namespace WinFormsLegacyControls
         ///  text alignment and reading order will be from right to left.
         /// </summary>
         // Add an AmbientValue attribute so that the Reset context menu becomes available in the Property Grid.
-        [
-        Localizable(true),
-        AmbientValue(RightToLeft.Inherit),
-        SRDescription(nameof(SR.MenuRightToLeftDescr))
-        ]
+        [Localizable(true)]
+        [AmbientValue(RightToLeft.Inherit)]
+        [SRDescription(nameof(SR.MenuRightToLeftDescr))]
         public virtual RightToLeft RightToLeft
         {
             get

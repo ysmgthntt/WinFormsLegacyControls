@@ -17,11 +17,9 @@ namespace WinFormsLegacyControls
     ///  Stores the <see cref='StatusBar'/>
     ///  control panel's information.
     /// </summary>
-    [
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty(nameof(Text))
-    ]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultProperty(nameof(Text))]
     public class StatusBarPanel : Component, ISupportInitialize
     {
         private const int DEFAULTWIDTH = 100;
@@ -62,12 +60,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the <see cref='Alignment'/>
         ///  property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(HorizontalAlignment.Left),
-        Localizable(true),
-        SRDescription(nameof(SR.StatusBarPanelAlignmentDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(HorizontalAlignment.Left)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.StatusBarPanelAlignmentDescr))]
         public HorizontalAlignment Alignment
         {
             get => _alignment;
@@ -90,12 +86,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the <see cref='AutoSize'/>
         ///  property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(StatusBarPanelAutoSize.None),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.StatusBarPanelAutoSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(StatusBarPanelAutoSize.None)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.StatusBarPanelAutoSizeDescr))]
         public StatusBarPanelAutoSize AutoSize
         {
             get => _autoSize;
@@ -150,12 +144,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the <see cref='Icon'/>
         ///  property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.StatusBarPanelIconDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(null)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.StatusBarPanelIconDescr))]
         public Icon? Icon
         {
             // unfortunately we have no way of getting the icon from the control.
@@ -200,17 +192,16 @@ namespace WinFormsLegacyControls
             get => _index;
             set => _index = value;
         }
+
         /// <summary>
         ///  Gets or sets the minimum width the <see cref='StatusBarPanel'/> can be within the <see cref='StatusBar'/>
         ///  control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(DEFAULTMINWIDTH),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.StatusBarPanelMinWidthDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(DEFAULTMINWIDTH)]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.StatusBarPanelMinWidthDescr))]
         public int MinWidth
         {
             get => _minWidth;
@@ -237,11 +228,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Gets or sets the name of the panel.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            Localizable(true),
-            SRDescription(nameof(SR.StatusBarPanelNameDescr))
-            ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.StatusBarPanelNameDescr))]
         public string Name
         {
             get => WindowsFormsUtils.GetComponentName(this, _name);
@@ -280,11 +269,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Gets or sets the style of the panel.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(StatusBarPanelStyle.Text),
-        SRDescription(nameof(SR.StatusBarPanelStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(StatusBarPanelStyle.Text)]
+        [SRDescription(nameof(SR.StatusBarPanelStyleDescr))]
         public StatusBarPanelStyle Style
         {
             get => _style;
@@ -307,14 +294,12 @@ namespace WinFormsLegacyControls
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object? Tag
         {
             get => _userData;
@@ -324,12 +309,10 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Gets or sets the text of the panel.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.StatusBarPanelTextDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.StatusBarPanelTextDescr))]
         public string Text
         {
             get => _text ?? string.Empty;
@@ -357,12 +340,10 @@ namespace WinFormsLegacyControls
         ///  Gets
         ///  or sets the panel's tool tip text.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.StatusBarPanelToolTipTextDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.StatusBarPanelToolTipTextDescr))]
         public string ToolTipText
         {
             get => _toolTipText ?? string.Empty;
@@ -393,12 +374,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the width of the <see cref='StatusBarPanel'/> within the <see cref='StatusBar'/>
         ///  control.
         /// </summary>
-        [
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(DEFAULTWIDTH),
-        SRDescription(nameof(SR.StatusBarPanelWidthDescr))
-        ]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(DEFAULTWIDTH)]
+        [SRDescription(nameof(SR.StatusBarPanelWidthDescr))]
         public int Width
         {
             get => _width;

@@ -581,8 +581,8 @@ namespace WinFormsLegacyControls
         ///  Gets or sets a value that indicates whether the shortcut key that is associated
         ///  with the menu item is displayed next to the menu item caption.
         /// </summary>
-        [DefaultValue(true),
-        Localizable(true)]
+        [DefaultValue(true)]
+        [Localizable(true)]
         [SRDescription(nameof(SR.MenuItemShowShortCutDescr))]
         public bool ShowShortcut
         {
@@ -646,7 +646,8 @@ namespace WinFormsLegacyControls
         ///  Occurs when when the property of a menu item is set to <see langword='true'/> and
         ///  a request is made to draw the menu item.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem
         {
             add
@@ -664,7 +665,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Occurs when when the menu needs to know the size of a menu item before drawing it.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem
         {
             add

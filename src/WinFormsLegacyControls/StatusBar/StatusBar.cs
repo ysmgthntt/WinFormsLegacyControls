@@ -20,13 +20,11 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  Represents a Windows status bar control.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(PanelClick)),
-    DefaultProperty(nameof(Text)),
-    //Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign),
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(PanelClick))]
+    [DefaultProperty(nameof(Text))]
+    //[Designer("System.Windows.Forms.Design.StatusBarDesigner, " + AssemblyRef.SystemDesign)]
     public class StatusBar : Control
     {
         private int _sizeGripWidth;
@@ -129,7 +127,8 @@ namespace WinFormsLegacyControls
         ///  The background color of this control. This is an ambient property and will
         ///  always return a non-null value.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
             // not supported, always return CONTROL
@@ -138,7 +137,8 @@ namespace WinFormsLegacyControls
             set { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
@@ -150,28 +150,32 @@ namespace WinFormsLegacyControls
         ///  <see cref='StatusBar'/>
         ///  control.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
             set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -240,10 +244,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Gets or sets the docking behavior of the <see cref='StatusBar'/> control.
         /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(DockStyle.Bottom)
-        ]
+        [Localizable(true)]
+        [DefaultValue(DockStyle.Bottom)]
         public override DockStyle Dock
         {
             get => base.Dock;
@@ -255,9 +257,7 @@ namespace WinFormsLegacyControls
         ///  control will use to display
         ///  information.
         /// </summary>
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         [AllowNull]
         public override Font Font
         {
@@ -273,28 +273,32 @@ namespace WinFormsLegacyControls
         ///  Gets or sets
         ///  the forecolor for the control.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
             get => base.ForeColor;
             set => base.ForeColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
         {
             add => base.ImeModeChanged += value;
@@ -306,13 +310,11 @@ namespace WinFormsLegacyControls
         ///  panels contained within the
         ///  control.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(nameof(SR.StatusBarPanelsDescr)),
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        MergableProperty(false)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRDescription(nameof(SR.StatusBarPanelsDescr))]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [MergableProperty(false)]
         public StatusBarPanelCollection Panels
             => _panelsCollection ??= new StatusBarPanelCollection(this);
 
@@ -339,9 +341,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  The status bar text.
         /// </summary>
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         [AllowNull]
         public override string Text
         {
@@ -360,11 +360,9 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Gets or sets a value indicating whether panels should be shown.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.StatusBarShowPanelsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.StatusBarShowPanelsDescr))]
         public bool ShowPanels
         {
             get => _showPanels;
@@ -403,11 +401,9 @@ namespace WinFormsLegacyControls
         ///  will be rendered on the corner of the <see cref='StatusBar'/>
         ///  control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.StatusBarSizingGripDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.StatusBarSizingGripDescr))]
         public bool SizingGrip
         {
             get => _sizeGrip;
@@ -453,7 +449,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Occurs when a visual aspect of an owner-drawn status bar changes.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.StatusBarDrawItem))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.StatusBarDrawItem))]
         public event StatusBarDrawItemEventHandler DrawItem
         {
             add => Events.AddHandler(EVENT_SBDRAWITEM, value);
@@ -463,7 +460,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Occurs when a panel on the status bar is clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
         public event StatusBarPanelClickEventHandler PanelClick
         {
             add => Events.AddHandler(EVENT_PANELCLICK, value);
@@ -474,7 +472,8 @@ namespace WinFormsLegacyControls
         ///  StatusBar Onpaint.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
             add => base.Paint += value;

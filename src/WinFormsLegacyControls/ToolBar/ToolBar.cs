@@ -20,13 +20,11 @@ namespace WinFormsLegacyControls
     /// <summary>
     ///  Represents a Windows toolbar.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(ButtonClick)),
-    //Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign),
-    DefaultProperty(nameof(Buttons))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(ButtonClick))]
+    //[Designer("System.Windows.Forms.Design.ToolBarDesigner, " + AssemblyRef.SystemDesign)]
+    [DefaultProperty(nameof(Buttons))]
     public partial class ToolBar : Control
     {
         private readonly ToolBarButtonCollection _buttonsCollection;
@@ -127,12 +125,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the appearance of the toolbar
         ///  control and its buttons.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(ToolBarAppearance.Normal),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarAppearanceDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(ToolBarAppearance.Normal)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarAppearanceDescr))]
         public ToolBarAppearance Appearance
         {
             get => _appearance;
@@ -157,15 +153,13 @@ namespace WinFormsLegacyControls
         ///  adjusts its size automatically based on the size of the buttons and the
         ///  dock style.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarAutoSizeDescr)),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarAutoSizeDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get => _toolBarState[TOOLBARSTATE_autoSize];
@@ -194,50 +188,58 @@ namespace WinFormsLegacyControls
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
             get => base.BackColor;
             set => base.BackColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
             set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -248,12 +250,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets
         ///  the border style of the toolbar control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(BorderStyle.None),
-        DispId(PInvoke.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.ToolBarBorderStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(BorderStyle.None)]
+        [DispId(PInvoke.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.ToolBarBorderStyleDescr))]
         public BorderStyle BorderStyle
         {
             get => _borderStyle;
@@ -279,25 +279,21 @@ namespace WinFormsLegacyControls
         ///  A collection of <see cref='ToolBarButton'/> controls assigned to the
         ///  toolbar control. The property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarButtonsDescr)),
-        MergableProperty(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarButtonsDescr))]
+        [MergableProperty(false)]
         public ToolBarButtonCollection Buttons => _buttonsCollection;
 
         /// <summary>
         ///  Gets or sets
         ///  the size of the buttons on the toolbar control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        RefreshProperties(RefreshProperties.All),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarButtonSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [RefreshProperties(RefreshProperties.All)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarButtonSizeDescr))]
         public Size ButtonSize
         {
             get
@@ -432,11 +428,9 @@ namespace WinFormsLegacyControls
         ///  Gets or sets a value indicating
         ///  whether the toolbar displays a divider.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolBarDividerDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolBarDividerDescr))]
         public bool Divider
         {
             get => _toolBarState[TOOLBARSTATE_divider];
@@ -455,10 +449,8 @@ namespace WinFormsLegacyControls
         ///  Sets the way in which this ToolBar is docked to its parent. We need to
         ///  override this to ensure autoSizing works correctly
         /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(DockStyle.Top)
-        ]
+        [Localizable(true)]
+        [DefaultValue(DockStyle.Top)]
         public override DockStyle Dock
         {
             get => base.Dock;
@@ -503,12 +495,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets a value indicating whether drop-down buttons on a
         ///  toolbar display down arrows.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarDropDownArrowsDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarDropDownArrowsDescr))]
         public bool DropDownArrows
         {
             get => _toolBarState[TOOLBARSTATE_dropDownArrows];
@@ -523,14 +513,16 @@ namespace WinFormsLegacyControls
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
             get => base.ForeColor;
             set => base.ForeColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
@@ -541,11 +533,9 @@ namespace WinFormsLegacyControls
         ///  Gets or sets the collection of images available to the toolbar button
         ///  controls.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ToolBarImageListDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ToolBarImageListDescr))]
         public ImageList? ImageList
         {
             get => _imageList;
@@ -582,22 +572,23 @@ namespace WinFormsLegacyControls
         ///  Gets the size of the images in the image list assigned to the
         ///  toolbar.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ToolBarImageSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ToolBarImageSizeDescr))]
         public Size ImageSize => _imageList?.ImageSize ?? new Size(0, 0);
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
         {
             add => base.ImeModeChanged += value;
@@ -730,14 +721,16 @@ namespace WinFormsLegacyControls
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft
         {
             get => base.RightToLeft;
             set => base.RightToLeft = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged
         {
             add => base.RightToLeftChanged += value;
@@ -792,12 +785,10 @@ namespace WinFormsLegacyControls
         ///  Gets or sets a value indicating whether the toolbar displays a
         ///  tool tip for each button.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarShowToolTipsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarShowToolTipsDescr))]
         public bool ShowToolTips
         {
             get => _toolBarState[TOOLBARSTATE_showToolTips];
@@ -819,11 +810,10 @@ namespace WinFormsLegacyControls
             set => base.TabStop = value;
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        Bindable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [AllowNull]
         public override string Text
         {
@@ -831,7 +821,8 @@ namespace WinFormsLegacyControls
             set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -843,12 +834,10 @@ namespace WinFormsLegacyControls
         ///  image displayed on
         ///  the toolbar button controls.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ToolBarTextAlign.Underneath),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarTextAlignDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ToolBarTextAlign.Underneath)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarTextAlignDescr))]
         public ToolBarTextAlign TextAlign
         {
             get => _textAlign;
@@ -877,12 +866,10 @@ namespace WinFormsLegacyControls
         ///  toolbar becomes too small to display all the buttons
         ///  on the same line.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolBarWrappableDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolBarWrappableDescr))]
         public bool Wrappable
         {
             get => _toolBarState[TOOLBARSTATE_wrappable];
@@ -899,7 +886,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Occurs when a <see cref='ToolBarButton'/> on the <see cref='ToolBar'/> is clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonClickDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolBarButtonClickDescr))]
         public event ToolBarButtonClickEventHandler ButtonClick
         {
             add => Events.AddHandler(s_buttonClickEvent, value);
@@ -909,7 +897,8 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Occurs when a drop-down style <see cref='ToolBarButton'/> or its down arrow is clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolBarButtonDropDownDescr))]
         public event ToolBarButtonClickEventHandler ButtonDropDown
         {
             add => Events.AddHandler(s_buttonDropDownEvent, value);
@@ -920,7 +909,8 @@ namespace WinFormsLegacyControls
         ///  ToolBar Onpaint.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
             add => base.Paint += value;
@@ -1808,6 +1798,7 @@ namespace WinFormsLegacyControls
                     }
                 }
             }
+
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
