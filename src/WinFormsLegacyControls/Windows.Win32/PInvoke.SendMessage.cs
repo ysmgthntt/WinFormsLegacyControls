@@ -39,6 +39,7 @@ namespace Windows.Win32
             }
         }
 
+        /*
         public static unsafe nint SendMessage<TLParam>(
             IWin32Window hWnd,
             uint Msg,
@@ -51,5 +52,6 @@ namespace Windows.Win32
                 return SendMessage(hWnd, Msg, wParam, (LPARAM)l);
             }
         }
+        */
     }
 }

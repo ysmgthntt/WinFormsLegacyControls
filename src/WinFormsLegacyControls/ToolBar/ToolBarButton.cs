@@ -310,7 +310,10 @@ namespace WinFormsLegacyControls
                 if (_parent is not null)
                 {
                     RECT rc = new RECT();
-                    PInvoke.SendMessage(_parent, PInvoke.TB_GETRECT, (WPARAM)FindButtonIndex(), ref rc);
+                    unsafe
+                    {
+                        PInvoke.SendMessage(_parent, PInvoke.TB_GETRECT, (WPARAM)FindButtonIndex(), &rc);
+                    }
                     return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
                 }
                 return Rectangle.Empty;
@@ -538,13 +541,14 @@ namespace WinFormsLegacyControls
             int buttonWidth = Parent!.ButtonSize.Width;
 
             TBBUTTONINFOW button = default;
+            button.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
+
+            int buttonID;
             unsafe
             {
                 button.cbSize = (uint)sizeof(TBBUTTONINFOW);
+                buttonID = (int)PInvoke.SendMessage(Parent, PInvoke.TB_GETBUTTONINFO, (WPARAM)_commandId, &button);
             }
-            button.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
-
-            int buttonID = (int)PInvoke.SendMessage(Parent, PInvoke.TB_GETBUTTONINFO, (WPARAM)_commandId, ref button);
             if (buttonID != -1)
             {
                 buttonWidth = button.cx;
@@ -706,7 +710,7 @@ namespace WinFormsLegacyControls
             fixed (char* pszText = textValue)
             {
                 tbbi.pszText = pszText;
-                PInvoke.SendMessage(_parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, ref tbbi);
+                PInvoke.SendMessage(_parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, &tbbi);
             }
         }
 

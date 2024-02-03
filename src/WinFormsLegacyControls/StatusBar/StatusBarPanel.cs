@@ -555,7 +555,10 @@ namespace WinFormsLegacyControls
                 if (_style == StatusBarPanelStyle.OwnerDraw)
                 {
                     RECT rect = new RECT();
-                    result = (int)PInvoke.SendMessage(_parent, PInvoke.SB_GETRECT, (WPARAM)GetIndex(), ref rect);
+                    unsafe
+                    {
+                        result = (int)PInvoke.SendMessage(_parent, PInvoke.SB_GETRECT, (WPARAM)GetIndex(), &rect);
+                    }
 
                     if (result != 0)
                     {

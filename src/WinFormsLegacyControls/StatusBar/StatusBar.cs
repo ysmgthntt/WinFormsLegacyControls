@@ -504,19 +504,19 @@ namespace WinFormsLegacyControls
             if (length == 0)
             {
                 Size sz = Size;
-                Span<int> offsets = stackalloc int[1];
+                int* offsets = stackalloc int[1];
                 offsets[0] = sz.Width;
                 if (_sizeGrip)
                 {
                     offsets[0] -= SizeGripWidth;
                 }
-                PInvoke.SendMessage(this, PInvoke.SB_SETPARTS, 1, ref offsets[0]);
+                PInvoke.SendMessage(this, PInvoke.SB_SETPARTS, 1, offsets);
                 PInvoke.SendMessage(this, PInvoke.SB_SETICON, 0, 0);
 
                 return;
             }
 
-            int[] offsets2 = new int[length];
+            int* offsets2 = stackalloc int[length];
             int currentOffset = 0;
             for (int i = 0; i < length; i++)
             {
@@ -526,10 +526,7 @@ namespace WinFormsLegacyControls
                 panel.Right = offsets2[i];
             }
 
-            fixed (int* pOffsets = offsets2)
-            {
-                PInvoke.SendMessage(this, PInvoke.SB_SETPARTS, (WPARAM)length, (LPARAM)pOffsets);
-            }
+            PInvoke.SendMessage(this, PInvoke.SB_SETPARTS, (WPARAM)length, offsets2);
 
             // Tooltip setup...
             for (int i = 0; i < length; i++)

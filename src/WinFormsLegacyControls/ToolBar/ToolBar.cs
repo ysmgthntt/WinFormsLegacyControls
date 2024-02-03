@@ -628,7 +628,10 @@ namespace WinFormsLegacyControls
                         firstVisible = 0;
                     }
 
-                    PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)firstVisible, ref rect);
+                    unsafe
+                    {
+                        PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)firstVisible, &rect);
+                    }
 
                     // height is the button's height plus some extra goo
                     //
@@ -699,8 +702,11 @@ namespace WinFormsLegacyControls
 
                         for (int x = 0; x < _buttons.Count; x++)
                         {
-                            // ? 0 -> x ?
-                            PInvoke.SendMessage(this, PInvoke.TB_GETRECT, 0, ref rect);
+                            unsafe
+                            {
+                                // ? 0 -> x ?
+                                PInvoke.SendMessage(this, PInvoke.TB_GETRECT, 0, &rect);
+                            }
                             if (rect.Width > _maxWidth)
                             {
                                 _maxWidth = rect.Width;
@@ -1034,10 +1040,6 @@ namespace WinFormsLegacyControls
                 {
 
                     TBBUTTONINFOW tbbi = default;
-                    unsafe
-                    {
-                        tbbi.cbSize = (uint)sizeof(TBBUTTONINFOW);
-                    }
                     tbbi.cx = (ushort)_buttons[x].Width;
 
                     if (tbbi.cx > _maxWidth)
@@ -1046,7 +1048,11 @@ namespace WinFormsLegacyControls
                     }
 
                     tbbi.dwMask = TBBUTTONINFOW_MASK.TBIF_SIZE;
-                    PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONINFO, (WPARAM)x, ref tbbi);
+                    unsafe
+                    {
+                        tbbi.cbSize = (uint)sizeof(TBBUTTONINFOW);
+                        PInvoke.SendMessage(this, PInvoke.TB_SETBUTTONINFO, (WPARAM)x, &tbbi);
+                    }
                 }
             }
         }
@@ -1272,21 +1278,21 @@ namespace WinFormsLegacyControls
 
                     // insert the buttons and set their parent pointers
                     //
-                    Span<NativeMethods.TBBUTTON> ptbbuttons = stackalloc NativeMethods.TBBUTTON[count];
-
-                    for (int x = 0; x < count; x++)
-                    {
-                        ToolBarButton button = _buttons[x];
-                        button.GetTBBUTTON(x, ref ptbbuttons[x]);
-                        button._parent = this;
-                    }
-
                     unsafe
                     {
-                        fixed (void* ptr = ptbbuttons)
+                        NativeMethods.TBBUTTON* ptbbuttons = stackalloc NativeMethods.TBBUTTON[count];
+#if DEBUG
+                        Span<NativeMethods.TBBUTTON> span = new(ptbbuttons, count);
+#endif
+
+                        for (int x = 0; x < count; x++)
                         {
-                            PInvoke.SendMessage(this, PInvoke.TB_ADDBUTTONS, (WPARAM)count, ptr);
+                            ToolBarButton button = _buttons[x];
+                            button.GetTBBUTTON(x, ref ptbbuttons[x]);
+                            button._parent = this;
                         }
+
+                        PInvoke.SendMessage(this, PInvoke.TB_ADDBUTTONS, (WPARAM)count, ptbbuttons);
                     }
 
                     // after doing anything with the comctl ToolBar control, this
@@ -1441,16 +1447,11 @@ namespace WinFormsLegacyControls
         ///  The button clicked was a dropdown button.  If it has a menu specified,
         ///  show it now.  Otherwise, fire an onButtonDropDown event.
         /// </summary>
-        private void WmNotifyDropDown(ref Message m)
+        private unsafe void WmNotifyDropDown(ref Message m)
         {
             int iItem;
-            HWND hwndFrom;
-            unsafe
-            {
-                NativeMethods.NMTOOLBAR* nmTB = (NativeMethods.NMTOOLBAR*)m.LParam;
-                iItem = nmTB->iItem;
-                hwndFrom = nmTB->hdr.hwndFrom;
-            }
+            NativeMethods.NMTOOLBAR* nmTB = (NativeMethods.NMTOOLBAR*)m.LParam;
+            iItem = nmTB->iItem;
             ToolBarButton tbb = _buttons[iItem];
             /*
             if (tbb is null)
@@ -1465,7 +1466,7 @@ namespace WinFormsLegacyControls
             {
                 RECT rc = new RECT();
 
-                PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)iItem, ref rc);
+                PInvoke.SendMessage(this, PInvoke.TB_GETRECT, (WPARAM)iItem, &rc);
 
                 _toolBarButtonContextMenu = contextMenu;
                 contextMenu.Show(this, new Point(rc.left, rc.bottom));
