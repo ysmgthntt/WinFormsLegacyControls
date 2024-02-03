@@ -1713,11 +1713,14 @@ namespace WinFormsLegacyControls
             /// <summary>
             ///  Destroys the handle for this control.
             /// </summary>
-            private void DestroyHandle()
+            private void DestroyHandle(bool disposing)
             {
                 if (IsHandleCreated)
                 {
                     _window.DestroyHandle();
+                }
+                if (disposing)
+                {
                     _tools?.Clear();
                 }
             }
@@ -1727,7 +1730,11 @@ namespace WinFormsLegacyControls
             ///  This method removes the component from its container (if the component has a site)
             ///  and triggers the dispose event.
             /// </summary>
-            public void Dispose() => DestroyHandle();
+            public void Dispose()
+            {
+                DestroyHandle(true);
+                GC.SuppressFinalize(this);
+            }
 
             /// <summary>
             ///  Returns a new instance of the TOOLINFO_T structure with the minimum
@@ -1775,7 +1782,7 @@ namespace WinFormsLegacyControls
 
             ~ControlToolTip()
             {
-                DestroyHandle();
+                DestroyHandle(false);
             }
 
             private sealed class ToolTipNativeWindow : NativeWindow
