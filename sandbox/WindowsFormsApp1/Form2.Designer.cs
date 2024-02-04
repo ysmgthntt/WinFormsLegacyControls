@@ -37,6 +37,7 @@
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -91,12 +92,25 @@
             this.menuItem6.MdiList = true;
             this.menuItem6.Text = "&Window";
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button1.Location = new System.Drawing.Point(676, 404);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(112, 34);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "MainMenu";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.ContextMenu = this.contextMenu1;
+            this.Controls.Add(this.button1);
             this.IsMdiContainer = true;
             this.Menu = this.mainMenu1;
             this.Name = "Form2";
@@ -115,5 +129,6 @@
         private MenuItem menuItem5;
         private ContextMenu contextMenu1;
         private MenuItem menuItem6;
+        private Button button1;
     }
 }

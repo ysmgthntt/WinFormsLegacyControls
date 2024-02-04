@@ -37,6 +37,7 @@
             menuItem5 = new WinFormsLegacyControls.MenuItem();
             contextMenu1 = new WinFormsLegacyControls.ContextMenu();
             menuItem6 = new WinFormsLegacyControls.MenuItem();
+            button1 = new Button();
             SuspendLayout();
             // 
             // mainMenu1
@@ -82,12 +83,25 @@
             menuItem6.MdiList = true;
             menuItem6.Text = "&Window";
             // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button1.FlatStyle = FlatStyle.System;
+            button1.Location = new Point(676, 404);
+            button1.Name = "button1";
+            button1.Size = new Size(112, 34);
+            button1.TabIndex = 1;
+            button1.Text = "MainMenu";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             contextMenu1.SetContextMenu(this, true);
+            Controls.Add(button1);
             IsMdiContainer = true;
             mainMenu1.SetMenu(this, true);
             Name = "Form2";
@@ -105,5 +119,6 @@
         private WinFormsLegacyControls.MenuItem menuItem5;
         private WinFormsLegacyControls.ContextMenu contextMenu1;
         private WinFormsLegacyControls.MenuItem menuItem6;
+        private Button button1;
     }
 }

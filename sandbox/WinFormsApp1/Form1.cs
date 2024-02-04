@@ -77,6 +77,7 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            /*
             statusBarPanel2.ToolTipText = textBox1.Text;
 
             menuItem5.ShowShortcut = !menuItem5.ShowShortcut;
@@ -84,6 +85,20 @@ namespace WinFormsApp1
             this.RightToLeftLayout = !this.RightToLeftLayout;
             toolBar1.RightToLeftLayout = !toolBar1.RightToLeftLayout;
             statusBar1.RightToLeftLayout = !statusBar1.RightToLeftLayout;
+            */
+
+            /*
+            Debug.WriteLine(mainMenu1.ToString());
+            Debug.WriteLine(contextMenu1.ToString());
+            Debug.WriteLine(menuItem6.ToString());
+            Debug.WriteLine(toolBar1.ToString());
+            Debug.WriteLine(toolBarButton2.ToString());
+            Debug.WriteLine(statusBar1.ToString());
+            Debug.WriteLine(statusBarPanel3.ToString());
+            */
+
+            toolBarButton2.Text = textBox1.Text;
+            toolBarButton2.Pushed = !toolBarButton2.Pushed;
         }
 
         private void MenuItem_Click(object? sender, EventArgs e)

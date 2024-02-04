@@ -40,7 +40,10 @@ namespace WinFormsApp1
             mainMenu.MenuItems.Add(file);
             mainMenu.MenuItems.Add("MDI Menu " + _count);
             mainMenu.SetMenu(form, true);
-            form.Click += (s, e) => ((Form?)s)?.SetMenu(null);
+            form.Click += (s, e) =>
+            {
+                ((Form?)s)?.SetMenu(null);
+            };
 
             form.Show();
         }
@@ -48,6 +51,14 @@ namespace WinFormsApp1
         private void MenuItem4_Click(object? sender, EventArgs e)
         {
             IsMdiContainer = !IsMdiContainer;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (this.GetMenu() is null)
+                this.SetMenu(mainMenu1);
+            else
+                this.SetMenu(null);
         }
     }
 }
