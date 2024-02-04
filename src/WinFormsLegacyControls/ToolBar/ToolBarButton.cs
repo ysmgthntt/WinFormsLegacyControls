@@ -702,14 +702,21 @@ namespace WinFormsLegacyControls
         internal unsafe void SetButtonInfo(bool updateText, int index)
         {
             TBBUTTONINFOW tbbi = GetTBBUTTONINFO(updateText, index);
-            string? textValue = _text;
-            if (textValue is null)
-                textValue = "\0\0";
-            else
-                PrefixAmpersands(ref textValue);
-            fixed (char* pszText = textValue)
+            if (updateText)
             {
-                tbbi.pszText = pszText;
+                string? textValue = _text;
+                if (textValue is null)
+                    textValue = "\0\0";
+                else
+                    PrefixAmpersands(ref textValue);
+                fixed (char* pszText = textValue)
+                {
+                    tbbi.pszText = pszText;
+                    PInvoke.SendMessage(_parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, &tbbi);
+                }
+            }
+            else
+            {
                 PInvoke.SendMessage(_parent!, PInvoke.TB_SETBUTTONINFO, (WPARAM)index, &tbbi);
             }
         }
@@ -731,15 +738,17 @@ namespace WinFormsLegacyControls
 
             // If there are no ampersands, we don't need to do anything here
             //
-            if (value.IndexOf('&') < 0)
+            int firstAmpersand = value.IndexOf('&');
+            if (firstAmpersand < 0)
             {
                 return;
             }
 
             // Insert extra ampersands
             //
-            StringBuilder newString = new StringBuilder();
-            for (int i = 0; i < value.Length; ++i)
+            StringBuilder newString = new();
+            newString.Append(value.AsSpan(0, firstAmpersand));
+            for (int i = firstAmpersand; i < value.Length; ++i)
             {
                 if (value[i] == '&')
                 {

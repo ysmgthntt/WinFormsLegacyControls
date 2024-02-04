@@ -1128,14 +1128,15 @@ namespace WinFormsLegacyControls
 
             if (IsHandleCreated)
             {
-                value.SetButtonInfo(updateText, index);
-
                 if (recreate)
                 {
                     UpdateButtons();
                 }
                 else
                 {
+                    // Not required when recreating
+                    value.SetButtonInfo(updateText, index);
+
                     // after doing anything with the comctl ToolBar control, this
                     // appears to be a good idea.
                     //
