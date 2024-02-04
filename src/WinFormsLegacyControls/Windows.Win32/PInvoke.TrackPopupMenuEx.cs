@@ -16,6 +16,7 @@ namespace Windows.Win32
             return result;
         }
 
+        /*
         public static BOOL TrackPopupMenuEx(Menu menu, TRACK_POPUP_MENU_FLAGS uFlags, int x, int y, IWin32Window hwnd, ref TPMPARAMS tpm)
         {
             BOOL result;
@@ -30,5 +31,6 @@ namespace Windows.Win32
             GC.KeepAlive(hwnd);
             return result;
         }
+        */
     }
 }

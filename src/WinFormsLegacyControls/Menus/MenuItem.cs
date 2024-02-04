@@ -393,12 +393,12 @@ namespace WinFormsLegacyControls
                 }
 
                 MENUITEMINFOW info = default;
+                info.fMask = MENU_ITEM_MASK.MIIM_STATE;
                 unsafe
                 {
                     info.cbSize = (uint)sizeof(MENUITEMINFOW);
+                    PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, &info);
                 }
-                info.fMask = MENU_ITEM_MASK.MIIM_STATE;
-                PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
 
                 return (info.fState & MENU_ITEM_STATE.MFS_HILITE) != 0;
             }
@@ -429,7 +429,10 @@ namespace WinFormsLegacyControls
 
                 for (int i = 0; i < count; i++)
                 {
-                    PInvoke.GetMenuItemInfo(Parent, (uint)i, true, ref info);
+                    unsafe
+                    {
+                        PInvoke.GetMenuItemInfo(Parent, (uint)i, true, &info);
+                    }
 
                     // For sub menus, the handle is always valid.
                     // For items, however, it is always zero.
@@ -767,11 +770,11 @@ namespace WinFormsLegacyControls
                     fixed (char* ptr = dwTypeData)
                     {
                         info.dwTypeData = ptr;
-                        PInvoke.InsertMenuItem(Parent!, unchecked((uint)-1), true, ref info);
+                        PInvoke.InsertMenuItem(Parent!, unchecked((uint)-1), true, &info);
                         if (setRightToLeftBit)
                         {
                             // InsertMenuItem だけだと右からにならない。
-                            PInvoke.SetMenuItemInfo(Parent!, info.wID, false, ref info);
+                            PInvoke.SetMenuItemInfo(Parent!, info.wID, false, &info);
                         }
                     }
                 }
@@ -792,10 +795,10 @@ namespace WinFormsLegacyControls
                 unsafe
                 {
                     infoVerify.cbSize = (uint)sizeof(MENUITEMINFOW);
+                    infoVerify.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                                       MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE;
+                    PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, &infoVerify);
                 }
-                infoVerify.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
-                                   MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE;
-                PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref infoVerify);
 #endif
             }
         }
@@ -1449,11 +1452,11 @@ namespace WinFormsLegacyControls
             info.fMask = MENU_ITEM_MASK.MIIM_TYPE | MENU_ITEM_MASK.MIIM_STATE | MENU_ITEM_MASK.MIIM_SUBMENU;
             // [fixed]
             // Get text length containing shortcut
-            PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
+            PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, &info);
             info.cch++;
             char* dwTypeData = stackalloc char[(int)info.cch];
             info.dwTypeData = dwTypeData;
-            PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
+            PInvoke.GetMenuItemInfo(Parent!, (uint)MenuID, false, &info);
             if (setRightToLeftBit)
             {
                 info.fType |= MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER;
@@ -1463,7 +1466,7 @@ namespace WinFormsLegacyControls
                 info.fType &= ~(MENU_ITEM_TYPE.MFT_RIGHTJUSTIFY | MENU_ITEM_TYPE.MFT_RIGHTORDER);
             }
 
-            PInvoke.SetMenuItemInfo(Parent!, (uint)MenuID, false, ref info);
+            PInvoke.SetMenuItemInfo(Parent!, (uint)MenuID, false, &info);
         }
 
         internal void UpdateMenuItem(bool force)
@@ -1481,7 +1484,7 @@ namespace WinFormsLegacyControls
                     fixed (char* ptr = dwTypeData)
                     {
                         info.dwTypeData = ptr;
-                        PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, ref info);
+                        PInvoke.SetMenuItemInfo(Parent, (uint)MenuID, false, &info);
                     }
                 }
 #if DEBUG
@@ -1489,10 +1492,10 @@ namespace WinFormsLegacyControls
                 unsafe
                 {
                     infoVerify.cbSize = (uint)sizeof(MENUITEMINFOW);
+                    infoVerify.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
+                                       MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE;
+                    PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, &infoVerify);
                 }
-                infoVerify.fMask = MENU_ITEM_MASK.MIIM_ID | MENU_ITEM_MASK.MIIM_STATE |
-                                   MENU_ITEM_MASK.MIIM_SUBMENU | MENU_ITEM_MASK.MIIM_TYPE;
-                PInvoke.GetMenuItemInfo(Parent, (uint)MenuID, false, ref infoVerify);
 #endif
 
                 if (_hasHandle && info.hSubMenu == IntPtr.Zero)

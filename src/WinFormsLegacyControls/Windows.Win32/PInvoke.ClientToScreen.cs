@@ -5,9 +5,9 @@ namespace Windows.Win32
 {
     partial class PInvoke
     {
-        public static BOOL ClientToScreen(IWin32Window hWnd, ref Point lpPoint)
+        public static unsafe BOOL ClientToScreen(IWin32Window hWnd, Point* lpPoint)
         {
-            BOOL result = ClientToScreen((HWND)hWnd.Handle, ref lpPoint);
+            BOOL result = ClientToScreen((HWND)hWnd.Handle, lpPoint);
             GC.KeepAlive(hWnd);
             return result;
         }

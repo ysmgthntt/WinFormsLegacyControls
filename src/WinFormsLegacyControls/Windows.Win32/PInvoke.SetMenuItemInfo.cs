@@ -4,13 +4,10 @@ namespace Windows.Win32
 {
     partial class PInvoke
     {
-        public static unsafe BOOL SetMenuItemInfo(Menu menu, uint item, BOOL fByPositon, ref MENUITEMINFOW mii)
+        public static unsafe BOOL SetMenuItemInfo(Menu menu, uint item, BOOL fByPositon, MENUITEMINFOW* lpmii)
         {
             BOOL result;
-            fixed (MENUITEMINFOW* lpmii = &mii)
-            {
-                result = SetMenuItemInfo((HMENU)menu._handle, item, fByPositon, lpmii);
-            }
+            result = SetMenuItemInfo((HMENU)menu._handle, item, fByPositon, lpmii);
             GC.KeepAlive(menu);
             return result;
         }

@@ -1606,7 +1606,7 @@ namespace WinFormsLegacyControls
                             // Prevent the tooltip from displaying in the upper left corner of the
                             // desktop when the control is nowhere near that location.
                             WINDOWPLACEMENT wndPlacement = default;
-                            int nRet = PInvoke.GetWindowPlacement(note->hwndFrom, ref wndPlacement);
+                            int nRet = PInvoke.GetWindowPlacement(note->hwndFrom, &wndPlacement);
 
                             // Is this tooltip going to be positioned in the upper left corner of the display,
                             // but nowhere near the toolbar button?
@@ -1636,7 +1636,7 @@ namespace WinFormsLegacyControls
                                 int x = Location.X + buttonRight + 1;
                                 int y = Location.Y + (ButtonSize.Height / 2);
                                 var leftTop = new Point(x, y);
-                                PInvoke.ClientToScreen(this, ref leftTop);
+                                PInvoke.ClientToScreen(this, &leftTop);
 
                                 // Will the tooltip bleed off the top?
                                 if (leftTop.Y < SystemInformation.WorkingArea.Y)
