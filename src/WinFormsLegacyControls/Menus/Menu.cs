@@ -273,28 +273,41 @@ namespace WinFormsLegacyControls
         }
 
         public MenuItem? FindMenuItem(int type, IntPtr value)
+            => type switch
+            {
+                FindHandle => FindMenuItemByHandle(value),
+                FindShortcut => FindMenuItemByShortcut((Shortcut)(int)value),
+                _ => null
+            };
+
+        private MenuItem? FindMenuItemByHandle(IntPtr value)
         {
             for (int i = 0; i < ItemCount; i++)
             {
                 MenuItem? item = _items[i];
-                switch (type)
+                if (item._handle == value)
                 {
-                    case FindHandle:
-                        if (item._handle == value)
-                        {
-                            return item;
-                        }
-
-                        break;
-                    case FindShortcut:
-                        if (item.Shortcut == (Shortcut)(int)value)
-                        {
-                            return item;
-                        }
-
-                        break;
+                    return item;
                 }
-                item = item.FindMenuItem(type, value);
+                item = item.FindMenuItemByHandle(value);
+                if (item is not null)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        private MenuItem? FindMenuItemByShortcut(Shortcut value)
+        {
+            for (int i = 0; i < ItemCount; i++)
+            {
+                MenuItem? item = _items[i];
+                if (item.Shortcut == value)
+                {
+                    return item;
+                }
+                item = item.FindMenuItemByShortcut(value);
                 if (item is not null)
                 {
                     return item;
@@ -554,7 +567,7 @@ namespace WinFormsLegacyControls
 
         internal virtual bool ProcessInitMenuPopup(IntPtr handle)
         {
-            MenuItem? item = FindMenuItem(FindHandle, handle);
+            MenuItem? item = FindMenuItemByHandle(handle);
             if (item is not null)
             {
                 item.OnInitMenuPopup(EventArgs.Empty);
@@ -566,7 +579,7 @@ namespace WinFormsLegacyControls
 
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            MenuItem? item = FindMenuItem(FindShortcut, (IntPtr)(int)keyData);
+            MenuItem? item = FindMenuItemByShortcut((Shortcut)(int)keyData);
             return item is not null ? item.ShortcutClick() : false;
         }
 
@@ -608,7 +621,7 @@ namespace WinFormsLegacyControls
             }
             else
             {
-                menu = FindMenuItem(FindHandle, m.LParam);
+                menu = FindMenuItemByHandle(m.LParam);
                 if (menu is null)
                 {
                     return;
