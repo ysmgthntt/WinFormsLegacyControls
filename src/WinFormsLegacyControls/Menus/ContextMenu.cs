@@ -215,6 +215,10 @@ namespace WinFormsLegacyControls
 
         internal void RaiseCollapse()
         {
+            // ToolBarButton.DropDownMenu と ToolBar.ContextMenu の両方設定されている場合、
+            // ToolBarButton.DropDownMenu の Collapse 時 ToolBar.ContextMenu の Collapse も発生してしまう。
+            // ContextMenu は NativeWindow で処理しており、 Control の WndProc より先に呼ばれるため、
+            // ToolBarButton.DropDownMenu を ToolBar.WndProc で処理済でもキャンセルできない。
             if (s_lastPopupHandle == _handle)
             {
                 s_lastPopupHandle = -1;

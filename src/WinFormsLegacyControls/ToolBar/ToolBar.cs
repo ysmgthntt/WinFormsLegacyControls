@@ -1711,6 +1711,14 @@ namespace WinFormsLegacyControls
                     break;
 
                 // [spec]
+                case PInvoke.WM_INITMENUPOPUP:
+                    if (_toolBarButtonContextMenu is not null)
+                        _toolBarButtonContextMenu.ProcessInitMenuPopup(m.WParam);
+                    else
+                        base.WndProc(ref m);
+                    break;
+
+                // [spec]
                 case PInvoke.WM_EXITMENULOOP:
                     if (_toolBarButtonContextMenu is { } contextMenu)
                     {

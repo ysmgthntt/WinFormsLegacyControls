@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             mainMenu1 = new WinFormsLegacyControls.MainMenu(components);
             menuItem1 = new WinFormsLegacyControls.MenuItem();
             menuItem4 = new WinFormsLegacyControls.MenuItem();
@@ -62,6 +62,10 @@
             contextMenu2 = new WinFormsLegacyControls.ContextMenu();
             menuItem12 = new WinFormsLegacyControls.MenuItem();
             menuItem13 = new WinFormsLegacyControls.MenuItem();
+            menuItem14 = new WinFormsLegacyControls.MenuItem();
+            menuItem15 = new WinFormsLegacyControls.MenuItem();
+            menuItem16 = new WinFormsLegacyControls.MenuItem();
+            menuItem17 = new WinFormsLegacyControls.MenuItem();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)statusBarPanel1).BeginInit();
@@ -82,6 +86,7 @@
             // menuItem4
             // 
             menuItem4.Index = 0;
+            menuItem4.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem16, menuItem17 });
             menuItem4.Text = "menuItem4";
             // 
             // menuItem5
@@ -284,12 +289,33 @@
             // menuItem12
             // 
             menuItem12.Index = 0;
+            menuItem12.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem14, menuItem15 });
             menuItem12.Text = "menuItem12";
             // 
             // menuItem13
             // 
             menuItem13.Index = 1;
             menuItem13.Text = "menuItem13";
+            // 
+            // menuItem14
+            // 
+            menuItem14.Index = 0;
+            menuItem14.Text = "menuItem14";
+            // 
+            // menuItem15
+            // 
+            menuItem15.Index = 1;
+            menuItem15.Text = "menuItem15";
+            // 
+            // menuItem16
+            // 
+            menuItem16.Index = 0;
+            menuItem16.Text = "menuItem16";
+            // 
+            // menuItem17
+            // 
+            menuItem17.Index = 1;
+            menuItem17.Text = "menuItem17";
             // 
             // Form1
             // 
@@ -346,5 +372,9 @@
         private WinFormsLegacyControls.ContextMenu contextMenu2;
         private WinFormsLegacyControls.MenuItem menuItem12;
         private WinFormsLegacyControls.MenuItem menuItem13;
+        private WinFormsLegacyControls.MenuItem menuItem16;
+        private WinFormsLegacyControls.MenuItem menuItem17;
+        private WinFormsLegacyControls.MenuItem menuItem14;
+        private WinFormsLegacyControls.MenuItem menuItem15;
     }
 }

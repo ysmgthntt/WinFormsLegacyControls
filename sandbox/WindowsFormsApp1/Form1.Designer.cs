@@ -67,6 +67,10 @@ namespace WindowsFormsApp1
             this.contextMenu2 = new System.Windows.Forms.ContextMenu();
             this.menuItem12 = new System.Windows.Forms.MenuItem();
             this.menuItem13 = new System.Windows.Forms.MenuItem();
+            this.menuItem14 = new System.Windows.Forms.MenuItem();
+            this.menuItem15 = new System.Windows.Forms.MenuItem();
+            this.menuItem16 = new System.Windows.Forms.MenuItem();
+            this.menuItem17 = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.statusBarPanel3)).BeginInit();
@@ -129,6 +133,9 @@ namespace WindowsFormsApp1
             // menuItem4
             // 
             this.menuItem4.Index = 0;
+            this.menuItem4.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem16,
+            this.menuItem17});
             this.menuItem4.Text = "mainMenu4";
             // 
             // menuItem5
@@ -321,12 +328,35 @@ namespace WindowsFormsApp1
             // menuItem12
             // 
             this.menuItem12.Index = 0;
+            this.menuItem12.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem14,
+            this.menuItem15});
             this.menuItem12.Text = "contextMenu2-1";
             // 
             // menuItem13
             // 
             this.menuItem13.Index = 1;
             this.menuItem13.Text = "contextMenu2-2";
+            // 
+            // menuItem14
+            // 
+            this.menuItem14.Index = 0;
+            this.menuItem14.Text = "contextMenu2-3";
+            // 
+            // menuItem15
+            // 
+            this.menuItem15.Index = 1;
+            this.menuItem15.Text = "contextMenu2-4";
+            // 
+            // menuItem16
+            // 
+            this.menuItem16.Index = 0;
+            this.menuItem16.Text = "mainMenu4-1";
+            // 
+            // menuItem17
+            // 
+            this.menuItem17.Index = 1;
+            this.menuItem17.Text = "mainMenu4-2";
             // 
             // Form1
             // 
@@ -384,6 +414,10 @@ namespace WindowsFormsApp1
         private ContextMenu contextMenu2;
         private MenuItem menuItem12;
         private MenuItem menuItem13;
+        private MenuItem menuItem16;
+        private MenuItem menuItem17;
+        private MenuItem menuItem14;
+        private MenuItem menuItem15;
     }
 }
 

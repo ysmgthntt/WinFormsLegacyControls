@@ -102,6 +102,14 @@ namespace WinFormsLegacyControls.Menus.Migration
                     break;
 
                 // [spec]
+                case PInvoke.WM_INITMENUPOPUP:
+                    if (_treeNodeContextMenu is not null)
+                        _treeNodeContextMenu.ProcessInitMenuPopup(m.WParam);
+                    else
+                        base.WndProc(ref m);
+                    break;
+
+                // [spec]
                 case PInvoke.WM_EXITMENULOOP:
                     if (_treeNodeContextMenu is { } contextMenu)
                     {
