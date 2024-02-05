@@ -1229,10 +1229,8 @@ namespace WinFormsLegacyControls
             /// </summary>
             public virtual StatusBarPanel Add(string text)
             {
-                StatusBarPanel panel = new StatusBarPanel
-                {
-                    Text = text
-                };
+                StatusBarPanel panel = new StatusBarPanel();
+                panel.Text = text;
                 Add(panel);
                 return panel;
             }
@@ -1539,11 +1537,9 @@ namespace WinFormsLegacyControls
                     }
                     */
 
-                    var cp = new CreateParams
-                    {
-                        Parent = IntPtr.Zero,
-                        ClassName = PInvoke.TOOLTIPS_CLASS
-                    };
+                    CreateParams cp = new CreateParams();
+                    cp.Parent = IntPtr.Zero;
+                    cp.ClassName = PInvoke.TOOLTIPS_CLASS;
                     cp.Style |= (int)PInvoke.TTS_ALWAYSTIP;
                     cp.ExStyle = 0;
                     cp.Caption = null;
@@ -1766,8 +1762,7 @@ namespace WinFormsLegacyControls
                 ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS;
 
                 // RightToLeft reading order
-                Control richParent = _parent;
-                if (richParent is not null && richParent.RightToLeft == RightToLeft.Yes)
+                if (_parent.RightToLeft == RightToLeft.Yes)
                 {
                     ti.Info.uFlags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                 }

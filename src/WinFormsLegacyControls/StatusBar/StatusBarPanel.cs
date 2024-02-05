@@ -120,11 +120,11 @@ namespace WinFormsLegacyControls
             get => _borderStyle;
             set
             {
+                //valid values are 0x1 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelBorderStyle.None, (int)StatusBarPanelBorderStyle.Sunken))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(StatusBarPanelBorderStyle));
                 }
-
                 if (_borderStyle != value)
                 {
                     _borderStyle = value;

@@ -1835,6 +1835,7 @@ namespace WinFormsLegacyControls
 
                 }
             }
+
             /// <summary>
             ///  Gets the number of buttons in the toolbar button collection.
             /// </summary>

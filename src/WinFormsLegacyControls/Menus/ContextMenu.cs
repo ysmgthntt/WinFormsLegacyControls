@@ -115,8 +115,7 @@ namespace WinFormsLegacyControls
             }
         }
 
-        internal override bool RenderIsRightToLeft
-            => (_rightToLeft == RightToLeft.Yes);
+        internal override bool RenderIsRightToLeft => (_rightToLeft == RightToLeft.Yes);
 
         /// <summary>
         ///  Fires the popup event

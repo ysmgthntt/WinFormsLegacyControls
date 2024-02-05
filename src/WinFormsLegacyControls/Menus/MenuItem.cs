@@ -322,6 +322,11 @@ namespace WinFormsLegacyControls
             {
                 if (_data is not null && MdiList)
                 {
+                    if (Parent is not null && Parent is not MenuItem)
+                    {
+                        return true;
+                    }
+
                     for (int i = 0; i < ItemCount; i++)
                     {
                         if (_items[i]._data.UserData is not MdiListUserData)
@@ -331,11 +336,6 @@ namespace WinFormsLegacyControls
                     }
 
                     if (FindMdiForms(out _).Length > 0)
-                    {
-                        return true;
-                    }
-
-                    if (Parent is not null && Parent is not MenuItem)
                     {
                         return true;
                     }
@@ -1107,7 +1107,7 @@ namespace WinFormsLegacyControls
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
                 }
-                else if (_data is not null)
+                else //if (_data is not null)
                 {
                     MenuItem? currentMenuItem = _data._firstItem;
                     while (currentMenuItem is not null)
@@ -1165,7 +1165,7 @@ namespace WinFormsLegacyControls
 
                 // Add new items
                 Form[] forms = FindMdiForms(out var activeMdiChild);
-                if (forms is not null && forms.Length > 0)
+                if (forms is { Length: > 0 })
                 {
 
                     //Form activeMdiChild = GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
@@ -1851,7 +1851,7 @@ namespace WinFormsLegacyControls
                 Debug.Assert(forms is not null, "Didn't get a list of the MDI Forms.");
                 //Form active = _parent.GetMainMenu()./*GetFormUnsafe()*/form.ActiveMdiChild;
                 Debug.Assert(active is not null, "Didn't get the active MDI child");
-                if (forms is not null && forms.Length > 0 && active is not null)
+                if (forms is { Length: > 0 } && active is not null)
                 {
                     Type? t = Type.GetType("System.Windows.Forms.MdiWindowDialog, System.Windows.Forms");
                     if (t is not null)

@@ -250,10 +250,7 @@ namespace WinFormsLegacyControls
                     // remove the item before we dispose it so it still has valid state
                     // for undo/redo
                     //
-                    if (item.Site is not null && item.Site.Container is not null)
-                    {
-                        item.Site.Container.Remove(item);
-                    }
+                    item.Site?.Container?.Remove(item);
 
                     item.Parent = null;
                     item.Dispose();

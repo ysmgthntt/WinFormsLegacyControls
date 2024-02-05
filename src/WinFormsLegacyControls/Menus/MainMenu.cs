@@ -175,8 +175,7 @@ namespace WinFormsLegacyControls
         /// <summary>
         ///  Returns true if the RightToLeft should be persisted in code gen.
         /// </summary>
-        private bool ShouldSerializeRightToLeft()
-            => RightToLeft.Inherit != _rightToLeft;
+        private bool ShouldSerializeRightToLeft() => RightToLeft.Inherit != _rightToLeft;
 
         /*
         /// <summary>
