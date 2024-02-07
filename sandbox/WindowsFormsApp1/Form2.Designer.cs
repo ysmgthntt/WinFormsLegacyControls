@@ -38,6 +38,12 @@
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
             this.button1 = new System.Windows.Forms.Button();
+            this.mnuNewWindow = new System.Windows.Forms.MenuItem();
+            this.mnuCascade = new System.Windows.Forms.MenuItem();
+            this.mnuTileVertical = new System.Windows.Forms.MenuItem();
+            this.mnuTileHorizontal = new System.Windows.Forms.MenuItem();
+            this.mnuCloseAll = new System.Windows.Forms.MenuItem();
+            this.mnuArrangeIcons = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -79,6 +85,13 @@
             // 
             this.menuItem5.Index = 3;
             this.menuItem5.MdiList = true;
+            this.menuItem5.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuNewWindow,
+            this.mnuCascade,
+            this.mnuTileVertical,
+            this.mnuTileHorizontal,
+            this.mnuCloseAll,
+            this.mnuArrangeIcons});
             this.menuItem5.Text = "&Window";
             // 
             // contextMenu1
@@ -103,6 +116,38 @@
             this.button1.Text = "MainMenu";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // mnuNewWindow
+            // 
+            this.mnuNewWindow.Index = 0;
+            this.mnuNewWindow.Text = "&New Window";
+            // 
+            // mnuCascade
+            // 
+            this.mnuCascade.Index = 1;
+            this.mnuCascade.Text = "&Cascade";
+            // 
+            // mnuTileVertical
+            // 
+            this.mnuTileVertical.Index = 2;
+            this.mnuTileVertical.Shortcut = System.Windows.Forms.Shortcut.CtrlV;
+            this.mnuTileVertical.Text = "Tile &Vertical";
+            // 
+            // mnuTileHorizontal
+            // 
+            this.mnuTileHorizontal.Index = 3;
+            this.mnuTileHorizontal.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
+            this.mnuTileHorizontal.Text = "Tile &Horizontal";
+            // 
+            // mnuCloseAll
+            // 
+            this.mnuCloseAll.Index = 4;
+            this.mnuCloseAll.Text = "C&lose All";
+            // 
+            // mnuArrangeIcons
+            // 
+            this.mnuArrangeIcons.Index = 5;
+            this.mnuArrangeIcons.Text = "&Arrange Icons";
             // 
             // Form2
             // 
@@ -130,5 +175,11 @@
         private ContextMenu contextMenu1;
         private MenuItem menuItem6;
         private Button button1;
+        private MenuItem mnuNewWindow;
+        private MenuItem mnuCascade;
+        private MenuItem mnuTileVertical;
+        private MenuItem mnuTileHorizontal;
+        private MenuItem mnuCloseAll;
+        private MenuItem mnuArrangeIcons;
     }
 }

@@ -746,7 +746,7 @@ namespace WinFormsLegacyControls
 
             // Insert extra ampersands
             //
-            StringBuilder newString = new();
+            StringBuilder newString = new(value.Length + 2);
             newString.Append(value.AsSpan(0, firstAmpersand));
             for (int i = firstAmpersand; i < value.Length; ++i)
             {

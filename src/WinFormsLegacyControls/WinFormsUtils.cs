@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -42,9 +43,42 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Adds an extra &amp; to to the text so that "Fish &amp; Chips" can be displayed on a menu item
+        ///  without underlining anything.
+        ///  Fish &amp; Chips --> Fish &amp;&amp; Chips
+        /// </summary>
+        internal static string? EscapeTextWithAmpersands(string? text)
+        {
+            if (text is null)
+            {
+                return null;
+            }
+
+            int index = text.IndexOf('&');
+            if (index == -1)
+            {
+                return text;
+            }
+
+            StringBuilder str = new(text.Length + 2);
+            str.Append(text.AsSpan(0, index));
+            for (; index < text.Length; ++index)
+            {
+                if (text[index] == '&')
+                {
+                    str.Append('&');
+                }
+
+                str.Append(text[index]);
+            }
+
+            return str.ToString();
+        }
+
+        /// <summary>
         ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
         ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
-        /// <summary>
+        /// </summary>
         public static char GetMnemonic(string text, bool convertToUpperCase)
         {
             char mnemonic = '\0';

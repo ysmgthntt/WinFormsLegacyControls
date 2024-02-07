@@ -35,6 +35,12 @@
             menuItem3 = new WinFormsLegacyControls.MenuItem();
             menuItem4 = new WinFormsLegacyControls.MenuItem();
             menuItem5 = new WinFormsLegacyControls.MenuItem();
+            mnuNewWindow = new WinFormsLegacyControls.MenuItem();
+            mnuCascade = new WinFormsLegacyControls.MenuItem();
+            mnuTileVertical = new WinFormsLegacyControls.MenuItem();
+            mnuTileHorizontal = new WinFormsLegacyControls.MenuItem();
+            mnuCloseAll = new WinFormsLegacyControls.MenuItem();
+            mnuArrangeIcons = new WinFormsLegacyControls.MenuItem();
             contextMenu1 = new WinFormsLegacyControls.ContextMenu();
             menuItem6 = new WinFormsLegacyControls.MenuItem();
             button1 = new Button();
@@ -71,7 +77,40 @@
             // 
             menuItem5.Index = 3;
             menuItem5.MdiList = true;
+            menuItem5.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { mnuNewWindow, mnuCascade, mnuTileVertical, mnuTileHorizontal, mnuCloseAll, mnuArrangeIcons });
             menuItem5.Text = "&Window";
+            // 
+            // mnuNewWindow
+            // 
+            mnuNewWindow.Index = 0;
+            mnuNewWindow.Text = "&New Window";
+            // 
+            // mnuCascade
+            // 
+            mnuCascade.Index = 1;
+            mnuCascade.Text = "&Cascade";
+            // 
+            // mnuTileVertical
+            // 
+            mnuTileVertical.Index = 2;
+            mnuTileVertical.Shortcut = Shortcut.CtrlV;
+            mnuTileVertical.Text = "Tile &Vertical";
+            // 
+            // mnuTileHorizontal
+            // 
+            mnuTileHorizontal.Index = 3;
+            mnuTileHorizontal.Shortcut = Shortcut.CtrlH;
+            mnuTileHorizontal.Text = "Tile &Horizontal";
+            // 
+            // mnuCloseAll
+            // 
+            mnuCloseAll.Index = 4;
+            mnuCloseAll.Text = "C&lose All";
+            // 
+            // mnuArrangeIcons
+            // 
+            mnuArrangeIcons.Index = 5;
+            mnuArrangeIcons.Text = "&Arrange Icons";
             // 
             // contextMenu1
             // 
@@ -120,5 +159,11 @@
         private WinFormsLegacyControls.ContextMenu contextMenu1;
         private WinFormsLegacyControls.MenuItem menuItem6;
         private Button button1;
+        private WinFormsLegacyControls.MenuItem mnuNewWindow;
+        private WinFormsLegacyControls.MenuItem mnuCascade;
+        private WinFormsLegacyControls.MenuItem mnuTileVertical;
+        private WinFormsLegacyControls.MenuItem mnuTileHorizontal;
+        private WinFormsLegacyControls.MenuItem mnuCloseAll;
+        private WinFormsLegacyControls.MenuItem mnuArrangeIcons;
     }
 }

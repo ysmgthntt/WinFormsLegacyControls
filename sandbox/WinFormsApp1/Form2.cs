@@ -20,11 +20,38 @@ namespace WinFormsApp1
             menuItem2.Click += (_, _) => Close();
             menuItem3.Click += MenuItem3_Click;
             menuItem4.Click += MenuItem4_Click;
+
+            mnuNewWindow.Click += (_, _) => AddNewMdiForm();
+            mnuCascade.Click += (_, _) => LayoutMdi(MdiLayout.Cascade);
+            mnuTileVertical.Click += (_, _) => LayoutMdi(MdiLayout.TileVertical);
+            mnuTileHorizontal.Click += (_, _) => LayoutMdi(MdiLayout.TileHorizontal);
+            mnuCloseAll.Click += (_, _) => {
+                foreach (Form form in MdiChildren)
+                    form.Close();
+            };
+            mnuArrangeIcons.Click += (_, _) => LayoutMdi(MdiLayout.ArrangeIcons);
+
+            /*
+            while (_count < 100)
+            {
+                _count++;
+
+                Form form = new Form();
+                form.MdiParent = this;
+                form.Text = "MDI Form " + _count;
+                form.Show();
+            }
+            */
         }
 
         private int _count = 0;
 
         private void MenuItem3_Click(object? sender, EventArgs e)
+        {
+            AddNewMdiForm();
+        }
+
+        private void AddNewMdiForm()
         {
             _count++;
 

@@ -1195,24 +1195,26 @@ namespace WinFormsLegacyControls
                     bool activeFormAdded = false;
                     for (int i = 0; i < forms.Length; i++)
                     {
-                        if (forms[i].Visible)
+                        Form form = forms[i];
+                        if (form.Visible)
                         {
                             visibleChildren++;
                             if ((activeFormAdded && (formsAddedToMenu < MaxMenuForms)) ||  // don't exceed max
                                 (!activeFormAdded && (formsAddedToMenu < (MaxMenuForms - 1)) ||  // save room for active if it's not in yet
-                                (forms[i].Equals(activeMdiChild))))
+                                (form.Equals(activeMdiChild))))
                             {
                                 // there's always room for activeMdiChild
                                 MenuItem windowItem = CreateSameTypeInstance(thisType);
                                 windowItem._data.UserData = new MdiListFormData(this, i);
 
-                                if (forms[i].Equals(activeMdiChild))
+                                if (form.Equals(activeMdiChild))
                                 {
                                     windowItem.Checked = true;
                                     activeFormAdded = true;
                                 }
 
-                                windowItem.Text = string.Create(CultureInfo.CurrentUICulture, $"&{accel} {forms[i].Text}");
+                                string? text = WindowsFormsUtils.EscapeTextWithAmpersands(form.Text);
+                                windowItem.Text = string.Create(CultureInfo.CurrentUICulture, $"&{accel} {text}");
                                 accel++;
                                 formsAddedToMenu++;
                                 senderMenu.MenuItems.Add(windowItem);
