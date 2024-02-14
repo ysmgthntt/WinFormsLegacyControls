@@ -1153,7 +1153,19 @@ namespace WinFormsLegacyControls
         ///  event.
         /// </summary>
         protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e)
-            => ((ToolBarButtonClickEventHandler?)Events[s_buttonClickEvent])?.Invoke(this, e);
+        {
+            ((ToolBarButtonClickEventHandler?)Events[s_buttonClickEvent])?.Invoke(this, e);
+
+            // [Command]
+            if (e.Button.Command is { } command)
+            {
+                object? commandParameter = e.Button.CommandParameter;
+                if (command.CanExecute(commandParameter))
+                {
+                    command.Execute(commandParameter);
+                }
+            }
+        }
 
         /// <summary>
         ///  Raises the <see cref='ButtonDropDown'/>

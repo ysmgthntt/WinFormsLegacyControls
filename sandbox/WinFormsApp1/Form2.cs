@@ -31,6 +31,9 @@ namespace WinFormsApp1
             };
             mnuArrangeIcons.Click += (_, _) => LayoutMdi(MdiLayout.ArrangeIcons);
 
+            var command = new SimpleCommand(_ => MessageBox.Show(this, "Container Command"), _ => true);
+            menuItem7.Command = command;
+
             /*
             while (_count < 100)
             {
@@ -71,6 +74,11 @@ namespace WinFormsApp1
             {
                 ((Form?)s)?.SetMenu(null);
             };
+
+            MenuItem commandMenu = new MenuItem("M&DI Command " + _count);
+            file.MenuItems.Add(commandMenu);
+            var command = new SimpleCommand(_ => MessageBox.Show(this, "MDI Command " + _count), _ => true);
+            commandMenu.Command = command;
 
             form.Show();
         }

@@ -14,6 +14,8 @@ namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
+        private bool _canExecute = true;
+
         public Form1()
         {
             InitializeComponent();
@@ -73,6 +75,23 @@ namespace WinFormsApp1
 
             statusBarPanel2.Style = StatusBarPanelStyle.OwnerDraw;
             statusBar1.DrawItem += StatusBar1_DrawItem;
+
+
+            // Command
+            var command1 = new SimpleCommand(p => MessageBox.Show(this, $"command1: {p}"), _ => _canExecute);
+            menuItem11.Command = command1;
+            menuItem11.CommandParameter = nameof(menuItem11);
+            menuItem15.Command = command1;
+            menuItem15.CommandParameter = nameof(menuItem15);
+            menuItem17.Command = command1;
+            menuItem17.CommandParameter = nameof(menuItem17);
+            toolBarButton3.Command = command1;
+            toolBarButton3.CommandParameter = nameof(toolBarButton3);
+
+            var command2 = new SimpleCommand(_ => { _canExecute = !_canExecute; command1.RaiseCanExecuteChanged(); }, _ => true);
+            menuItem10.Command = command2;
+            menuItem14.Command = command2;
+            menuItem16.Command = command2;
         }
 
         private void button1_Click(object sender, EventArgs e)

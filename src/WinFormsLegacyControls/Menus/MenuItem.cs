@@ -932,6 +932,12 @@ namespace WinFormsLegacyControls
 
                 _uniqueID = 0;
 
+                // [Command]
+                if (_command is not null)
+                {
+                    // Detach CanExecuteChanged event
+                    Command = null;
+                }
             }
 
             FreeMsaaMenuInfo();
@@ -1289,6 +1295,15 @@ namespace WinFormsLegacyControls
             else
             {
                 _data._onClick?.Invoke(this, e);
+
+                // [Command]
+                if (_command is not null)
+                {
+                    if (_command.CanExecute(_commandParameter))
+                    {
+                        _command.Execute(_commandParameter);
+                    }
+                }
             }
         }
 

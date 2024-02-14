@@ -24,7 +24,7 @@ namespace WinFormsLegacyControls
     [DefaultProperty(nameof(Text))]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
-    public class ToolBarButton : Component
+    public partial class ToolBarButton : Component
     {
         string? _text;
         string? _name;
@@ -512,6 +512,13 @@ namespace WinFormsLegacyControls
                     {
                         _parent.Buttons.RemoveAt(index);
                     }
+                }
+
+                // [Command]
+                if (_command is not null)
+                {
+                    // Detach CanExecuteChanged event
+                    Command = null;
                 }
             }
             base.Dispose(disposing);

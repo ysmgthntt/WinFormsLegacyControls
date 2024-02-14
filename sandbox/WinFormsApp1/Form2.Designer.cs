@@ -32,6 +32,7 @@
             mainMenu1 = new WinFormsLegacyControls.MainMenu(components);
             menuItem1 = new WinFormsLegacyControls.MenuItem();
             menuItem2 = new WinFormsLegacyControls.MenuItem();
+            menuItem7 = new WinFormsLegacyControls.MenuItem();
             menuItem3 = new WinFormsLegacyControls.MenuItem();
             menuItem4 = new WinFormsLegacyControls.MenuItem();
             menuItem5 = new WinFormsLegacyControls.MenuItem();
@@ -53,7 +54,7 @@
             // menuItem1
             // 
             menuItem1.Index = 0;
-            menuItem1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem2 });
+            menuItem1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem2, menuItem7 });
             menuItem1.MergeType = WinFormsLegacyControls.MenuMerge.MergeItems;
             menuItem1.Text = "&File";
             // 
@@ -62,6 +63,11 @@
             menuItem2.Index = 0;
             menuItem2.MergeOrder = 100;
             menuItem2.Text = "&Close";
+            // 
+            // menuItem7
+            // 
+            menuItem7.Index = 1;
+            menuItem7.Text = "C&ontainer Command";
             // 
             // menuItem3
             // 
@@ -165,5 +171,6 @@
         private WinFormsLegacyControls.MenuItem mnuTileHorizontal;
         private WinFormsLegacyControls.MenuItem mnuCloseAll;
         private WinFormsLegacyControls.MenuItem mnuArrangeIcons;
+        private WinFormsLegacyControls.MenuItem menuItem7;
     }
 }
