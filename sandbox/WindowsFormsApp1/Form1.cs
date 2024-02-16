@@ -82,6 +82,10 @@ namespace WindowsFormsApp1
 
             toolBarButton2.Text = textBox1.Text;
             toolBarButton2.Pushed = !toolBarButton2.Pushed;
+
+            var clone = menuItem5.CloneMenu();
+            clone.Click += (sender, e) => MessageBox.Show(this, "Clone");
+            menuItem2.MenuItems.Add(clone);
         }
 
         private void MenuItem_Click(object? sender, EventArgs e)

@@ -86,6 +86,13 @@ namespace WinFormsLegacyControls
                 Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.SetValue(form, menu);
         }
 
+        public static MainMenu? GetMergedMenu(this Form form)
+        {
+            if (Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetWindow(form, out var window))
+                return window.MergedMenu;
+            return null;
+        }
+
         internal static MainMenuSupportFormNativeWindow? GetMainMenuSupportFormNativeWindow(this Form form)
         {
             Holder<Form, MainMenuSupportFormNativeWindow, MainMenu>.TryGetWindow(form, out var window);

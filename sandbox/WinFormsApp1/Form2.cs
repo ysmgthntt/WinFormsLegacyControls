@@ -68,7 +68,7 @@ namespace WinFormsApp1
             MenuItem close = new MenuItem("&Close " + form.Text, (_, _) => form.Close());
             file.MenuItems.Add(close);
             mainMenu.MenuItems.Add(file);
-            mainMenu.MenuItems.Add("MDI Menu " + _count);
+            mainMenu.MenuItems.Add("MDI Menu " + _count, (_, _) => MessageBox.Show(this, "MDI Menu " + _count));
             mainMenu.SetMenu(form, true);
             form.Click += (s, e) =>
             {
@@ -79,6 +79,15 @@ namespace WinFormsApp1
             file.MenuItems.Add(commandMenu);
             var command = new SimpleCommand(_ => MessageBox.Show(this, "MDI Command " + _count), _ => true);
             commandMenu.Command = command;
+
+            var mm = form.GetMergedMenu();
+            if (mm is not null)
+            {
+                var m1 = mm.MenuItems[4];
+                m1.Click += (_, _) => MessageBox.Show(this, "m1");
+                var m2 = mm.MenuItems[5];
+                m2.Click += (_, _) => MessageBox.Show(this, "m2");
+            }
 
             form.Show();
         }

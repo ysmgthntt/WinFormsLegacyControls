@@ -35,15 +35,16 @@
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
-            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
-            this.menuItem6 = new System.Windows.Forms.MenuItem();
-            this.button1 = new System.Windows.Forms.Button();
             this.mnuNewWindow = new System.Windows.Forms.MenuItem();
             this.mnuCascade = new System.Windows.Forms.MenuItem();
             this.mnuTileVertical = new System.Windows.Forms.MenuItem();
             this.mnuTileHorizontal = new System.Windows.Forms.MenuItem();
             this.mnuCloseAll = new System.Windows.Forms.MenuItem();
             this.mnuArrangeIcons = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
+            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mainMenu1
@@ -52,7 +53,8 @@
             this.menuItem1,
             this.menuItem3,
             this.menuItem4,
-            this.menuItem5});
+            this.menuItem5,
+            this.menuItem7});
             // 
             // menuItem1
             // 
@@ -94,29 +96,6 @@
             this.mnuArrangeIcons});
             this.menuItem5.Text = "&Window";
             // 
-            // contextMenu1
-            // 
-            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem6});
-            // 
-            // menuItem6
-            // 
-            this.menuItem6.Index = 0;
-            this.menuItem6.MdiList = true;
-            this.menuItem6.Text = "&Window";
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(676, 404);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 34);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "MainMenu";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // mnuNewWindow
             // 
             this.mnuNewWindow.Index = 0;
@@ -148,6 +127,34 @@
             // 
             this.mnuArrangeIcons.Index = 5;
             this.mnuArrangeIcons.Text = "&Arrange Icons";
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 4;
+            this.menuItem7.Text = "Container Menu";
+            // 
+            // contextMenu1
+            // 
+            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem6});
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 0;
+            this.menuItem6.MdiList = true;
+            this.menuItem6.Text = "&Window";
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button1.Location = new System.Drawing.Point(676, 404);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(112, 34);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "MainMenu";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form2
             // 
@@ -181,5 +188,6 @@
         private MenuItem mnuTileHorizontal;
         private MenuItem mnuCloseAll;
         private MenuItem mnuArrangeIcons;
+        private MenuItem menuItem7;
     }
 }

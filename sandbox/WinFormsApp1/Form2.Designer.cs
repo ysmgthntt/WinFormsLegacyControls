@@ -45,11 +45,12 @@
             contextMenu1 = new WinFormsLegacyControls.ContextMenu();
             menuItem6 = new WinFormsLegacyControls.MenuItem();
             button1 = new Button();
+            menuItem8 = new WinFormsLegacyControls.MenuItem();
             SuspendLayout();
             // 
             // mainMenu1
             // 
-            mainMenu1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem1, menuItem3, menuItem4, menuItem5 });
+            mainMenu1.MenuItems.AddRange(new WinFormsLegacyControls.MenuItem[] { menuItem1, menuItem3, menuItem4, menuItem5, menuItem8 });
             // 
             // menuItem1
             // 
@@ -140,6 +141,11 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // menuItem8
+            // 
+            menuItem8.Index = 4;
+            menuItem8.Text = "Container Menu";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -172,5 +178,6 @@
         private WinFormsLegacyControls.MenuItem mnuCloseAll;
         private WinFormsLegacyControls.MenuItem mnuArrangeIcons;
         private WinFormsLegacyControls.MenuItem menuItem7;
+        private WinFormsLegacyControls.MenuItem menuItem8;
     }
 }

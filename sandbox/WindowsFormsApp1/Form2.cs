@@ -65,12 +65,21 @@ namespace WindowsFormsApp1
             MenuItem close = new MenuItem("&Close " + form.Text, (_, _) => form.Close());
             file.MenuItems.Add(close);
             mainMenu.MenuItems.Add(file);
-            mainMenu.MenuItems.Add("MDI Menu " + _count);
+            mainMenu.MenuItems.Add("MDI Menu " + _count, (_, _) => MessageBox.Show(this, "MDI Menu " + _count));
             form.Menu = mainMenu;
             form.Click += (s, e) =>
             {
                 ((Form)s).Menu = null;
             };
+
+            var mm = form.MergedMenu;
+            if (mm is not null)
+            {
+                var m1 = mm.MenuItems[4];
+                m1.Click += (_, _) => MessageBox.Show(this, "m1");
+                var m2 = mm.MenuItems[5];
+                m2.Click += (_, _) => MessageBox.Show(this, "m2");
+            }
 
             form.Show();
         }
