@@ -2,15 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
-using System.ComponentModel;
-using System.Globalization;
-using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Reflection;
-
 #if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
 #else
@@ -21,7 +12,7 @@ namespace WinFormsLegacyControls
     {
         internal sealed class MenuItemData : ICommandExecutor
         {
-            internal MenuItem _baseItem = null!;
+            internal MenuItem _baseItem;
             internal MenuItem? _firstItem;
 
             private int _state;
@@ -44,7 +35,11 @@ namespace WinFormsLegacyControls
                                   string? caption, EventHandler? onClick, EventHandler? onPopup, EventHandler? onSelect,
                                   DrawItemEventHandler? onDrawItem, MeasureItemEventHandler? onMeasureItem)
             {
-                AddItem(baseItem);
+                //AddItem(baseItem);
+                Debug.Assert(baseItem._data is null);
+                _firstItem = baseItem;
+                _baseItem = baseItem;
+
                 _mergeType = mergeType;
                 _mergeOrder = mergeOrder;
                 _shortcut = shortcut;

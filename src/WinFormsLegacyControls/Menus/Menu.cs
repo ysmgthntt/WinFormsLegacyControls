@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 #if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
@@ -36,6 +33,8 @@ namespace WinFormsLegacyControls
         internal bool _created;
         private object? _userData;
         private string? _name;
+
+        private protected Menu() { }
 
         /// <summary>
         ///  This is an abstract class.  Instances cannot be created, so the constructor

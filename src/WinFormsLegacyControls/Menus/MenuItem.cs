@@ -2,14 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
-using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Reflection;
 
 #if WINFORMS_NAMESPACE
 namespace System.Windows.Forms
@@ -41,7 +36,7 @@ namespace WinFormsLegacyControls
         //private const int StateHiLite = 0x00000080;
 
         private bool _hasHandle;
-        private MenuItemData _data = null!;
+        private MenuItemData _data;
         private int _dataVersion;
         private MenuItem? _nextLinkedItem; // Next item linked to the same MenuItemData.
 
@@ -118,10 +113,11 @@ namespace WinFormsLegacyControls
         /// </summary>
         public MenuItem(MenuMerge mergeType, int mergeOrder, Shortcut shortcut,
                         string? text, EventHandler? onClick, EventHandler? onPopup,
-                        EventHandler? onSelect, MenuItem[]? items) : base(items)
+                        EventHandler? onSelect, MenuItem[]? items)
+            : base(items)
         {
-            new MenuItemData(this, mergeType, mergeOrder, shortcut, true,
-                             text, onClick, onPopup, onSelect, null, null);
+            _data = new MenuItemData(this, mergeType, mergeOrder, shortcut, true,
+                                     text, onClick, onPopup, onSelect, null, null);
 
 #if DEBUG
             _debugText = text;
@@ -740,8 +736,14 @@ namespace WinFormsLegacyControls
         /// </summary>
         public virtual MenuItem CloneMenu()
         {
-            var newItem = new MenuItem();
-            newItem.CloneMenu(this);
+            CheckIfDisposed();
+            MenuItem newItem = new MenuItem(_data._mergeType, _data._mergeOrder, _data._shortcut, _data._caption,
+                _data._onClick, _data._onPopup, _data._onSelect, null);
+            newItem.CloneMenu((Menu)this);
+            newItem._data._showShortcut = _data._showShortcut;
+            newItem._data._onDrawItem = _data._onDrawItem;
+            newItem._data._onMeasureItem = _data._onMeasureItem;
+            newItem._data.SetState(_data.State & StateCloneMask, true);
             return newItem;
         }
 
@@ -751,11 +753,16 @@ namespace WinFormsLegacyControls
         protected void CloneMenu(MenuItem itemSrc)
         {
             base.CloneMenu(itemSrc);
-            int state = itemSrc._data.State;
-            new MenuItemData(this,
-                             itemSrc.MergeType, itemSrc.MergeOrder, itemSrc.Shortcut, itemSrc.ShowShortcut,
-                             itemSrc.Text, itemSrc._data._onClick, itemSrc._data._onPopup, itemSrc._data._onSelect,
-                             itemSrc._data._onDrawItem, itemSrc._data._onMeasureItem);
+            var dataSrc = itemSrc._data;
+            int state = dataSrc.State;
+
+            _data.RemoveItem(this);
+            _data = new MenuItemData(this,
+                                     dataSrc._mergeType, dataSrc._mergeOrder, dataSrc._shortcut, dataSrc._showShortcut,
+                                     dataSrc._caption, dataSrc._onClick, dataSrc._onPopup, dataSrc._onSelect,
+                                     dataSrc._onDrawItem, dataSrc._onMeasureItem);
+            UpdateMenuItem(false);
+
             _data.SetState(state & StateCloneMask, true);
         }
 
@@ -1249,9 +1256,28 @@ namespace WinFormsLegacyControls
         private static MenuItem CreateSameTypeInstance(Type thisType)
         {
             if (thisType == typeof(MenuItem))
+            {
                 return new MenuItem();
+            }
             else
+            {
                 return (MenuItem)Activator.CreateInstance(thisType)!;
+            }
+        }
+
+        private MenuItem(MenuItem itemSrc)
+        {
+            //itemSrc._data.AddItem(this);
+            _data = itemSrc._data;
+            _nextLinkedItem = _data._firstItem;
+            _data._firstItem = this;
+            Debug.Assert(_data._baseItem is not null);
+            base.MergeMenu(itemSrc);
+
+#if DEBUG
+            _debugText = itemSrc._data._caption;
+            _creationNumber = s_createCount++;
+#endif
         }
 
         /// <summary>
@@ -1262,10 +1288,18 @@ namespace WinFormsLegacyControls
         {
             CheckIfDisposed();
 
-            MenuItem newItem = CreateSameTypeInstance(GetType());
-            _data.AddItem(newItem);
-            newItem.MergeMenu(this);
-            return newItem;
+            Type thisType = GetType();
+            if (thisType == typeof(MenuItem))
+            {
+                return new MenuItem(this);
+            }
+            else
+            {
+                MenuItem newItem = (MenuItem)Activator.CreateInstance(thisType)!;
+                _data.AddItem(newItem);
+                newItem.MergeMenu(this);
+                return newItem;
+            }
         }
 
         /// <summary>
