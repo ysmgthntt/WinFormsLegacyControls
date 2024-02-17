@@ -313,6 +313,7 @@ namespace WinFormsLegacyControls
         [Localizable(true)]
         [DefaultValue("")]
         [SRDescription(nameof(SR.StatusBarPanelTextDescr))]
+        [AllowNull]
         public string Text
         {
             get => _text ?? string.Empty;

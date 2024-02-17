@@ -536,6 +536,7 @@ namespace WinFormsLegacyControls
         /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.MenuItemTextDescr))]
+        [AllowNull]
         public string Text
         {
             get

@@ -209,7 +209,7 @@ namespace WinFormsLegacyControls
                 }
             }
 
-            internal void SetCaption(string value)
+            internal void SetCaption(string? value)
             {
                 value ??= string.Empty;
 
