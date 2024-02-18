@@ -185,20 +185,20 @@ namespace WinFormsLegacyControls
         {
             ArgumentNullException.ThrowIfNull(menuSrc);
 
-            MenuItem[]? newItems = null;
+            if (ItemCount > 0)
+            {
+                MenuItems.Clear();
+            }
             int count = menuSrc.ItemCount;
             if (count > 0)
             {
-                newItems = new MenuItem[count];
+                var itemsSrc = menuSrc.MenuItems;
+                var itemsDst = MenuItems;
                 for (int i = 0; i < count; i++)
                 {
-                    newItems[i] = menuSrc.MenuItems[i].CloneMenu();
+                    MenuItem menuItem = itemsSrc[i].CloneMenu();
+                    itemsDst.Add(menuItem);
                 }
-            }
-            MenuItems.Clear();
-            if (newItems is not null)
-            {
-                MenuItems.AddRange(newItems);
             }
         }
 
