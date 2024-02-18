@@ -67,7 +67,7 @@ namespace WinFormsLegacyControls
         {
         }
 
-        public ToolBarButton(string text) : base()
+        public ToolBarButton(string text)
         {
             Text = text;
         }

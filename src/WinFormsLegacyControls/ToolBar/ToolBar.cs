@@ -104,7 +104,6 @@ namespace WinFormsLegacyControls
         ///  Initializes a new instance of the <see cref='ToolBar'/> class.
         /// </summary>
         public ToolBar()
-        : base()
         {
             // Set this BEFORE calling any other methods so that these defaults will be propagated
             _toolBarState = new BitVector32(TOOLBARSTATE_autoSize |

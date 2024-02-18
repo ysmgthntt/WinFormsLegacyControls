@@ -30,7 +30,6 @@ namespace WinFormsLegacyControls
         ///  Creates a new ContextMenu object with no items in it by default.
         /// </summary>
         public ContextMenu()
-            : base(null)
         {
         }
 

@@ -53,7 +53,6 @@ namespace WinFormsLegacyControls
         ///  Initializes a new default instance of the <see cref='StatusBar'/> class.
         /// </summary>
         public StatusBar()
-        : base()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.Selectable, false);
 

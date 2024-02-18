@@ -29,14 +29,13 @@ namespace WinFormsLegacyControls
         ///  Creates a new MainMenu control.
         /// </summary>
         public MainMenu()
-            : base(null)
         {
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='MainMenu'/> class with the specified container.
         /// </summary>
-        public MainMenu(IContainer container) : this()
+        public MainMenu(IContainer container)
         {
             ArgumentNullException.ThrowIfNull(container);
 
