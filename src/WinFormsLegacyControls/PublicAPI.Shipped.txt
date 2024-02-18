@@ -1,0 +1,421 @@
+﻿#nullable enable
+const WinFormsLegacyControls.Menu.FindHandle = 0 -> int
+const WinFormsLegacyControls.Menu.FindShortcut = 1 -> int
+override WinFormsLegacyControls.MainMenu.CreateMenuHandle() -> nint
+override WinFormsLegacyControls.MainMenu.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.Menu.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.Menu.ToString() -> string!
+override WinFormsLegacyControls.MenuItem.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.MenuItem.IsParent.get -> bool
+override WinFormsLegacyControls.MenuItem.ToString() -> string!
+override WinFormsLegacyControls.StatusBar.BackColor.get -> System.Drawing.Color
+override WinFormsLegacyControls.StatusBar.BackColor.set -> void
+override WinFormsLegacyControls.StatusBar.BackgroundImage.get -> System.Drawing.Image?
+override WinFormsLegacyControls.StatusBar.BackgroundImage.set -> void
+override WinFormsLegacyControls.StatusBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
+override WinFormsLegacyControls.StatusBar.BackgroundImageLayout.set -> void
+override WinFormsLegacyControls.StatusBar.CreateHandle() -> void
+override WinFormsLegacyControls.StatusBar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override WinFormsLegacyControls.StatusBar.DefaultImeMode.get -> System.Windows.Forms.ImeMode
+override WinFormsLegacyControls.StatusBar.DefaultSize.get -> System.Drawing.Size
+override WinFormsLegacyControls.StatusBar.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.StatusBar.Dock.get -> System.Windows.Forms.DockStyle
+override WinFormsLegacyControls.StatusBar.Dock.set -> void
+override WinFormsLegacyControls.StatusBar.DoubleBuffered.get -> bool
+override WinFormsLegacyControls.StatusBar.DoubleBuffered.set -> void
+override WinFormsLegacyControls.StatusBar.Font.get -> System.Drawing.Font!
+override WinFormsLegacyControls.StatusBar.Font.set -> void
+override WinFormsLegacyControls.StatusBar.ForeColor.get -> System.Drawing.Color
+override WinFormsLegacyControls.StatusBar.ForeColor.set -> void
+override WinFormsLegacyControls.StatusBar.OnHandleCreated(System.EventArgs! e) -> void
+override WinFormsLegacyControls.StatusBar.OnHandleDestroyed(System.EventArgs! e) -> void
+override WinFormsLegacyControls.StatusBar.OnLayout(System.Windows.Forms.LayoutEventArgs! levent) -> void
+override WinFormsLegacyControls.StatusBar.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override WinFormsLegacyControls.StatusBar.OnResize(System.EventArgs! e) -> void
+override WinFormsLegacyControls.StatusBar.Text.get -> string!
+override WinFormsLegacyControls.StatusBar.Text.set -> void
+override WinFormsLegacyControls.StatusBar.ToString() -> string!
+override WinFormsLegacyControls.StatusBar.WndProc(ref System.Windows.Forms.Message m) -> void
+override WinFormsLegacyControls.StatusBarPanel.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.StatusBarPanel.ToString() -> string!
+override WinFormsLegacyControls.ToolBar.AutoSize.get -> bool
+override WinFormsLegacyControls.ToolBar.AutoSize.set -> void
+override WinFormsLegacyControls.ToolBar.BackColor.get -> System.Drawing.Color
+override WinFormsLegacyControls.ToolBar.BackColor.set -> void
+override WinFormsLegacyControls.ToolBar.BackgroundImage.get -> System.Drawing.Image?
+override WinFormsLegacyControls.ToolBar.BackgroundImage.set -> void
+override WinFormsLegacyControls.ToolBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
+override WinFormsLegacyControls.ToolBar.BackgroundImageLayout.set -> void
+override WinFormsLegacyControls.ToolBar.CreateHandle() -> void
+override WinFormsLegacyControls.ToolBar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override WinFormsLegacyControls.ToolBar.DefaultImeMode.get -> System.Windows.Forms.ImeMode
+override WinFormsLegacyControls.ToolBar.DefaultSize.get -> System.Drawing.Size
+override WinFormsLegacyControls.ToolBar.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.ToolBar.Dock.get -> System.Windows.Forms.DockStyle
+override WinFormsLegacyControls.ToolBar.Dock.set -> void
+override WinFormsLegacyControls.ToolBar.DoubleBuffered.get -> bool
+override WinFormsLegacyControls.ToolBar.DoubleBuffered.set -> void
+override WinFormsLegacyControls.ToolBar.ForeColor.get -> System.Drawing.Color
+override WinFormsLegacyControls.ToolBar.ForeColor.set -> void
+override WinFormsLegacyControls.ToolBar.OnFontChanged(System.EventArgs! e) -> void
+override WinFormsLegacyControls.ToolBar.OnHandleCreated(System.EventArgs! e) -> void
+override WinFormsLegacyControls.ToolBar.OnResize(System.EventArgs! e) -> void
+override WinFormsLegacyControls.ToolBar.RightToLeft.get -> System.Windows.Forms.RightToLeft
+override WinFormsLegacyControls.ToolBar.RightToLeft.set -> void
+override WinFormsLegacyControls.ToolBar.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
+override WinFormsLegacyControls.ToolBar.ScaleCore(float dx, float dy) -> void
+override WinFormsLegacyControls.ToolBar.SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified) -> void
+override WinFormsLegacyControls.ToolBar.Text.get -> string!
+override WinFormsLegacyControls.ToolBar.Text.set -> void
+override WinFormsLegacyControls.ToolBar.ToString() -> string!
+override WinFormsLegacyControls.ToolBar.WndProc(ref System.Windows.Forms.Message m) -> void
+override WinFormsLegacyControls.ToolBarButton.Dispose(bool disposing) -> void
+override WinFormsLegacyControls.ToolBarButton.ToString() -> string!
+static WinFormsLegacyControls.ExtendMenuProperties.GetContextMenu(this System.Windows.Forms.Control! control) -> WinFormsLegacyControls.ContextMenu?
+static WinFormsLegacyControls.ExtendMenuProperties.GetContextMenu(this System.Windows.Forms.NotifyIcon! notifyIcon) -> WinFormsLegacyControls.ContextMenu?
+static WinFormsLegacyControls.ExtendMenuProperties.GetContextMenu(this System.Windows.Forms.TreeNode! treeNode) -> WinFormsLegacyControls.ContextMenu?
+static WinFormsLegacyControls.ExtendMenuProperties.GetContextMenuForTreeNodesEnabled(this System.Windows.Forms.TreeView! treeView) -> bool
+static WinFormsLegacyControls.ExtendMenuProperties.GetMenu(this System.Windows.Forms.Form! form) -> WinFormsLegacyControls.MainMenu?
+static WinFormsLegacyControls.ExtendMenuProperties.GetMergedMenu(this System.Windows.Forms.Form! form) -> WinFormsLegacyControls.MainMenu?
+static WinFormsLegacyControls.ExtendMenuProperties.SetContextMenu(this System.Windows.Forms.Control! control, WinFormsLegacyControls.ContextMenu? contextMenu) -> void
+static WinFormsLegacyControls.ExtendMenuProperties.SetContextMenu(this System.Windows.Forms.NotifyIcon! notifyIcon, WinFormsLegacyControls.ContextMenu? contextMenu) -> void
+static WinFormsLegacyControls.ExtendMenuProperties.SetContextMenu(this System.Windows.Forms.TreeNode! treeNode, WinFormsLegacyControls.ContextMenu? contextMenu) -> void
+static WinFormsLegacyControls.ExtendMenuProperties.SetContextMenuForTreeNodesEnabled(this System.Windows.Forms.TreeView! treeView, bool enabled) -> void
+static WinFormsLegacyControls.ExtendMenuProperties.SetMenu(this System.Windows.Forms.Form! form, WinFormsLegacyControls.MainMenu? menu) -> void
+virtual WinFormsLegacyControls.ContextMenu.OnCollapse(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.ContextMenu.OnPopup(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.ContextMenu.ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData, System.Windows.Forms.Control! control) -> bool
+virtual WinFormsLegacyControls.ContextMenu.RightToLeft.get -> System.Windows.Forms.RightToLeft
+virtual WinFormsLegacyControls.ContextMenu.RightToLeft.set -> void
+virtual WinFormsLegacyControls.MainMenu.CloneMenu() -> WinFormsLegacyControls.MainMenu!
+virtual WinFormsLegacyControls.MainMenu.OnCollapse(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.MainMenu.RightToLeft.get -> System.Windows.Forms.RightToLeft
+virtual WinFormsLegacyControls.MainMenu.RightToLeft.set -> void
+virtual WinFormsLegacyControls.Menu.CreateMenuHandle() -> nint
+virtual WinFormsLegacyControls.Menu.IsParent.get -> bool
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Add(int index, WinFormsLegacyControls.MenuItem! item) -> int
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Add(string! caption) -> WinFormsLegacyControls.MenuItem!
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Add(string! caption, System.EventHandler! onClick) -> WinFormsLegacyControls.MenuItem!
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Add(string! caption, WinFormsLegacyControls.MenuItem![]! items) -> WinFormsLegacyControls.MenuItem!
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Add(WinFormsLegacyControls.MenuItem! item) -> int
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.AddRange(WinFormsLegacyControls.MenuItem![]! items) -> void
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Clear() -> void
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.ContainsKey(string! key) -> bool
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.IndexOfKey(string! key) -> int
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.Remove(WinFormsLegacyControls.MenuItem! item) -> void
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.RemoveAt(int index) -> void
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.RemoveByKey(string! key) -> void
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.this[int index].get -> WinFormsLegacyControls.MenuItem!
+virtual WinFormsLegacyControls.Menu.MenuItemCollection.this[string! key].get -> WinFormsLegacyControls.MenuItem?
+virtual WinFormsLegacyControls.Menu.MergeMenu(WinFormsLegacyControls.Menu! menuSrc) -> void
+virtual WinFormsLegacyControls.Menu.ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData) -> bool
+virtual WinFormsLegacyControls.MenuItem.CloneMenu() -> WinFormsLegacyControls.MenuItem!
+virtual WinFormsLegacyControls.MenuItem.MergeMenu() -> WinFormsLegacyControls.MenuItem!
+virtual WinFormsLegacyControls.MenuItem.OnClick(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.MenuItem.OnDrawItem(System.Windows.Forms.DrawItemEventArgs! e) -> void
+virtual WinFormsLegacyControls.MenuItem.OnInitMenuPopup(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.MenuItem.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs! e) -> void
+virtual WinFormsLegacyControls.MenuItem.OnPopup(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.MenuItem.OnSelect(System.EventArgs! e) -> void
+virtual WinFormsLegacyControls.MenuItem.PerformSelect() -> void
+virtual WinFormsLegacyControls.StatusBar.OnDrawItem(WinFormsLegacyControls.StatusBarDrawItemEventArgs! sbdievent) -> void
+virtual WinFormsLegacyControls.StatusBar.OnPanelClick(WinFormsLegacyControls.StatusBarPanelClickEventArgs! e) -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Add(string! text) -> WinFormsLegacyControls.StatusBarPanel!
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Add(WinFormsLegacyControls.StatusBarPanel! value) -> int
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.AddRange(WinFormsLegacyControls.StatusBarPanel![]! panels) -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Clear() -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.ContainsKey(string! key) -> bool
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.IndexOfKey(string! key) -> int
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Insert(int index, WinFormsLegacyControls.StatusBarPanel! value) -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Remove(WinFormsLegacyControls.StatusBarPanel! value) -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.RemoveAt(int index) -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.RemoveByKey(string! key) -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.this[int index].get -> WinFormsLegacyControls.StatusBarPanel!
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.this[int index].set -> void
+virtual WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.this[string! key].get -> WinFormsLegacyControls.StatusBarPanel?
+virtual WinFormsLegacyControls.ToolBar.OnButtonClick(WinFormsLegacyControls.ToolBarButtonClickEventArgs! e) -> void
+virtual WinFormsLegacyControls.ToolBar.OnButtonDropDown(WinFormsLegacyControls.ToolBarButtonClickEventArgs! e) -> void
+virtual WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.ContainsKey(string! key) -> bool
+virtual WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.IndexOfKey(string! key) -> int
+virtual WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.RemoveByKey(string! key) -> void
+virtual WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.this[int index].get -> WinFormsLegacyControls.ToolBarButton!
+virtual WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.this[int index].set -> void
+virtual WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.this[string! key].get -> WinFormsLegacyControls.ToolBarButton?
+WinFormsLegacyControls.ContextMenu
+WinFormsLegacyControls.ContextMenu.Collapse -> System.EventHandler!
+WinFormsLegacyControls.ContextMenu.ContextMenu() -> void
+WinFormsLegacyControls.ContextMenu.ContextMenu(WinFormsLegacyControls.MenuItem![]! menuItems) -> void
+WinFormsLegacyControls.ContextMenu.GetContextMenu(System.ComponentModel.Component! component) -> bool
+WinFormsLegacyControls.ContextMenu.Popup -> System.EventHandler!
+WinFormsLegacyControls.ContextMenu.SetContextMenu(System.ComponentModel.Component! component, bool set) -> void
+WinFormsLegacyControls.ContextMenu.Show(System.Windows.Forms.Control! control, System.Drawing.Point pos) -> void
+WinFormsLegacyControls.ContextMenu.Show(System.Windows.Forms.Control! control, System.Drawing.Point pos, System.Windows.Forms.LeftRightAlignment alignment) -> void
+WinFormsLegacyControls.ContextMenu.SourceControl.get -> System.Windows.Forms.Control?
+WinFormsLegacyControls.ExtendMenuProperties
+WinFormsLegacyControls.MainMenu
+WinFormsLegacyControls.MainMenu.Collapse -> System.EventHandler!
+WinFormsLegacyControls.MainMenu.GetForm() -> System.Windows.Forms.Form?
+WinFormsLegacyControls.MainMenu.GetMenu(System.Windows.Forms.Form! form) -> bool
+WinFormsLegacyControls.MainMenu.MainMenu() -> void
+WinFormsLegacyControls.MainMenu.MainMenu(System.ComponentModel.IContainer! container) -> void
+WinFormsLegacyControls.MainMenu.MainMenu(WinFormsLegacyControls.MenuItem![]! items) -> void
+WinFormsLegacyControls.MainMenu.SetMenu(System.Windows.Forms.Form! form, bool set) -> void
+WinFormsLegacyControls.Menu
+WinFormsLegacyControls.Menu.CloneMenu(WinFormsLegacyControls.Menu! menuSrc) -> void
+WinFormsLegacyControls.Menu.FindMenuItem(int type, nint value) -> WinFormsLegacyControls.MenuItem?
+WinFormsLegacyControls.Menu.FindMergePosition(int mergeOrder) -> int
+WinFormsLegacyControls.Menu.GetContextMenu() -> WinFormsLegacyControls.ContextMenu?
+WinFormsLegacyControls.Menu.GetMainMenu() -> WinFormsLegacyControls.MainMenu?
+WinFormsLegacyControls.Menu.Handle.get -> nint
+WinFormsLegacyControls.Menu.MdiListItem.get -> WinFormsLegacyControls.MenuItem?
+WinFormsLegacyControls.Menu.Menu(WinFormsLegacyControls.MenuItem![]? items) -> void
+WinFormsLegacyControls.Menu.MenuItemCollection
+WinFormsLegacyControls.Menu.MenuItemCollection.Contains(WinFormsLegacyControls.MenuItem! value) -> bool
+WinFormsLegacyControls.Menu.MenuItemCollection.CopyTo(System.Array! dest, int index) -> void
+WinFormsLegacyControls.Menu.MenuItemCollection.Count.get -> int
+WinFormsLegacyControls.Menu.MenuItemCollection.Find(string! key, bool searchAllChildren) -> WinFormsLegacyControls.MenuItem![]!
+WinFormsLegacyControls.Menu.MenuItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+WinFormsLegacyControls.Menu.MenuItemCollection.IndexOf(WinFormsLegacyControls.MenuItem! value) -> int
+WinFormsLegacyControls.Menu.MenuItemCollection.IsReadOnly.get -> bool
+WinFormsLegacyControls.Menu.MenuItemCollection.MenuItemCollection(WinFormsLegacyControls.Menu! owner) -> void
+WinFormsLegacyControls.Menu.MenuItems.get -> WinFormsLegacyControls.Menu.MenuItemCollection!
+WinFormsLegacyControls.Menu.Name.get -> string!
+WinFormsLegacyControls.Menu.Name.set -> void
+WinFormsLegacyControls.Menu.Tag.get -> object?
+WinFormsLegacyControls.Menu.Tag.set -> void
+WinFormsLegacyControls.MenuItem
+WinFormsLegacyControls.MenuItem.BarBreak.get -> bool
+WinFormsLegacyControls.MenuItem.BarBreak.set -> void
+WinFormsLegacyControls.MenuItem.Break.get -> bool
+WinFormsLegacyControls.MenuItem.Break.set -> void
+WinFormsLegacyControls.MenuItem.Checked.get -> bool
+WinFormsLegacyControls.MenuItem.Checked.set -> void
+WinFormsLegacyControls.MenuItem.Click -> System.EventHandler!
+WinFormsLegacyControls.MenuItem.CloneMenu(WinFormsLegacyControls.MenuItem! itemSrc) -> void
+WinFormsLegacyControls.MenuItem.Command.get -> System.Windows.Input.ICommand?
+WinFormsLegacyControls.MenuItem.Command.set -> void
+WinFormsLegacyControls.MenuItem.CommandParameter.get -> object?
+WinFormsLegacyControls.MenuItem.CommandParameter.set -> void
+WinFormsLegacyControls.MenuItem.DefaultItem.get -> bool
+WinFormsLegacyControls.MenuItem.DefaultItem.set -> void
+WinFormsLegacyControls.MenuItem.DrawItem -> System.Windows.Forms.DrawItemEventHandler!
+WinFormsLegacyControls.MenuItem.Enabled.get -> bool
+WinFormsLegacyControls.MenuItem.Enabled.set -> void
+WinFormsLegacyControls.MenuItem.Index.get -> int
+WinFormsLegacyControls.MenuItem.Index.set -> void
+WinFormsLegacyControls.MenuItem.MdiList.get -> bool
+WinFormsLegacyControls.MenuItem.MdiList.set -> void
+WinFormsLegacyControls.MenuItem.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler!
+WinFormsLegacyControls.MenuItem.MenuID.get -> int
+WinFormsLegacyControls.MenuItem.MenuItem() -> void
+WinFormsLegacyControls.MenuItem.MenuItem(string! text) -> void
+WinFormsLegacyControls.MenuItem.MenuItem(string! text, System.EventHandler! onClick) -> void
+WinFormsLegacyControls.MenuItem.MenuItem(string! text, System.EventHandler! onClick, System.Windows.Forms.Shortcut shortcut) -> void
+WinFormsLegacyControls.MenuItem.MenuItem(string! text, WinFormsLegacyControls.MenuItem![]! items) -> void
+WinFormsLegacyControls.MenuItem.MenuItem(WinFormsLegacyControls.MenuMerge mergeType, int mergeOrder, System.Windows.Forms.Shortcut shortcut, string? text, System.EventHandler? onClick, System.EventHandler? onPopup, System.EventHandler? onSelect, WinFormsLegacyControls.MenuItem![]? items) -> void
+WinFormsLegacyControls.MenuItem.MergeMenu(WinFormsLegacyControls.MenuItem! itemSrc) -> void
+WinFormsLegacyControls.MenuItem.MergeOrder.get -> int
+WinFormsLegacyControls.MenuItem.MergeOrder.set -> void
+WinFormsLegacyControls.MenuItem.MergeType.get -> WinFormsLegacyControls.MenuMerge
+WinFormsLegacyControls.MenuItem.MergeType.set -> void
+WinFormsLegacyControls.MenuItem.Mnemonic.get -> char
+WinFormsLegacyControls.MenuItem.OwnerDraw.get -> bool
+WinFormsLegacyControls.MenuItem.OwnerDraw.set -> void
+WinFormsLegacyControls.MenuItem.Parent.get -> WinFormsLegacyControls.Menu?
+WinFormsLegacyControls.MenuItem.PerformClick() -> void
+WinFormsLegacyControls.MenuItem.Popup -> System.EventHandler!
+WinFormsLegacyControls.MenuItem.RadioCheck.get -> bool
+WinFormsLegacyControls.MenuItem.RadioCheck.set -> void
+WinFormsLegacyControls.MenuItem.Select -> System.EventHandler!
+WinFormsLegacyControls.MenuItem.Shortcut.get -> System.Windows.Forms.Shortcut
+WinFormsLegacyControls.MenuItem.Shortcut.set -> void
+WinFormsLegacyControls.MenuItem.ShowShortcut.get -> bool
+WinFormsLegacyControls.MenuItem.ShowShortcut.set -> void
+WinFormsLegacyControls.MenuItem.Text.get -> string!
+WinFormsLegacyControls.MenuItem.Text.set -> void
+WinFormsLegacyControls.MenuItem.Visible.get -> bool
+WinFormsLegacyControls.MenuItem.Visible.set -> void
+WinFormsLegacyControls.MenuMerge
+WinFormsLegacyControls.MenuMerge.Add = 0 -> WinFormsLegacyControls.MenuMerge
+WinFormsLegacyControls.MenuMerge.MergeItems = 2 -> WinFormsLegacyControls.MenuMerge
+WinFormsLegacyControls.MenuMerge.Remove = 3 -> WinFormsLegacyControls.MenuMerge
+WinFormsLegacyControls.MenuMerge.Replace = 1 -> WinFormsLegacyControls.MenuMerge
+WinFormsLegacyControls.StatusBar
+WinFormsLegacyControls.StatusBar.BackColorChanged -> System.EventHandler!
+WinFormsLegacyControls.StatusBar.BackgroundImageChanged -> System.EventHandler!
+WinFormsLegacyControls.StatusBar.BackgroundImageLayoutChanged -> System.EventHandler!
+WinFormsLegacyControls.StatusBar.DrawItem -> WinFormsLegacyControls.StatusBarDrawItemEventHandler!
+WinFormsLegacyControls.StatusBar.ForeColorChanged -> System.EventHandler!
+WinFormsLegacyControls.StatusBar.ImeMode.get -> System.Windows.Forms.ImeMode
+WinFormsLegacyControls.StatusBar.ImeMode.set -> void
+WinFormsLegacyControls.StatusBar.ImeModeChanged -> System.EventHandler!
+WinFormsLegacyControls.StatusBar.Paint -> System.Windows.Forms.PaintEventHandler!
+WinFormsLegacyControls.StatusBar.PanelClick -> WinFormsLegacyControls.StatusBarPanelClickEventHandler!
+WinFormsLegacyControls.StatusBar.Panels.get -> WinFormsLegacyControls.StatusBar.StatusBarPanelCollection!
+WinFormsLegacyControls.StatusBar.RightToLeftLayout.get -> bool
+WinFormsLegacyControls.StatusBar.RightToLeftLayout.set -> void
+WinFormsLegacyControls.StatusBar.SetToolTip(System.Windows.Forms.ToolTip! t) -> void
+WinFormsLegacyControls.StatusBar.ShowPanels.get -> bool
+WinFormsLegacyControls.StatusBar.ShowPanels.set -> void
+WinFormsLegacyControls.StatusBar.SizingGrip.get -> bool
+WinFormsLegacyControls.StatusBar.SizingGrip.set -> void
+WinFormsLegacyControls.StatusBar.StatusBar() -> void
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Contains(WinFormsLegacyControls.StatusBarPanel! panel) -> bool
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.Count.get -> int
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.GetEnumerator() -> System.Collections.IEnumerator!
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.IndexOf(WinFormsLegacyControls.StatusBarPanel! panel) -> int
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.IsReadOnly.get -> bool
+WinFormsLegacyControls.StatusBar.StatusBarPanelCollection.StatusBarPanelCollection(WinFormsLegacyControls.StatusBar! owner) -> void
+WinFormsLegacyControls.StatusBar.TabStop.get -> bool
+WinFormsLegacyControls.StatusBar.TabStop.set -> void
+WinFormsLegacyControls.StatusBarDrawItemEventArgs
+WinFormsLegacyControls.StatusBarDrawItemEventArgs.Panel.get -> WinFormsLegacyControls.StatusBarPanel!
+WinFormsLegacyControls.StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs(System.Drawing.Graphics! g, System.Drawing.Font! font, System.Drawing.Rectangle r, int itemId, System.Windows.Forms.DrawItemState itemState, WinFormsLegacyControls.StatusBarPanel! panel) -> void
+WinFormsLegacyControls.StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs(System.Drawing.Graphics! g, System.Drawing.Font! font, System.Drawing.Rectangle r, int itemId, System.Windows.Forms.DrawItemState itemState, WinFormsLegacyControls.StatusBarPanel! panel, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+WinFormsLegacyControls.StatusBarDrawItemEventHandler
+WinFormsLegacyControls.StatusBarPanel
+WinFormsLegacyControls.StatusBarPanel.Alignment.get -> System.Windows.Forms.HorizontalAlignment
+WinFormsLegacyControls.StatusBarPanel.Alignment.set -> void
+WinFormsLegacyControls.StatusBarPanel.AutoSize.get -> WinFormsLegacyControls.StatusBarPanelAutoSize
+WinFormsLegacyControls.StatusBarPanel.AutoSize.set -> void
+WinFormsLegacyControls.StatusBarPanel.BeginInit() -> void
+WinFormsLegacyControls.StatusBarPanel.BorderStyle.get -> WinFormsLegacyControls.StatusBarPanelBorderStyle
+WinFormsLegacyControls.StatusBarPanel.BorderStyle.set -> void
+WinFormsLegacyControls.StatusBarPanel.EndInit() -> void
+WinFormsLegacyControls.StatusBarPanel.Icon.get -> System.Drawing.Icon?
+WinFormsLegacyControls.StatusBarPanel.Icon.set -> void
+WinFormsLegacyControls.StatusBarPanel.MinWidth.get -> int
+WinFormsLegacyControls.StatusBarPanel.MinWidth.set -> void
+WinFormsLegacyControls.StatusBarPanel.Name.get -> string!
+WinFormsLegacyControls.StatusBarPanel.Name.set -> void
+WinFormsLegacyControls.StatusBarPanel.Parent.get -> WinFormsLegacyControls.StatusBar?
+WinFormsLegacyControls.StatusBarPanel.StatusBarPanel() -> void
+WinFormsLegacyControls.StatusBarPanel.Style.get -> WinFormsLegacyControls.StatusBarPanelStyle
+WinFormsLegacyControls.StatusBarPanel.Style.set -> void
+WinFormsLegacyControls.StatusBarPanel.Tag.get -> object?
+WinFormsLegacyControls.StatusBarPanel.Tag.set -> void
+WinFormsLegacyControls.StatusBarPanel.Text.get -> string!
+WinFormsLegacyControls.StatusBarPanel.Text.set -> void
+WinFormsLegacyControls.StatusBarPanel.ToolTipText.get -> string!
+WinFormsLegacyControls.StatusBarPanel.ToolTipText.set -> void
+WinFormsLegacyControls.StatusBarPanel.Width.get -> int
+WinFormsLegacyControls.StatusBarPanel.Width.set -> void
+WinFormsLegacyControls.StatusBarPanelAutoSize
+WinFormsLegacyControls.StatusBarPanelAutoSize.Contents = 3 -> WinFormsLegacyControls.StatusBarPanelAutoSize
+WinFormsLegacyControls.StatusBarPanelAutoSize.None = 1 -> WinFormsLegacyControls.StatusBarPanelAutoSize
+WinFormsLegacyControls.StatusBarPanelAutoSize.Spring = 2 -> WinFormsLegacyControls.StatusBarPanelAutoSize
+WinFormsLegacyControls.StatusBarPanelBorderStyle
+WinFormsLegacyControls.StatusBarPanelBorderStyle.None = 1 -> WinFormsLegacyControls.StatusBarPanelBorderStyle
+WinFormsLegacyControls.StatusBarPanelBorderStyle.Raised = 2 -> WinFormsLegacyControls.StatusBarPanelBorderStyle
+WinFormsLegacyControls.StatusBarPanelBorderStyle.Sunken = 3 -> WinFormsLegacyControls.StatusBarPanelBorderStyle
+WinFormsLegacyControls.StatusBarPanelClickEventArgs
+WinFormsLegacyControls.StatusBarPanelClickEventArgs.StatusBarPanel.get -> WinFormsLegacyControls.StatusBarPanel!
+WinFormsLegacyControls.StatusBarPanelClickEventArgs.StatusBarPanelClickEventArgs(WinFormsLegacyControls.StatusBarPanel! statusBarPanel, System.Windows.Forms.MouseButtons button, int clicks, int x, int y) -> void
+WinFormsLegacyControls.StatusBarPanelClickEventHandler
+WinFormsLegacyControls.StatusBarPanelStyle
+WinFormsLegacyControls.StatusBarPanelStyle.OwnerDraw = 2 -> WinFormsLegacyControls.StatusBarPanelStyle
+WinFormsLegacyControls.StatusBarPanelStyle.Text = 1 -> WinFormsLegacyControls.StatusBarPanelStyle
+WinFormsLegacyControls.ToolBar
+WinFormsLegacyControls.ToolBar.Appearance.get -> WinFormsLegacyControls.ToolBarAppearance
+WinFormsLegacyControls.ToolBar.Appearance.set -> void
+WinFormsLegacyControls.ToolBar.AutoSizeChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.BackColorChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.BackgroundImageChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.BackgroundImageLayoutChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.BorderStyle.get -> System.Windows.Forms.BorderStyle
+WinFormsLegacyControls.ToolBar.BorderStyle.set -> void
+WinFormsLegacyControls.ToolBar.ButtonClick -> WinFormsLegacyControls.ToolBarButtonClickEventHandler!
+WinFormsLegacyControls.ToolBar.ButtonDropDown -> WinFormsLegacyControls.ToolBarButtonClickEventHandler!
+WinFormsLegacyControls.ToolBar.Buttons.get -> WinFormsLegacyControls.ToolBar.ToolBarButtonCollection!
+WinFormsLegacyControls.ToolBar.ButtonSize.get -> System.Drawing.Size
+WinFormsLegacyControls.ToolBar.ButtonSize.set -> void
+WinFormsLegacyControls.ToolBar.Divider.get -> bool
+WinFormsLegacyControls.ToolBar.Divider.set -> void
+WinFormsLegacyControls.ToolBar.DropDownArrows.get -> bool
+WinFormsLegacyControls.ToolBar.DropDownArrows.set -> void
+WinFormsLegacyControls.ToolBar.ForeColorChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.ImageList.get -> System.Windows.Forms.ImageList?
+WinFormsLegacyControls.ToolBar.ImageList.set -> void
+WinFormsLegacyControls.ToolBar.ImageSize.get -> System.Drawing.Size
+WinFormsLegacyControls.ToolBar.ImeMode.get -> System.Windows.Forms.ImeMode
+WinFormsLegacyControls.ToolBar.ImeMode.set -> void
+WinFormsLegacyControls.ToolBar.ImeModeChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.Paint -> System.Windows.Forms.PaintEventHandler!
+WinFormsLegacyControls.ToolBar.RightToLeftChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.RightToLeftLayout.get -> bool
+WinFormsLegacyControls.ToolBar.RightToLeftLayout.set -> void
+WinFormsLegacyControls.ToolBar.SetToolTip(System.Windows.Forms.ToolTip? t) -> void
+WinFormsLegacyControls.ToolBar.ShowToolTips.get -> bool
+WinFormsLegacyControls.ToolBar.ShowToolTips.set -> void
+WinFormsLegacyControls.ToolBar.TabStop.get -> bool
+WinFormsLegacyControls.ToolBar.TabStop.set -> void
+WinFormsLegacyControls.ToolBar.TextAlign.get -> WinFormsLegacyControls.ToolBarTextAlign
+WinFormsLegacyControls.ToolBar.TextAlign.set -> void
+WinFormsLegacyControls.ToolBar.TextChanged -> System.EventHandler!
+WinFormsLegacyControls.ToolBar.ToolBar() -> void
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Add(string! text) -> int
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Add(WinFormsLegacyControls.ToolBarButton! button) -> int
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.AddRange(WinFormsLegacyControls.ToolBarButton![]! buttons) -> void
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Clear() -> void
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Contains(WinFormsLegacyControls.ToolBarButton! button) -> bool
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Count.get -> int
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.GetEnumerator() -> System.Collections.IEnumerator!
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.IndexOf(WinFormsLegacyControls.ToolBarButton! button) -> int
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Insert(int index, WinFormsLegacyControls.ToolBarButton! button) -> void
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.IsReadOnly.get -> bool
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.Remove(WinFormsLegacyControls.ToolBarButton! button) -> void
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.RemoveAt(int index) -> void
+WinFormsLegacyControls.ToolBar.ToolBarButtonCollection.ToolBarButtonCollection(WinFormsLegacyControls.ToolBar! owner) -> void
+WinFormsLegacyControls.ToolBar.Wrappable.get -> bool
+WinFormsLegacyControls.ToolBar.Wrappable.set -> void
+WinFormsLegacyControls.ToolBarAppearance
+WinFormsLegacyControls.ToolBarAppearance.Flat = 1 -> WinFormsLegacyControls.ToolBarAppearance
+WinFormsLegacyControls.ToolBarAppearance.Normal = 0 -> WinFormsLegacyControls.ToolBarAppearance
+WinFormsLegacyControls.ToolBarButton
+WinFormsLegacyControls.ToolBarButton.Command.get -> System.Windows.Input.ICommand?
+WinFormsLegacyControls.ToolBarButton.Command.set -> void
+WinFormsLegacyControls.ToolBarButton.CommandParameter.get -> object?
+WinFormsLegacyControls.ToolBarButton.CommandParameter.set -> void
+WinFormsLegacyControls.ToolBarButton.DropDownMenu.get -> WinFormsLegacyControls.Menu?
+WinFormsLegacyControls.ToolBarButton.DropDownMenu.set -> void
+WinFormsLegacyControls.ToolBarButton.Enabled.get -> bool
+WinFormsLegacyControls.ToolBarButton.Enabled.set -> void
+WinFormsLegacyControls.ToolBarButton.ImageIndex.get -> int
+WinFormsLegacyControls.ToolBarButton.ImageIndex.set -> void
+WinFormsLegacyControls.ToolBarButton.ImageKey.get -> string!
+WinFormsLegacyControls.ToolBarButton.ImageKey.set -> void
+WinFormsLegacyControls.ToolBarButton.Name.get -> string!
+WinFormsLegacyControls.ToolBarButton.Name.set -> void
+WinFormsLegacyControls.ToolBarButton.Parent.get -> WinFormsLegacyControls.ToolBar?
+WinFormsLegacyControls.ToolBarButton.PartialPush.get -> bool
+WinFormsLegacyControls.ToolBarButton.PartialPush.set -> void
+WinFormsLegacyControls.ToolBarButton.Pushed.get -> bool
+WinFormsLegacyControls.ToolBarButton.Pushed.set -> void
+WinFormsLegacyControls.ToolBarButton.Rectangle.get -> System.Drawing.Rectangle
+WinFormsLegacyControls.ToolBarButton.Style.get -> WinFormsLegacyControls.ToolBarButtonStyle
+WinFormsLegacyControls.ToolBarButton.Style.set -> void
+WinFormsLegacyControls.ToolBarButton.Tag.get -> object?
+WinFormsLegacyControls.ToolBarButton.Tag.set -> void
+WinFormsLegacyControls.ToolBarButton.Text.get -> string!
+WinFormsLegacyControls.ToolBarButton.Text.set -> void
+WinFormsLegacyControls.ToolBarButton.ToolBarButton() -> void
+WinFormsLegacyControls.ToolBarButton.ToolBarButton(string! text) -> void
+WinFormsLegacyControls.ToolBarButton.ToolTipText.get -> string!
+WinFormsLegacyControls.ToolBarButton.ToolTipText.set -> void
+WinFormsLegacyControls.ToolBarButton.Visible.get -> bool
+WinFormsLegacyControls.ToolBarButton.Visible.set -> void
+WinFormsLegacyControls.ToolBarButtonClickEventArgs
+WinFormsLegacyControls.ToolBarButtonClickEventArgs.Button.get -> WinFormsLegacyControls.ToolBarButton!
+WinFormsLegacyControls.ToolBarButtonClickEventArgs.Button.set -> void
+WinFormsLegacyControls.ToolBarButtonClickEventArgs.ToolBarButtonClickEventArgs(WinFormsLegacyControls.ToolBarButton! button) -> void
+WinFormsLegacyControls.ToolBarButtonClickEventHandler
+WinFormsLegacyControls.ToolBarButtonStyle
+WinFormsLegacyControls.ToolBarButtonStyle.DropDownButton = 4 -> WinFormsLegacyControls.ToolBarButtonStyle
+WinFormsLegacyControls.ToolBarButtonStyle.PushButton = 1 -> WinFormsLegacyControls.ToolBarButtonStyle
+WinFormsLegacyControls.ToolBarButtonStyle.Separator = 3 -> WinFormsLegacyControls.ToolBarButtonStyle
+WinFormsLegacyControls.ToolBarButtonStyle.ToggleButton = 2 -> WinFormsLegacyControls.ToolBarButtonStyle
+WinFormsLegacyControls.ToolBarTextAlign
+WinFormsLegacyControls.ToolBarTextAlign.Right = 1 -> WinFormsLegacyControls.ToolBarTextAlign
+WinFormsLegacyControls.ToolBarTextAlign.Underneath = 0 -> WinFormsLegacyControls.ToolBarTextAlign
