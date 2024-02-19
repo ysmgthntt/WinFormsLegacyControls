@@ -198,7 +198,7 @@ namespace WinFormsLegacyControls
             pos = control.PointToScreen(pos);
             //IntPtr createHandle = this.Handle;
             BOOL result = PInvoke.TrackPopupMenuEx(this, flags, pos.X, pos.Y, control, 0);
-            Debug.Assert(result);
+            Debug.Assert(result || ItemCount == 0);
         }
 
         //

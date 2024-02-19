@@ -16,6 +16,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp1", "sandbox\Win
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsApp1", "sandbox\WindowsFormsApp1\WindowsFormsApp1.csproj", "{0F2622F9-EAA6-428F-BA08-38CFBD22589C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3C39249F-F596-4732-885A-39B8C9CD6366}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsLegacyControls.Tests", "tests\WinFormsLegacyControls.Tests\WinFormsLegacyControls.Tests.csproj", "{86F161A7-E53F-4AFA-9EBE-FC0D5BB5D629}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,10 @@ Global
 		{0F2622F9-EAA6-428F-BA08-38CFBD22589C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F2622F9-EAA6-428F-BA08-38CFBD22589C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F2622F9-EAA6-428F-BA08-38CFBD22589C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86F161A7-E53F-4AFA-9EBE-FC0D5BB5D629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F161A7-E53F-4AFA-9EBE-FC0D5BB5D629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F161A7-E53F-4AFA-9EBE-FC0D5BB5D629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F161A7-E53F-4AFA-9EBE-FC0D5BB5D629}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +50,7 @@ Global
 		{AD00473E-9831-4F88-A33A-F6EBEE66ABC4} = {28D89F01-2506-4300-83F2-229414772941}
 		{F61CFF8A-A550-4D56-AB30-5E5F29F8D3C4} = {5610517B-55CC-4F08-973B-22FCCD746C2C}
 		{0F2622F9-EAA6-428F-BA08-38CFBD22589C} = {5610517B-55CC-4F08-973B-22FCCD746C2C}
+		{86F161A7-E53F-4AFA-9EBE-FC0D5BB5D629} = {3C39249F-F596-4732-885A-39B8C9CD6366}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F686D8A-245C-4769-B932-E0E238B61D21}
