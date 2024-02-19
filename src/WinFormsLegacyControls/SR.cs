@@ -50,8 +50,6 @@ internal static class SR
     internal static string ToolBarBorderStyleDescr => nameof(ToolBarBorderStyleDescr);
     internal static string ToolBarButtonClickDescr => nameof(ToolBarButtonClickDescr);
     internal static string ToolBarButtonDropDownDescr => nameof(ToolBarButtonDropDownDescr);
-    internal static string ToolBarButtonsDescr => nameof(ToolBarButtonsDescr);
-    internal static string ToolBarButtonSizeDescr => nameof(ToolBarButtonSizeDescr);
     internal static string ToolBarButtonEnabledDescr => nameof(ToolBarButtonEnabledDescr);
     internal static string ToolBarButtonImageIndexDescr => nameof(ToolBarButtonImageIndexDescr);
     internal static string ToolBarButtonInvalidDropDownMenuType => nameof(ToolBarButtonInvalidDropDownMenuType);
@@ -59,6 +57,8 @@ internal static class SR
     internal static string ToolBarButtonNotFound => nameof(ToolBarButtonNotFound);
     internal static string ToolBarButtonPartialPushDescr => nameof(ToolBarButtonPartialPushDescr);
     internal static string ToolBarButtonPushedDescr => nameof(ToolBarButtonPushedDescr);
+    internal static string ToolBarButtonsDescr => nameof(ToolBarButtonsDescr);
+    internal static string ToolBarButtonSizeDescr => nameof(ToolBarButtonSizeDescr);
     internal static string ToolBarButtonStyleDescr => nameof(ToolBarButtonStyleDescr);
     internal static string ToolBarButtonTextDescr => nameof(ToolBarButtonTextDescr);
     internal static string ToolBarButtonToolTipTextDescr => nameof(ToolBarButtonToolTipTextDescr);
